@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PrimeNet | Hostel Broadband Management System</title>
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Get high-speed, unlimited broadband internet for hostel students at PrimeNet. Safe, fast, and affordable internet starting at just ₹180 for 6 months.">
+  <meta name="keywords" content="Hostel internet, broadband management, high speed internet, student wifi, PrimeNet">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/favicon.png">
+
+  <!-- CSS Stylesheets -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://use.fontawesome.com/releases/v6.4.0/css/all.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Loading Spinner Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner-custom"></div>
+  </div>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-custom fixed-top py-3">
+    <div class="container">
+      <a class="navbar-brand" href="#home" id="navLogo">
+        <i class="fa-solid fa-wifi me-2"></i>PrimeNet
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto align-items-center" id="mainNavLinks">
+          <li class="nav-item">
+            <a class="nav-link active" href="#home" id="navHome">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#about" id="navAbout">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#services" id="navServices">Services</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#contact" id="navContact">Contact</a>
+          </li>
+          <!-- Admin Dashboard Switcher (Hidden initially) -->
+          <li class="nav-item d-none" id="adminPortalLinkItem">
+            <a class="nav-link text-primary fw-bold" href="#dashboard" id="navAdminPortal"><i class="fa-solid fa-gauge me-1"></i>Dashboard</a>
+          </li>
+        </ul>
+        <div class="d-flex align-items-center ms-lg-3 mt-3 mt-lg-0 gap-2">
+          <!-- Dark Mode Toggle -->
+          <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Dark Mode" title="Toggle Dark/Light Mode">
+            <i class="fa-solid fa-moon"></i>
+          </button>
+          
+          <!-- Admin Login / Logout button -->
+          <button class="btn btn-outline-primary" id="adminLoginBtn" data-bs-toggle="modal" data-bs-target="#loginModal">
+            <i class="fa-solid fa-lock me-2"></i>Admin Login
+          </button>
+          <button class="btn btn-danger d-none" id="adminLogoutBtn">
+            <i class="fa-solid fa-right-from-bracket me-2"></i>Logout
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="liveToast" class="toast align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body" id="toastMessage">
+          Notification message goes here.
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Landing Page Wrapper (Hidden when Admin Dashboard is active) -->
+  <div id="landingPageWrapper">
+    <!-- Hero Section -->
+    <header class="hero-section" id="home">
+      <div class="container">
+        <div class="row align-items-center min-vh-75">
+          <div class="col-lg-6 fade-in">
+            <span class="hero-price-badge">
+              <i class="fa-solid fa-tag me-2"></i>Only ₹180 for 6 Months
+            </span>
+            <h1 class="hero-title">Unlimited High-Speed <br>Internet for <span>Hostel Students</span></h1>
+            <p class="hero-subtitle">Reliable, fast, and highly affordable internet connection. Built to support online studying, entertainment, and browsing without limits.</p>
+            <div class="d-flex flex-wrap gap-3">
+              <button class="btn btn-accent btn-lg" id="getConnectionHeroBtn" data-bs-toggle="modal" data-bs-target="#registerModal">
+                <i class="fa-solid fa-circle-plus me-2"></i>Get Connection
+              </button>
+              <button class="btn btn-outline-primary btn-lg" id="adminLoginHeroBtn" data-bs-toggle="modal" data-bs-target="#loginModal">
+                <i class="fa-solid fa-shield-halved me-2"></i>Admin Login
+              </button>
+            </div>
+          </div>
+          <div class="col-lg-6 mt-5 mt-lg-0 fade-in">
+            <div class="hero-media-container position-relative">
+              <!-- Interactive Video Player Card -->
+              <div class="video-wrapper glass-card overflow-hidden shadow-lg mb-4">
+                <div class="video-overlay-details p-3 d-flex justify-content-between align-items-center">
+                  <span class="badge bg-success"><i class="fa-solid fa-circle-play me-1"></i> Host Link</span>
+                  <span class="text-white small fw-bold" id="videoBandwidth"><i class="fa-solid fa-chart-simple me-1"></i> Gigabit Config</span>
+                </div>
+                <video id="heroVideo" autoplay loop muted playsinline width="100%">
+                  <source src="assets/hero.mp4" type="video/mp4">
+                  Your browser does not support HTML5 video.
+                </video>
+                <div class="video-controls p-2 d-flex justify-content-between align-items-center">
+                  <button class="btn btn-sm btn-link text-white px-2" id="btnPlayPauseVideo" aria-label="Play/Pause Video">
+                    <i class="fa-solid fa-pause"></i>
+                  </button>
+                  <button class="btn btn-sm btn-link text-white px-2" id="btnMuteVideo" aria-label="Mute/Unmute Video">
+                    <i class="fa-solid fa-volume-xmark"></i>
+                  </button>
+                </div>
+              </div>
+              
+              <!-- Interactive Speed Test Panel -->
+              <div class="glass-card p-3 shadow-lg speedtest-card">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <h6 class="mb-0 speedtest-title"><i class="fa-solid fa-gauge-high text-accent me-2"></i>Campus Network SpeedCheck</h6>
+                  <span class="badge bg-secondary" id="speedtestStatus">Ready</span>
+                </div>
+                <div class="row align-items-center text-center mb-3">
+                  <div class="col-6 speedtest-divider">
+                    <div class="text-muted small text-uppercase mb-1">Download Speed</div>
+                    <div class="fs-2 fw-bold speedtest-value"><span id="speedValue">0.0</span> <small class="fs-6 fw-normal text-muted">Mbps</small></div>
+                  </div>
+                  <div class="col-6">
+                    <div class="text-muted small text-uppercase mb-1">Ping Latency</div>
+                    <div class="fs-2 fw-bold text-accent"><span id="pingValue">--</span> <small class="fs-6 fw-normal text-muted">ms</small></div>
+                  </div>
+                </div>
+                <!-- IP Addresses & Provider Information -->
+                <div class="speedtest-border-top pt-2 mb-3" style="font-size: 0.8rem;">
+                  <div class="d-flex justify-content-between text-muted mb-1">
+                    <span>IPv4 IP:</span>
+                    <span id="ipv4Status" class="speedtest-ip fw-semibold">Click check to detect</span>
+                  </div>
+                  <div class="d-flex justify-content-between text-muted mb-1">
+                    <span>IPv6 IP:</span>
+                    <span id="ipv6Status" class="text-accent fw-semibold">Click check to detect</span>
+                  </div>
+                  <div class="d-flex justify-content-between text-muted">
+                    <span>ISP Provider:</span>
+                    <span id="ispStatus" class="speedtest-ip fw-semibold text-truncate ms-2" style="max-width: 160px;" title="ISP Name">Click check to detect</span>
+                  </div>
+                </div>
+                <div class="d-grid">
+                  <button class="btn btn-accent btn-sm" id="btnStartSpeedtest">
+                    <i class="fa-solid fa-circle-nodes me-2"></i>Run Speed Check
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Features Section -->
+    <section class="features-section" id="features">
+      <div class="container">
+        <div class="section-header">
+          <h2>Key Features</h2>
+          <p>Why choose PrimeNet broadband connection for your hostel room?</p>
+        </div>
+        <div class="row g-4">
+          <!-- Feature 1 -->
+          <div class="col-md-6 col-lg-3">
+            <div class="glass-card p-4 h-100 text-center">
+              <div class="feature-icon-wrapper mx-auto">
+                <i class="fa-solid fa-infinity"></i>
+              </div>
+              <h4>Unlimited Internet</h4>
+              <p class="text-muted mb-0">No FUP data caps. Enjoy streaming, downloading, and browsing with true unlimited bandwidth.</p>
+            </div>
+          </div>
+          <!-- Feature 2 -->
+          <div class="col-md-6 col-lg-3">
+            <div class="glass-card p-4 h-100 text-center">
+              <div class="feature-icon-wrapper mx-auto">
+                <i class="fa-solid fa-bolt"></i>
+              </div>
+              <h4>High Speed Network</h4>
+              <p class="text-muted mb-0">Experience lightning-fast speeds configured directly for student study and streaming needs.</p>
+            </div>
+          </div>
+          <!-- Feature 3 -->
+          <div class="col-md-6 col-lg-3">
+            <div class="glass-card p-4 h-100 text-center">
+              <div class="feature-icon-wrapper mx-auto">
+                <i class="fa-solid fa-headset"></i>
+              </div>
+              <h4>24/7 Support</h4>
+              <p class="text-muted mb-0">Our dedicated technical support team is always available to resolve internet issues instantly.</p>
+            </div>
+          </div>
+          <!-- Feature 4 -->
+          <div class="col-md-6 col-lg-3">
+            <div class="glass-card p-4 h-100 text-center">
+              <div class="feature-icon-wrapper mx-auto">
+                <i class="fa-solid fa-indian-rupee-sign"></i>
+              </div>
+              <h4>Affordable Pricing</h4>
+              <p class="text-muted mb-0">Super low price of just ₹180 for 6 months, tailored specifically for hostel students.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section" id="about">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-6 mb-4 mb-lg-0">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 400" style="max-height: 350px; width:100%;">
+              <rect width="500" height="400" rx="20" fill="url(#grad2)" opacity="0.05" />
+              <!-- Graphic elements representation of a network switch / data nodes -->
+              <circle cx="250" cy="200" r="60" fill="#0066FF" opacity="0.2" />
+              <circle cx="250" cy="200" r="10" fill="#0066FF" />
+              
+              <circle cx="120" cy="120" r="40" fill="#00C896" opacity="0.2" />
+              <circle cx="120" cy="120" r="8" fill="#00C896" />
+              
+              <circle cx="380" cy="120" r="40" fill="#0066FF" opacity="0.2" />
+              <circle cx="380" cy="120" r="8" fill="#0066FF" />
+              
+              <circle cx="120" cy="280" r="40" fill="#0066FF" opacity="0.2" />
+              <circle cx="120" cy="280" r="8" fill="#0066FF" />
+              
+              <circle cx="380" cy="280" r="40" fill="#00C896" opacity="0.2" />
+              <circle cx="380" cy="280" r="8" fill="#00C896" />
+              
+              <!-- Connection Lines -->
+              <line x1="250" y1="200" x2="120" y2="120" stroke="#64748B" stroke-dasharray="5,5" stroke-width="2" />
+              <line x1="250" y1="200" x2="380" y2="120" stroke="#64748B" stroke-dasharray="5,5" stroke-width="2" />
+              <line x1="250" y1="200" x2="120" y2="280" stroke="#64748B" stroke-dasharray="5,5" stroke-width="2" />
+              <line x1="250" y1="200" x2="380" y2="280" stroke="#64748B" stroke-dasharray="5,5" stroke-width="2" />
+            </svg>
+          </div>
+          <div class="col-lg-6">
+            <h2 class="mb-4">Connecting Students to a Faster Future</h2>
+            <p class="text-muted mb-4">PrimeNet Hostel Broadband Management System is custom-designed for educational campus environments. We specialize in managing dense network loads while ensuring each individual room receives high-speed, secure, and low-latency bandwidth.</p>
+            <ul class="about-list mb-4">
+              <li><strong>MAC-Authenticated Security:</strong> We register your device's MAC address directly to our router database for password-free, secure logins.</li>
+              <li><strong>Room-to-Room Mapping:</strong> Enables structured troubleshooting and network health checks across hostel buildings.</li>
+              <li><strong>Student Budget-Friendly:</strong> Optimized rate structuring at just ₹30/month (billed semi-annually as ₹180 for 6 months).</li>
+              <li><strong>High Availability:</strong> Secondary backup links ensure 99.9% uptime during crucial exam and class times.</li>
+            </ul>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registerModal">
+              <i class="fa-solid fa-circle-plus me-2"></i>Apply for Connection
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Founders Section -->
+    <section class="founders-section py-5" style="background-color: var(--card-bg); border-top: 1px solid var(--border-color);">
+      <div class="container">
+        <div class="section-header mb-5">
+          <h2>Meet Our Founders</h2>
+          <p>The visionaries behind PrimeNet Hostel Broadband, striving to deliver seamless campus connectivity.</p>
+        </div>
+        <div class="row g-4 justify-content-center">
+          <!-- Founder 1 -->
+          <div class="col-md-4 text-center">
+            <div class="glass-card p-4 h-100">
+              <div class="founder-img-wrapper mb-3 mx-auto" style="width: 150px; height: 150px; overflow: hidden; border-radius: 50%; border: 3px solid var(--primary-color);">
+                <img src="assets/admin1.JPG" alt="Hota" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;">
+              </div>
+              <h4>Hota</h4>
+              <p class="text-primary small mb-2">Co-Founder & CEO</p>
+              <p class="text-muted small">Leading operations and strategic growth to power hostel communities.</p>
+            </div>
+          </div>
+          <!-- Founder 2 -->
+          <div class="col-md-4 text-center">
+            <div class="glass-card p-4 h-100">
+              <div class="founder-img-wrapper mb-3 mx-auto" style="width: 150px; height: 150px; overflow: hidden; border-radius: 50%; border: 3px solid var(--primary-color);">
+                <img src="assets/admin2.JPG" alt="Prabina" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;">
+              </div>
+              <h4>Prabina</h4>
+              <p class="text-primary small mb-2">Co-Founder & CTO</p>
+              <p class="text-muted small">Driving technical innovation and maintaining high-speed network reliability.</p>
+            </div>
+          </div>
+          <!-- Founder 3 -->
+          <div class="col-md-4 text-center">
+            <div class="glass-card p-4 h-100">
+              <div class="founder-img-wrapper mb-3 mx-auto" style="width: 150px; height: 150px; overflow: hidden; border-radius: 50%; border: 3px solid var(--primary-color);">
+                <img src="assets/admin3.JPG" alt="Biswa" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;">
+              </div>
+              <h4>Biswa</h4>
+              <p class="text-primary small mb-2">Co-Founder & Lead Architect</p>
+              <p class="text-muted small">Designing robust network backbones and structural hardware routing.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services-section" id="services">
+      <div class="container">
+        <div class="section-header">
+          <h2>Our Core Services</h2>
+          <p>We provide full-spectrum internet provisioning and administration for hostel buildings.</p>
+        </div>
+        <div class="row g-4">
+          <!-- Service 1 -->
+          <div class="col-md-6 col-lg-3">
+            <div class="glass-card p-4 h-100">
+              <div class="feature-icon-wrapper">
+                <i class="fa-solid fa-plug"></i>
+              </div>
+              <h4 class="mb-3">New Connection</h4>
+              <p class="text-muted mb-0">Instant registration and activation of internet ports or WiFi mappings for your specific hostel room.</p>
+            </div>
+          </div>
+          <!-- Service 2 -->
+          <div class="col-md-6 col-lg-3">
+            <div class="glass-card p-4 h-100">
+              <div class="feature-icon-wrapper">
+                <i class="fa-solid fa-screwdriver-wrench"></i>
+              </div>
+              <h4 class="mb-3">Technical Support</h4>
+              <p class="text-muted mb-0">Hardware replacement, router reconfigurations, and device alignment available right at your doorstep.</p>
+            </div>
+          </div>
+          <!-- Service 3 -->
+          <div class="col-md-6 col-lg-3">
+            <div class="glass-card p-4 h-100">
+              <div class="feature-icon-wrapper">
+                <i class="fa-solid fa-chart-line"></i>
+              </div>
+              <h4 class="mb-3">Network Monitoring</h4>
+              <p class="text-muted mb-0">Continuous monitoring of signal quality, latency, and router load to ensure consistent packet flows.</p>
+            </div>
+          </div>
+          <!-- Service 4 -->
+          <div class="col-md-6 col-lg-3">
+            <div class="glass-card p-4 h-100">
+              <div class="feature-icon-wrapper">
+                <i class="fa-solid fa-gears"></i>
+              </div>
+              <h4 class="mb-3">Internet Management</h4>
+              <p class="text-muted mb-0">Administrative tools for quick bandwidth allocation, MAC approvals, and status tracking.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section" id="contact">
+      <div class="container">
+        <div class="section-header">
+          <h2>Contact Us</h2>
+          <p>Have an issue or a question? Reach out to our local hostel network representatives.</p>
+        </div>
+        <div class="row g-4 justify-content-center">
+          <div class="col-md-4">
+            <div class="glass-card contact-info-card h-100">
+              <div class="contact-info-icon">
+                <i class="fa-solid fa-phone"></i>
+              </div>
+              <div>
+                <h5>Phone</h5>
+                <p class="text-muted mb-0" id="displayContactPhone">+91 98765 43210</p>
+                <p class="text-muted">Mon - Sat (9am - 8pm)</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="glass-card contact-info-card h-100">
+              <div class="contact-info-icon">
+                <i class="fa-solid fa-envelope"></i>
+              </div>
+              <div>
+                <h5>Email</h5>
+                <p class="text-muted mb-0" id="displayContactEmail">support@primenet.local</p>
+                <p class="text-muted">response within 2 hours</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="glass-card contact-info-card h-100">
+              <div class="contact-info-icon">
+                <i class="fa-solid fa-location-dot"></i>
+              </div>
+              <div>
+                <h5>Hostel Address</h5>
+                <p class="text-muted mb-0" id="displayContactAddress1">Hostel Block-C, Server Room 10</p>
+                <p class="text-muted" id="displayContactAddress2">Campus Ground, Pin 751024</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Admin Dashboard Container (Hidden initially, visible to logged-in admins) -->
+  <div id="adminDashboardWrapper" class="dashboard-container">
+    <div class="container">
+      
+      <!-- Dashboard Header -->
+      <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+        <div>
+          <h2>Admin Management Portal</h2>
+          <p class="text-muted mb-0">Review connection requests, manage registered MACs, and see analytics.</p>
+        </div>
+        <div class="d-flex gap-2">
+          <button class="btn btn-outline-secondary" id="btnOpenContactModal" data-bs-toggle="modal" data-bs-target="#contactModal" title="Update Campus Contact Information">
+            <i class="fa-solid fa-address-book me-2"></i>Update Contact Info
+          </button>
+          <button class="btn btn-outline-danger" id="btnToggleSpeedtest" title="Toggle Speed Test availability for students">
+            <i class="fa-solid fa-toggle-on me-2"></i>Disable Speed Test
+          </button>
+          <button class="btn btn-outline-primary" id="btnExportMac" title="Download accepted MAC list for router configuration">
+            <i class="fa-solid fa-download me-2"></i>Download Accepted MACs
+          </button>
+          <button class="btn btn-success" id="btnExportCsv" title="Export all user list to CSV file">
+            <i class="fa-solid fa-file-csv me-2"></i>Export CSV
+          </button>
+        </div>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="row g-4 mb-5">
+        <div class="col-sm-6 col-lg-3">
+          <div class="stats-card">
+            <div>
+              <span class="text-muted fw-semibold">Total Registrations</span>
+              <div class="stats-number" id="statTotal">0</div>
+            </div>
+            <div class="stats-icon text-primary"><i class="fa-solid fa-users"></i></div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="stats-card pending">
+            <div>
+              <span class="text-muted fw-semibold">Pending Requests</span>
+              <div class="stats-number text-warning" id="statPending">0</div>
+            </div>
+            <div class="stats-icon text-warning"><i class="fa-solid fa-clock"></i></div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="stats-card accepted">
+            <div>
+              <span class="text-muted fw-semibold">Accepted Users</span>
+              <div class="stats-number text-success" id="statAccepted">0</div>
+            </div>
+            <div class="stats-icon text-success"><i class="fa-solid fa-circle-check"></i></div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="stats-card rejected">
+            <div>
+              <span class="text-muted fw-semibold">Rejected Users</span>
+              <div class="stats-number text-danger" id="statRejected">0</div>
+            </div>
+            <div class="stats-icon text-danger"><i class="fa-solid fa-circle-xmark"></i></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts & Recent Activity Row (Charts removed) -->
+      <div class="row g-4 mb-5">
+        <!-- Recent Activities list -->
+        <div class="col-12">
+          <div class="glass-card p-4">
+            <h5 class="mb-4">Recent Registrations</h5>
+            <div id="recentActivityList" class="list-group list-group-flush" style="max-height: 300px; overflow-y: auto;">
+              <!-- Dynamic content -->
+              <div class="text-center text-muted py-3">No recent signups</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filters & Search Toolbar -->
+      <div class="glass-card p-4 mb-4">
+        <div class="row g-3 align-items-center">
+          <div class="col-md-4">
+            <label class="form-label small text-muted">Search User</label>
+            <div class="input-group">
+              <span class="input-group-text bg-transparent border-end-0 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
+              <input type="text" class="form-control border-start-0" id="searchBar" placeholder="Search by name, room, MAC...">
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <label class="form-label small text-muted">Filter by Status</label>
+            <select class="form-select" id="filterStatus">
+              <option value="All">All Registrations</option>
+              <option value="Pending">Pending</option>
+              <option value="Accepted">Accepted</option>
+              <option value="Rejected">Rejected</option>
+            </select>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <label class="form-label small text-muted">Filter by Room Type</label>
+            <select class="form-select" id="filterRoomType">
+              <option value="All">All Room Types</option>
+              <option value="A">Type A</option>
+              <option value="B">Type B</option>
+            </select>
+          </div>
+          <div class="col-md-2 d-grid mt-auto pt-2">
+            <button class="btn btn-outline-secondary" id="btnClearFilters">
+              <i class="fa-solid fa-rotate-left me-1"></i>Clear
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- User Management Table -->
+      <div class="glass-card p-0 overflow-hidden shadow-sm">
+        <div class="table-responsive">
+          <table class="table table-custom table-hover align-middle">
+            <thead>
+              <tr>
+                <th scope="col">Student Name</th>
+                <th scope="col">Contact Info</th>
+                <th scope="col">Room Details</th>
+                <th scope="col">MAC Address</th>
+                <th scope="col">Status</th>
+                <th scope="col" class="text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="studentTableBody">
+              <!-- Dynamically Populated Rows -->
+              <tr>
+                <td colspan="6" class="text-center text-muted py-5">
+                  <i class="fa-solid fa-folder-open fa-2x mb-3 d-block"></i>
+                  No student registrations found.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer-custom py-5">
+    <div class="container">
+      <div class="row g-4 mb-4 text-start">
+        <!-- Column 1 -->
+        <div class="col-md-4">
+          <h4 class="text-white fw-bold mb-3" style="font-family: var(--font-heading); text-transform: capitalize;">PrimeNet</h4>
+          <p class="small">High-speed, unlimited broadband internet custom-designed for educational campus environments.</p>
+        </div>
+        <!-- Column 2 -->
+        <div class="col-md-4">
+          <h4 class="text-white fw-bold mb-3" style="font-family: var(--font-heading);">Quick Links</h4>
+          <ul class="list-unstyled footer-links">
+            <li class="mb-2"><a href="#home" class="small text-decoration-none">Home</a></li>
+            <li class="mb-2"><a href="#about" class="small text-decoration-none">About</a></li>
+            <li class="mb-2"><a href="#services" class="small text-decoration-none">Services</a></li>
+            <li class="mb-2"><a href="#contact" class="small text-decoration-none">Contact</a></li>
+          </ul>
+        </div>
+        <!-- Column 3 -->
+        <div class="col-md-4">
+          <h4 class="text-white fw-bold mb-3" style="font-family: var(--font-heading);">Contact</h4>
+          <p class="small mb-2">Email: <span id="footerDisplayEmail">support@primenet.local</span></p>
+          <p class="small mb-3">Location: Hostel Block-C, Server Room 10</p>
+          <div class="d-flex gap-3 footer-socials">
+            <a href="#" id="footerInstagram" target="_blank" rel="noopener noreferrer" class="fw-semibold small text-decoration-none">Instagram</a>
+            <a href="#" id="footerFacebook" target="_blank" rel="noopener noreferrer" class="fw-semibold small text-decoration-none">Facebook</a>
+            <a href="#" id="footerYoutube" target="_blank" rel="noopener noreferrer" class="fw-semibold small text-decoration-none">YouTube</a>
+          </div>
+        </div>
+      </div>
+      <hr style="border-color: rgba(255,255,255,0.08);">
+      <div class="text-center pt-3">
+        <p class="small mb-0">(c) 2026 PRIMENET | All rights reserved</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- BUTTON SCROLL TO TOP -->
+  <button class="scroll-top-btn" id="scrollTopBtn" aria-label="Scroll to top" title="Scroll to Top">
+    <i class="fa-solid fa-arrow-up"></i>
+  </button>
+
+  <!-- ==================== MODALS ==================== -->
+
+  <!-- 1. REGISTRATION MODAL -->
+  <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content glass-card">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title fs-4" id="registerModalLabel">Get Connection Request</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body py-4">
+          <!-- Alert box for showing validation feedback or errors -->
+          <div class="alert alert-danger d-none" id="registerAlert" role="alert"></div>
+          <div class="alert alert-success d-none" id="registerSuccessAlert" role="alert"></div>
+
+          <form id="registerForm" novalidate>
+            <div class="mb-3">
+              <label for="regName" class="form-label small fw-semibold">Student Full Name</label>
+              <div class="input-group">
+                <span class="input-group-text bg-transparent text-muted"><i class="fa-solid fa-user"></i></span>
+                <input type="text" class="form-control" id="regName" required placeholder="e.g. John Doe">
+              </div>
+              <div class="invalid-feedback">Please enter your name.</div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="regMobile" class="form-label small fw-semibold">Mobile Number</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-transparent text-muted"><i class="fa-solid fa-phone"></i></span>
+                  <input type="tel" class="form-control" id="regMobile" required placeholder="10-digit mobile number" pattern="\d{10}">
+                </div>
+                <div class="invalid-feedback">Enter a valid 10-digit mobile.</div>
+              </div>
+              <div class="col-md-6 mt-3 mt-md-0">
+                <label for="regEmail" class="form-label small fw-semibold">Email ID</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-transparent text-muted"><i class="fa-solid fa-envelope"></i></span>
+                  <input type="email" class="form-control" id="regEmail" required placeholder="name@email.com">
+                </div>
+                <div class="invalid-feedback">Enter a valid email.</div>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="regRoomNumber" class="form-label small fw-semibold">Room Number</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-transparent text-muted"><i class="fa-solid fa-door-closed"></i></span>
+                  <input type="text" class="form-control" id="regRoomNumber" required placeholder="e.g. 104">
+                </div>
+                <div class="invalid-feedback">Enter room number.</div>
+              </div>
+              <div class="col-md-6 mt-3 mt-md-0">
+                <label for="regRoomType" class="form-label small fw-semibold">Room Type</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-transparent text-muted"><i class="fa-solid fa-bed"></i></span>
+                  <select class="form-select" id="regRoomType" required>
+                    <option value="" disabled selected>Select type</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                  </select>
+                </div>
+                <div class="invalid-feedback">Select room type.</div>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label for="regMac" class="form-label small fw-semibold">Device MAC Address</label>
+              <div class="input-group">
+                <span class="input-group-text bg-transparent text-muted"><i class="fa-solid fa-microchip"></i></span>
+                <input type="text" class="form-control" id="regMac" required placeholder="e.g. AA:BB:CC:DD:EE:01">
+              </div>
+              <div class="form-text text-muted small">How to get device MAC in phone: go to settings -> search "MAC" -> copy device MAC -> paste it here.</div>
+              <div class="invalid-feedback">Enter a valid MAC address (e.g., AA:BB:CC:DD:EE:01).</div>
+            </div>
+
+            <!-- Payment Step -->
+            <div class="mb-4 p-3 rounded border" style="background: rgba(0, 0, 0, 0.02); border-color: var(--border-color) !important;">
+              <h6 class="fw-bold mb-2 text-primary"><i class="fa-solid fa-qrcode me-2"></i>Pay ₹180 for Registration</h6>
+              <p class="small text-muted mb-3">Scan the QR code below using any UPI app to pay ₹180, then upload your payment screenshot below to submit your request.</p>
+              <div class="text-center mb-3">
+                <img id="registerQrCode" src="/favicon.png" alt="Payment QR Code" class="img-fluid rounded border shadow-sm p-1" style="max-height: 200px;">
+              </div>
+              <div class="mb-2">
+                <label for="regScreenshot" class="form-label small fw-semibold">Upload Payment Screenshot</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-transparent text-muted"><i class="fa-solid fa-file-image"></i></span>
+                  <input type="file" class="form-control" id="regScreenshot" accept="image/*" required>
+                </div>
+                <div class="invalid-feedback">Please upload your payment screenshot.</div>
+              </div>
+            </div>
+
+            <div class="d-grid">
+              <button type="submit" class="btn btn-accent btn-lg" id="btnRegisterSubmit">
+                Register Connection
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. ADMIN LOGIN MODAL -->
+  <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+      <div class="modal-content glass-card">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title fs-4" id="loginModalLabel">Admin Authenticator</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body py-4">
+          <div class="alert alert-danger d-none" id="loginAlert" role="alert"></div>
+
+          <form id="loginForm" novalidate>
+            <div class="mb-3">
+              <label for="loginUsername" class="form-label small fw-semibold">Admin Username</label>
+              <div class="input-group">
+                <span class="input-group-text bg-transparent text-muted"><i class="fa-solid fa-user-shield"></i></span>
+                <input type="text" class="form-control" id="loginUsername" required placeholder="Username">
+              </div>
+            </div>
+            <div class="mb-4">
+              <label for="loginPassword" class="form-label small fw-semibold">Password</label>
+              <div class="input-group">
+                <span class="input-group-text bg-transparent text-muted"><i class="fa-solid fa-key"></i></span>
+                <input type="password" class="form-control" id="loginPassword" required placeholder="Password">
+              </div>
+            </div>
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary btn-lg" id="btnLoginSubmit">
+                Authorize Log In
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. EDIT REGISTRATION MODAL -->
+  <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content glass-card">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title fs-4" id="editModalLabel">Modify Registration Record</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body py-4">
+          <div class="alert alert-danger d-none" id="editAlert" role="alert"></div>
+
+          <form id="editForm" novalidate>
+            <input type="hidden" id="editStudentId">
+            <div class="mb-3">
+              <label for="editName" class="form-label small fw-semibold">Student Full Name</label>
+              <div class="input-group">
+                <span class="input-group-text bg-transparent text-muted"><i class="fa-solid fa-user"></i></span>
+                <input type="text" class="form-control" id="editName" required>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="editMobile" class="form-label small fw-semibold">Mobile Number</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-transparent text-muted"><i class="fa-solid fa-phone"></i></span>
+                  <input type="tel" class="form-control" id="editMobile" required pattern="\d{10}">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="editEmail" class="form-label small fw-semibold">Email ID</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-transparent text-muted"><i class="fa-solid fa-envelope"></i></span>
+                  <input type="email" class="form-control" id="editEmail" required>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="editRoomNumber" class="form-label small fw-semibold">Room Number</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-transparent text-muted"><i class="fa-solid fa-door-closed"></i></span>
+                  <input type="text" class="form-control" id="editRoomNumber" required>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="editRoomType" class="form-label small fw-semibold">Room Type</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-transparent text-muted"><i class="fa-solid fa-bed"></i></span>
+                  <select class="form-select" id="editRoomType" required>
+                    <option value="A">Type A (Single)</option>
+                    <option value="B">Type B (Shared)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="editMac" class="form-label small fw-semibold">MAC Address</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-transparent text-muted"><i class="fa-solid fa-microchip"></i></span>
+                  <input type="text" class="form-control" id="editMac" required>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="editStatus" class="form-label small fw-semibold">Approval Status</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-transparent text-muted"><i class="fa-solid fa-circle-question"></i></span>
+                  <select class="form-select" id="editStatus" required>
+                    <option value="Pending">Pending</option>
+                    <option value="Accepted">Accepted</option>
+                    <option value="Rejected">Rejected</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-primary" id="btnEditSave">
+                Save Modifications
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. DELETE CONFIRMATION MODAL -->
+  <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+      <div class="modal-content glass-card">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title fs-5" id="deleteConfirmModalLabel">Confirm Deletion</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center py-4">
+          <i class="fa-solid fa-triangle-exclamation text-danger fa-3x mb-3"></i>
+          <p class="mb-0">Are you sure you want to permanently delete this registration record?</p>
+          <p class="text-danger small mt-1">This action cannot be undone.</p>
+        </div>
+        <div class="modal-footer border-0 d-flex justify-content-center gap-2 pb-4">
+          <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="toast" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-danger px-4" id="btnDeleteConfirm">Delete Record</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. CONTACT CONFIGURATION MODAL -->
+  <div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content glass-card">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title fs-4" id="contactModalLabel">Update Contact Information</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body py-4">
+          <div class="alert alert-danger d-none" id="contactAlert" role="alert"></div>
+          <form id="contactForm">
+            <div class="mb-3">
+              <label for="contactPhone" class="form-label small fw-semibold">Phone Number</label>
+              <div class="input-group">
+                <span class="input-group-text bg-transparent text-muted"><i class="fa-solid fa-phone"></i></span>
+                <input type="text" class="form-control" id="contactPhone" required placeholder="e.g. +91 98765 43210">
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="contactEmail" class="form-label small fw-semibold">Email ID</label>
+              <div class="input-group">
+                <span class="input-group-text bg-transparent text-muted"><i class="fa-solid fa-envelope"></i></span>
+                <input type="email" class="form-control" id="contactEmail" required placeholder="e.g. support@primenet.local">
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="contactAddress1" class="form-label small fw-semibold">Address Line 1</label>
+              <div class="input-group">
+                <span class="input-group-text bg-transparent text-muted"><i class="fa-solid fa-location-dot"></i></span>
+                <input type="text" class="form-control" id="contactAddress1" required placeholder="e.g. Hostel Block-C, Server Room 10">
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="contactAddress2" class="form-label small fw-semibold">Address Line 2 (City / ZIP)</label>
+              <div class="input-group">
+                <span class="input-group-text bg-transparent text-muted"><i class="fa-solid fa-map-pin"></i></span>
+                <input type="text" class="form-control" id="contactAddress2" required placeholder="e.g. Campus Ground, Pin 751024">
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="contactInstagram" class="form-label small fw-semibold">Instagram Link</label>
+              <div class="input-group">
+                <span class="input-group-text bg-transparent text-muted"><i class="fa-brands fa-instagram"></i></span>
+                <input type="url" class="form-control" id="contactInstagram" placeholder="e.g. https://instagram.com/username">
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="contactFacebook" class="form-label small fw-semibold">Facebook Link</label>
+              <div class="input-group">
+                <span class="input-group-text bg-transparent text-muted"><i class="fa-brands fa-facebook"></i></span>
+                <input type="url" class="form-control" id="contactFacebook" placeholder="e.g. https://facebook.com/username">
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="contactYoutube" class="form-label small fw-semibold">YouTube Link</label>
+              <div class="input-group">
+                <span class="input-group-text bg-transparent text-muted"><i class="fa-brands fa-youtube"></i></span>
+                <input type="url" class="form-control" id="contactYoutube" placeholder="e.g. https://youtube.com/channel">
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="contactQrCode" class="form-label small fw-semibold">Payment QR Code Image</label>
+              <div class="text-center mb-2">
+                <img id="contactQrCodePreview" src="/favicon.png" alt="QR Code Preview" class="img-fluid rounded border p-1" style="max-height: 120px;">
+              </div>
+              <div class="input-group">
+                <span class="input-group-text bg-transparent text-muted"><i class="fa-solid fa-qrcode"></i></span>
+                <input type="file" class="form-control" id="contactQrCode" accept="image/*">
+              </div>
+              <input type="hidden" id="contactQrCodeUrl">
+            </div>
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-primary" id="btnSaveContact">
+                Save Contact Info
+              </button>
+            </div>
+          </form>
+        </div>
+  <!-- 6. SCREENSHOT VIEW MODAL -->
+  <div class="modal fade" id="screenshotViewModal" tabindex="-1" aria-labelledby="screenshotViewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content glass-card">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title fs-4" id="screenshotViewModalLabel">
+            <i class="fa-solid fa-receipt me-2 text-info"></i>Payment Verification
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center py-4 position-relative" style="min-height: 250px;">
+          <!-- Spinner overlay -->
+          <div id="screenshotSpinner" class="position-absolute top-50 start-50 translate-middle d-flex flex-column align-items-center">
+            <div class="spinner-border text-info mb-2" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <span class="text-muted small">Loading screenshot...</span>
+          </div>
+          <!-- Image -->
+          <img id="screenshotViewImg" src="" alt="Payment Screenshot" class="img-fluid rounded border shadow-sm d-none" style="max-height: 600px; width: 100%; object-fit: contain;">
+          <!-- Error placeholder -->
+          <div id="screenshotError" class="d-none py-5 text-center text-danger">
+            <i class="fa-solid fa-triangle-exclamation fa-3x mb-3"></i>
+            <p class="mb-0 fw-bold">Failed to load payment screenshot.</p>
+            <p class="small text-muted">The image could not be loaded from storage.</p>
+          </div>
+        </div>
+        <div class="modal-footer border-0 d-flex justify-content-center gap-3 pb-4">
+          <a id="screenshotOpenNewTab" href="#" target="_blank" class="btn btn-outline-info px-4">
+            <i class="fa-solid fa-arrow-up-right-from-square me-2"></i>Open Full Size
+          </a>
+          <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

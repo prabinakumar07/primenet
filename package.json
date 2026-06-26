@@ -1,0 +1,15 @@
+{
+  "name": "primenet",
+  "version": "1.0.0",
+  "description": "PrimeNet full-stack hostel broadband management website",
+  "private": true,
+  "scripts": {
+    "start": "npm start --prefix backend",
+    "dev": "npm run dev --prefix backend",
+    "install:backend": "npm install --prefix backend",
+    "build": "npm install --prefix backend"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
