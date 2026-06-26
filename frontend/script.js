@@ -318,31 +318,40 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function updateSpeedtestUI() {
+    const speedtestCard = document.querySelector('.speedtest-card');
+    if (speedtestCard) {
+      speedtestCard.style.setProperty('display', speedTestEnabled ? 'block' : 'none', 'important');
+    }
+
     const btnStartSpeedtest = document.getElementById('btnStartSpeedtest');
     const speedtestStatus = document.getElementById('speedtestStatus');
     const speedValue = document.getElementById('speedValue');
 
-    if (!btnStartSpeedtest) return;
-
-    if (speedTestEnabled) {
-      btnStartSpeedtest.disabled = false;
-      btnStartSpeedtest.innerHTML = '<i class="fa-solid fa-circle-nodes me-2"></i>Run Speed Check';
-      speedtestStatus.className = 'badge bg-secondary';
-      speedtestStatus.textContent = 'Ready';
-    } else {
-      btnStartSpeedtest.disabled = true;
-      btnStartSpeedtest.innerHTML = '<i class="fa-solid fa-ban me-2"></i>Speed Check Disabled';
-      speedtestStatus.className = 'badge bg-danger';
-      speedtestStatus.textContent = 'Disabled';
-      speedValue.textContent = '0.0';
+    if (btnStartSpeedtest) {
+      if (speedTestEnabled) {
+        btnStartSpeedtest.disabled = false;
+        btnStartSpeedtest.innerHTML = '<i class="fa-solid fa-circle-nodes me-2"></i>Run Speed Check';
+        if (speedtestStatus) {
+          speedtestStatus.className = 'badge bg-secondary';
+          speedtestStatus.textContent = 'Ready';
+        }
+      } else {
+        btnStartSpeedtest.disabled = true;
+        btnStartSpeedtest.innerHTML = '<i class="fa-solid fa-ban me-2"></i>Speed Check Disabled';
+        if (speedtestStatus) {
+          speedtestStatus.className = 'badge bg-danger';
+          speedtestStatus.textContent = 'Disabled';
+        }
+        if (speedValue) speedValue.textContent = '0.0';
+      }
     }
 
     if (btnToggleSpeedtest) {
       if (speedTestEnabled) {
-        btnToggleSpeedtest.innerHTML = '<i class="fa-solid fa-toggle-on me-2"></i>Disable Speed Test';
+        btnToggleSpeedtest.innerHTML = '<i class="fa-solid fa-eye-slash me-2"></i>Hide Speed Test';
         btnToggleSpeedtest.className = 'btn btn-outline-danger';
       } else {
-        btnToggleSpeedtest.innerHTML = '<i class="fa-solid fa-toggle-off me-2"></i>Enable Speed Test';
+        btnToggleSpeedtest.innerHTML = '<i class="fa-solid fa-eye me-2"></i>Show Speed Test';
         btnToggleSpeedtest.className = 'btn btn-outline-success';
       }
     }
