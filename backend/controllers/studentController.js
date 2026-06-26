@@ -229,8 +229,14 @@ exports.registerStudent = async (req, res) => {
       console.error('[Pending Count Check Error]', countErr.message);
     }
 
+    // Trigger registration email asynchronously (non-blocking)
+    const emailService = require('../utils/emailService');
+    emailService.sendStudentRegistrationEmail(student).catch(e => {
+      console.error('[Registration Email Error]', e.message);
+    });
+
     return res.status(201).json({
-      message: 'Registration submitted successfully. Waiting for admin approval.',
+      message: 'Registration submitted successfully. Waiting for admin approval. A confirmation email has been sent to your inbox.',
       studentId: student._id
     });
   } catch (err) {
@@ -773,6 +779,56 @@ exports.uploadFile = async (req, res) => {
       try { fs.unlinkSync(tempFilePath); } catch (e) {}
     }
     return res.status(500).json({ message: 'Failed to upload file to Cloudinary.' });
+  }
+};
+
+// 15. Send Mail Broadcast (Admin only)
+exports.sendMailBroadcast = async (req, res) => {
+  const { recipients, subject, message } = req.body;
+
+  if (!recipients || !subject || !message) {
+    return res.status(400).json({ message: 'Recipients group, subject, and message are required.' });
+  }
+
+  if (!['All', 'Pending', 'Accepted', 'Rejected'].includes(recipients)) {
+    return res.status(400).json({ message: 'Invalid recipient group selected.' });
+  }
+
+  try {
+    let query = {};
+    if (recipients !== 'All') {
+      query.status = recipients;
+    }
+
+    const students = await Student.find(query);
+    if (students.length === 0) {
+      return res.status(404).json({ message: `No students found with registration status matching: ${recipients}` });
+    }
+
+    const emailService = require('../utils/emailService');
+    let successCount = 0;
+    let failCount = 0;
+
+    for (const student of students) {
+      try {
+        const sent = await emailService.sendBroadcastEmail(student.email, student.name, subject, message);
+        if (sent) {
+          successCount++;
+        } else {
+          failCount++;
+        }
+      } catch (err) {
+        console.error(`[Broadcast Error] Failed to send to ${student.email}:`, err.message);
+        failCount++;
+      }
+    }
+
+    return res.status(200).json({
+      message: `Broadcast completed. Sent: ${successCount}, Failed: ${failCount}.`
+    });
+  } catch (err) {
+    console.error('Mail broadcast error:', err.message);
+    return res.status(500).json({ message: 'Failed to process mail broadcast.' });
   }
 };
 

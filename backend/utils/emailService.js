@@ -398,3 +398,281 @@ exports.sendAdminAlertEmail = async (pendingCount, adminEmailString) => {
 
   return sendEmail(payload);
 };
+
+/**
+ * Sends a confirmation email to the student upon registration submission.
+ */
+exports.sendStudentRegistrationEmail = async (student) => {
+  const contact = await getContactConfig();
+  const senderEmail = (process.env.BREVO_SENDER_EMAIL || contact.email || 'support@primenet.local').trim();
+  const senderName = (process.env.BREVO_SENDER_NAME || 'PrimeNet Admin').trim();
+
+  const htmlContent = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <style>
+        body {
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          background-color: #f8fafc;
+          margin: 0;
+          padding: 20px;
+          color: #334155;
+        }
+        .container {
+          max-width: 600px;
+          margin: 0 auto;
+          background: #ffffff;
+          border-radius: 16px;
+          overflow: hidden;
+          box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+          border: 1px solid #e2e8f0;
+        }
+        .header {
+          background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+          color: #ffffff;
+          padding: 40px 20px;
+          text-align: center;
+        }
+        .header h1 {
+          margin: 0;
+          font-size: 24px;
+          font-weight: 700;
+          letter-spacing: 0.5px;
+        }
+        .logo-circle {
+          width: 60px;
+          height: 60px;
+          background: rgba(255, 255, 255, 0.2);
+          border-radius: 50%;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 15px;
+          font-size: 28px;
+        }
+        .content {
+          padding: 30px 25px;
+          line-height: 1.6;
+        }
+        .greeting {
+          font-size: 18px;
+          font-weight: 600;
+          margin-top: 0;
+          color: #1e293b;
+        }
+        .status-badge {
+          display: inline-block;
+          background-color: #e0f2fe;
+          color: #0369a1;
+          padding: 8px 16px;
+          border-radius: 9999px;
+          font-weight: 600;
+          font-size: 14px;
+          margin: 15px 0;
+        }
+        .details-card {
+          background: #f1f5f9;
+          border-radius: 12px;
+          padding: 20px;
+          margin: 25px 0;
+          border-left: 4px solid #0284c7;
+        }
+        .details-row {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 10px;
+          font-size: 14px;
+        }
+        .details-row:last-child {
+          margin-bottom: 0;
+        }
+        .details-label {
+          font-weight: 600;
+          color: #475569;
+        }
+        .details-value {
+          color: #0f172a;
+          font-family: monospace;
+          font-weight: bold;
+        }
+        .footer {
+          background: #f8fafc;
+          padding: 25px;
+          text-align: center;
+          font-size: 12px;
+          color: #64748b;
+          border-top: 1px solid #e2e8f0;
+        }
+        .footer a {
+          color: #3b82f6;
+          text-decoration: none;
+          margin: 0 10px;
+        }
+        .footer p {
+          margin: 5px 0;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <div class="logo-circle">⏳</div>
+          <h1>Registration Received</h1>
+          <p style="margin: 5px 0 0 0; opacity: 0.9;">PrimeNet Broadband System</p>
+        </div>
+        <div class="content">
+          <p class="greeting">Hello ${student.name},</p>
+          <p>Thank you for submitting your connection request. Your payment and verification are currently under process, and we will review them shortly.</p>
+          
+          <div style="text-align: center;">
+            <span class="status-badge">Verification Under Process</span>
+          </div>
+
+          <div class="details-card">
+            <div class="details-row">
+              <span class="details-label">Registered Name:</span>
+              <span class="details-value">${student.name}</span>
+            </div>
+            <div class="details-row">
+              <span class="details-label">Room Number:</span>
+              <span class="details-value">${student.room_number} (Type ${student.room_type})</span>
+            </div>
+            <div class="details-row">
+              <span class="details-label">MAC Address:</span>
+              <span class="details-value">${student.mac_address}</span>
+            </div>
+          </div>
+          
+          <p style="font-size: 14px; color: #64748b;">Once the administrator reviews and accepts your payment screenshot/request, you will receive another confirmation email with activation instructions.</p>
+        </div>
+        <div class="footer">
+          <p>Need assistance? Contact us at <strong>${contact.phone}</strong> or reply to <strong>${senderEmail}</strong>.</p>
+          <p style="margin-top: 15px; font-size: 10px; opacity: 0.8;">&copy; 2026 PrimeNet System. All rights reserved.</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+
+  const payload = {
+    sender: {
+      name: senderName,
+      email: senderEmail
+    },
+    to: [
+      {
+        email: student.email,
+        name: student.name
+      }
+    ],
+    subject: `⏳ PrimeNet Registration Under Review - Room ${student.room_number}`,
+    htmlContent: htmlContent
+  };
+
+  return sendEmail(payload);
+};
+
+/**
+ * Sends a broadcast email to a student.
+ */
+exports.sendBroadcastEmail = async (email, name, subject, htmlBody) => {
+  const contact = await getContactConfig();
+  const senderEmail = (process.env.BREVO_SENDER_EMAIL || contact.email || 'support@primenet.local').trim();
+  const senderName = (process.env.BREVO_SENDER_NAME || 'PrimeNet Admin').trim();
+
+  // Convert plain text line breaks to <br> if it doesn't contain HTML tags.
+  const hasHtmlTags = /<[a-z][\s\S]*>/i.test(htmlBody);
+  const formattedBody = hasHtmlTags ? htmlBody : htmlBody.replace(/\n/g, '<br>');
+
+  const htmlContent = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <style>
+        body {
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          background-color: #f8fafc;
+          margin: 0;
+          padding: 20px;
+          color: #334155;
+        }
+        .container {
+          max-width: 600px;
+          margin: 0 auto;
+          background: #ffffff;
+          border-radius: 16px;
+          overflow: hidden;
+          box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+          border: 1px solid #e2e8f0;
+        }
+        .header {
+          background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+          color: #ffffff;
+          padding: 30px 20px;
+          text-align: center;
+        }
+        .header h1 {
+          margin: 0;
+          font-size: 22px;
+          font-weight: 700;
+        }
+        .content {
+          padding: 30px 25px;
+          line-height: 1.6;
+        }
+        .greeting {
+          font-size: 16px;
+          font-weight: 600;
+          margin-top: 0;
+          color: #1e293b;
+        }
+        .footer {
+          background: #f8fafc;
+          padding: 20px;
+          text-align: center;
+          font-size: 12px;
+          color: #64748b;
+          border-top: 1px solid #e2e8f0;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <h1>PrimeNet Announcement</h1>
+        </div>
+        <div class="content">
+          <p class="greeting">Hello ${name},</p>
+          <div>
+            ${formattedBody}
+          </div>
+        </div>
+        <div class="footer">
+          <p>This is a broadcast message from the PrimeNet administrator.</p>
+          <p style="margin-top: 5px; font-size: 10px; opacity: 0.8;">&copy; 2026 PrimeNet System. All rights reserved.</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+
+  const payload = {
+    sender: {
+      name: senderName,
+      email: senderEmail
+    },
+    to: [
+      {
+        email: email,
+        name: name
+      }
+    ],
+    subject: subject,
+    htmlContent: htmlContent
+  };
+
+  return sendEmail(payload);
+};

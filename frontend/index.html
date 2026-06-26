@@ -554,6 +554,55 @@
         </div>
       </div>
 
+      <!-- Mail Broadcast Portal Card -->
+      <div class="glass-card p-4 mt-5 mb-4">
+        <h4 class="mb-3 text-primary"><i class="fa-solid fa-paper-plane me-2"></i>Mail Broadcast Portal</h4>
+        <p class="text-muted small mb-4">Send an announcement or update email to all registered students or specific subgroups (Pending, Accepted, Rejected).</p>
+        
+        <div class="alert alert-danger d-none" id="broadcastAlert" role="alert"></div>
+        <div class="alert alert-success d-none" id="broadcastSuccessAlert" role="alert"></div>
+        
+        <form id="broadcastForm" class="needs-validation" novalidate>
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label for="broadcastRecipients" class="form-label small fw-semibold">Target Group</label>
+              <div class="input-group">
+                <span class="input-group-text bg-transparent text-muted"><i class="fa-solid fa-users"></i></span>
+                <select class="form-select" id="broadcastRecipients" required>
+                  <option value="" disabled selected>Select group</option>
+                  <option value="All">All Registered Students</option>
+                  <option value="Pending">Pending Students Only</option>
+                  <option value="Accepted">Accepted Students Only</option>
+                  <option value="Rejected">Rejected Students Only</option>
+                </select>
+              </div>
+              <div class="invalid-feedback">Please select a target group.</div>
+            </div>
+            
+            <div class="col-md-8">
+              <label for="broadcastSubject" class="form-label small fw-semibold">Email Subject</label>
+              <div class="input-group">
+                <span class="input-group-text bg-transparent text-muted"><i class="fa-solid fa-heading"></i></span>
+                <input type="text" class="form-control" id="broadcastSubject" required placeholder="e.g. Important Maintenance Notice - PrimeNet">
+              </div>
+              <div class="invalid-feedback">Please enter an email subject.</div>
+            </div>
+            
+            <div class="col-12">
+              <label for="broadcastMessage" class="form-label small fw-semibold">Email Message Body</label>
+              <textarea class="form-control" id="broadcastMessage" rows="6" required placeholder="Type your message here. You can use standard text or HTML."></textarea>
+              <div class="invalid-feedback">Please enter the email message.</div>
+            </div>
+            
+            <div class="col-12 d-flex justify-content-end mt-4">
+              <button type="submit" class="btn btn-accent btn-lg" id="btnBroadcastSubmit">
+                <i class="fa-solid fa-bullhorn me-2"></i>Send Broadcast Email
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
     </div>
   </div>
 
@@ -682,10 +731,13 @@
               <h6 class="fw-bold mb-2 text-primary"><i class="fa-solid fa-qrcode me-2"></i>Pay ₹180 for Registration</h6>
               <p class="small text-muted mb-3">Scan the QR code below using any UPI app to pay ₹180, then upload your payment screenshot below to submit your request.</p>
               <div class="text-center mb-3">
-                <img id="registerQrCode" src="/favicon.png" alt="Payment QR Code" class="img-fluid rounded border shadow-sm p-1" style="max-height: 200px;">
+                <img id="registerQrCode" src="/favicon.png" alt="Payment QR Code" class="img-fluid rounded border shadow-sm p-1" style="max-height: 200px; display: block; margin: 0 auto 10px auto;">
+                <a id="downloadQrBtn" href="/favicon.png" download="payment_qr.png" class="btn btn-outline-primary btn-sm mt-1 px-3">
+                  <i class="fa-solid fa-download me-1"></i> Download QR Code
+                </a>
               </div>
               <div class="mb-2">
-                <label for="regScreenshot" class="form-label small fw-semibold">Upload Payment Screenshot</label>
+                <label for="regScreenshot" class="form-label small fw-semibold">Upload Payment Screenshot (Mandatory) *</label>
                 <div class="input-group">
                   <span class="input-group-text bg-transparent text-muted"><i class="fa-solid fa-file-image"></i></span>
                   <input type="file" class="form-control" id="regScreenshot" accept="image/*" required>

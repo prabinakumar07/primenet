@@ -1391,6 +1391,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const registerQrCode = document.getElementById('registerQrCode');
     if (registerQrCode) registerQrCode.src = data.qr_code_url || '/favicon.png';
 
+    const downloadQrBtn = document.getElementById('downloadQrBtn');
+    if (downloadQrBtn) downloadQrBtn.href = data.qr_code_url || '/favicon.png';
+
     // Also populate the admin form fields if they exist
     const inputPhone = document.getElementById('contactPhone');
     const inputEmail = document.getElementById('contactEmail');
@@ -1483,6 +1486,100 @@ document.addEventListener('DOMContentLoaded', () => {
           contactAlert.textContent = err.message;
           contactAlert.classList.remove('d-none');
         }
+      } finally {
+        toggleSpinner(false);
+      }
+  }
+
+  /* ==========================================
+     QR CODE DOWNLOAD HANDLER
+     ========================================== */
+  const downloadQrBtn = document.getElementById('downloadQrBtn');
+  if (downloadQrBtn) {
+    downloadQrBtn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const qrUrl = downloadQrBtn.getAttribute('href');
+      if (!qrUrl) return;
+      try {
+        const response = await fetch(qrUrl);
+        const blob = await response.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        const tempLink = document.createElement('a');
+        tempLink.href = blobUrl;
+        tempLink.download = 'payment_qr.png';
+        document.body.appendChild(tempLink);
+        tempLink.click();
+        document.body.removeChild(tempLink);
+        URL.revokeObjectURL(blobUrl);
+      } catch (err) {
+        console.error('Error downloading QR code:', err);
+        // Fallback: open in new tab
+        window.open(qrUrl, '_blank');
+      }
+    });
+  }
+
+  /* ==========================================
+     MAIL BROADCAST FORM SUBMISSION
+     ========================================== */
+  const broadcastForm = document.getElementById('broadcastForm');
+  const broadcastAlert = document.getElementById('broadcastAlert');
+  const broadcastSuccessAlert = document.getElementById('broadcastSuccessAlert');
+
+  if (broadcastForm) {
+    broadcastForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      broadcastAlert.classList.add('d-none');
+      broadcastSuccessAlert.classList.add('d-none');
+      
+      const recipients = document.getElementById('broadcastRecipients').value;
+      const subject = document.getElementById('broadcastSubject').value.trim();
+      const message = document.getElementById('broadcastMessage').value.trim();
+      
+      if (!recipients) {
+        broadcastAlert.textContent = 'Please select a target group.';
+        broadcastAlert.classList.remove('d-none');
+        broadcastForm.classList.add('was-validated');
+        return;
+      }
+      
+      if (!subject) {
+        broadcastAlert.textContent = 'Please enter an email subject.';
+        broadcastAlert.classList.remove('d-none');
+        broadcastForm.classList.add('was-validated');
+        return;
+      }
+      
+      if (!message) {
+        broadcastAlert.textContent = 'Please enter a message body.';
+        broadcastAlert.classList.remove('d-none');
+        broadcastForm.classList.add('was-validated');
+        return;
+      }
+      
+      toggleSpinner(true);
+      
+      try {
+        const res = await fetch(`${API_BASE}/students/broadcast`, {
+          method: 'POST',
+          headers: getAuthHeaders(),
+          body: JSON.stringify({ recipients, subject, message })
+        });
+        
+        const data = await res.json();
+        
+        if (!res.ok) {
+          throw new Error(data.message || 'Failed to send broadcast email.');
+        }
+        
+        broadcastSuccessAlert.textContent = data.message || 'Broadcast email sent successfully!';
+        broadcastSuccessAlert.classList.remove('d-none');
+        broadcastForm.reset();
+        broadcastForm.classList.remove('was-validated');
+      } catch (err) {
+        broadcastAlert.textContent = err.message;
+        broadcastAlert.classList.remove('d-none');
       } finally {
         toggleSpinner(false);
       }
