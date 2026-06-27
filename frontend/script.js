@@ -73,8 +73,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let deleteStudentIdTarget = null;
   let speedTestEnabled = true;
 
-  // Base API URL (relative to root since backend serves static frontend)
-  const API_BASE = '/api';
+  // Base API URL (dynamic fallback to support running frontend standalone/file-mode)
+  const API_BASE = window.location.origin.includes('5000') ? '/api' : 'http://localhost:5000/api';
 
   /* ==========================================
      THEME / DARK MODE MANAGEMENT
