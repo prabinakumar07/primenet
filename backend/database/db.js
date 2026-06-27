@@ -60,7 +60,15 @@ async function seedAdminUser() {
       await admin.save();
       console.log(`Admin user seeded successfully with username: ${username}`);
     } else {
-      console.log('Admin user already exists. Seeding skipped.');
+      const isMatch = await bcrypt.compare(password, existingAdmin.password);
+      if (!isMatch) {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        existingAdmin.password = hashedPassword;
+        await existingAdmin.save();
+        console.log(`Admin password updated in database to match the current environment configuration.`);
+      } else {
+        console.log('Admin user already exists and matches current password. Seeding skipped.');
+      }
     }
   } catch (err) {
     console.error('Error seeding admin user:', err.message);
