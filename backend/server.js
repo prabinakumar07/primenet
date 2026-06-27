@@ -67,7 +67,15 @@ app.get('/healthz', (req, res) => {
 });
 
 // Serve frontend static files
-app.use(express.static(frontendPath));
+app.use(express.static(frontendPath, {
+  setHeaders: (res, path) => {
+    if (path.endsWith('.html') || path.endsWith('.js') || path.endsWith('.css')) {
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+      res.setHeader('Pragma', 'no-cache');
+      res.setHeader('Expires', '0');
+    }
+  }
+}));
 
 // Routes
 const authRoutes = require('./routes/authRoutes');
