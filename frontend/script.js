@@ -73,8 +73,14 @@ document.addEventListener('DOMContentLoaded', () => {
   let deleteStudentIdTarget = null;
   let speedTestEnabled = true;
 
-  // Base API URL (dynamic fallback to support running frontend standalone/file-mode)
-  const API_BASE = window.location.origin.includes('5000') ? '/api' : 'http://localhost:5000/api';
+  // Base API URL (dynamic fallback to support running frontend standalone/file-mode or deployed)
+  let API_BASE = '/api';
+  if (
+    (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === '') &&
+    window.location.port !== '5000'
+  ) {
+    API_BASE = 'http://localhost:5000/api';
+  }
 
   /* ==========================================
      THEME / DARK MODE MANAGEMENT
