@@ -1498,6 +1498,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } finally {
         toggleSpinner(false);
       }
+    });
   }
 
   /* ==========================================
