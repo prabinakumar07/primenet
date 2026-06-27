@@ -388,7 +388,7 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
     loginAlert.classList.add('d-none');
 
-    const username = document.getElementById('loginUsername').value.trim();
+    const username = document.getElementById('loginUsername').value.toLowerCase().trim();
     const password = document.getElementById('loginPassword').value.trim();
 
     if (!username || !password) {

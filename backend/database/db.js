@@ -46,7 +46,7 @@ const Setting = mongoose.model('Setting', settingSchema);
 
 // Seeding functions
 async function seedAdminUser() {
-  const username = process.env.ADMIN_USERNAME || 'admin';
+  const username = (process.env.ADMIN_USERNAME || 'admin').toLowerCase().trim();
   const password = process.env.ADMIN_PASSWORD || 'primenet@2007';
 
   try {

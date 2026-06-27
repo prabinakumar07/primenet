@@ -10,7 +10,7 @@ exports.login = async (req, res) => {
   }
 
   try {
-    const user = await User.findOne({ username: username.trim() });
+    const user = await User.findOne({ username: username.toLowerCase().trim() });
     if (!user) {
       return res.status(401).json({ message: 'Invalid username or password.' });
     }
