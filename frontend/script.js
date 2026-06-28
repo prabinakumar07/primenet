@@ -630,11 +630,30 @@ document.addEventListener('DOMContentLoaded', () => {
         statusBadge = `<span class="badge-rejected"><i class="fa-solid fa-circle-xmark me-1"></i>Rejected</span>`;
       }
 
+      let payLaterBadge = '';
+      if (student.pay_later_date && student.payment_status !== 'Paid') {
+        const today = new Date();
+        today.setHours(0,0,0,0);
+        const dueDate = new Date(student.pay_later_date);
+        dueDate.setHours(0,0,0,0);
+        const isOverdue = dueDate < today;
+        const badgeClass = isOverdue ? 'bg-danger-subtle text-danger border border-danger-subtle' : 'bg-warning-subtle text-warning-emphasis border border-warning-subtle';
+        const iconClass = isOverdue ? 'fa-solid fa-triangle-exclamation' : 'fa-solid fa-clock';
+        payLaterBadge = `
+          <div class="mt-1">
+            <span class="badge ${badgeClass}" style="font-size: 0.7rem; padding: 0.2rem 0.5rem;" title="${isOverdue ? 'Overdue!' : 'Pay Later Deadline'}">
+              <i class="${iconClass} me-1"></i>Pay Later: ${new Date(student.pay_later_date).toLocaleDateString()}
+            </span>
+          </div>
+        `;
+      }
+
       const row = document.createElement('tr');
       row.innerHTML = `
         <td>
           <div class="fw-bold">${student.name}</div>
           <small class="text-muted" style="font-size: 0.75rem;">Reg: ${new Date(student.created_at).toLocaleDateString()} ${new Date(student.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</small>
+          ${payLaterBadge}
         </td>
         <td>
           <div><i class="fa-solid fa-phone me-2 text-muted" style="width: 14px;"></i>${student.mobile}</div>
@@ -646,10 +665,33 @@ document.addEventListener('DOMContentLoaded', () => {
         </td>
         <td>
           <div class="d-flex flex-column gap-1">
-            <code class="text-secondary" style="font-size: 0.85rem;">${student.mac_address}</code>
-            ${student.mac_address_2 ? `<code class="text-muted" style="font-size: 0.75rem;">${student.mac_address_2}</code>` : ''}
-            ${student.mac_address_3 ? `<code class="text-muted" style="font-size: 0.75rem;">${student.mac_address_3}</code>` : ''}
-            ${student.mac_address_4 ? `<code class="text-muted" style="font-size: 0.75rem;">${student.mac_address_4}</code>` : ''}
+            <div class="d-flex align-items-center justify-content-between gap-1">
+              <code class="text-secondary" style="font-size: 0.85rem;">${student.mac_address}</code>
+              <button class="btn btn-link p-0 text-muted action-copy-mac" data-mac="${student.mac_address}" title="Copy MAC Address" style="font-size: 0.8rem; line-height: 1; border: none; background: none;">
+                <i class="fa-regular fa-copy"></i>
+              </button>
+            </div>
+            ${student.mac_address_2 ? `
+              <div class="d-flex align-items-center justify-content-between gap-1">
+                <code class="text-muted" style="font-size: 0.75rem;">${student.mac_address_2}</code>
+                <button class="btn btn-link p-0 text-muted action-copy-mac" data-mac="${student.mac_address_2}" title="Copy MAC Address" style="font-size: 0.75rem; line-height: 1; border: none; background: none;">
+                  <i class="fa-regular fa-copy"></i>
+                </button>
+              </div>` : ''}
+            ${student.mac_address_3 ? `
+              <div class="d-flex align-items-center justify-content-between gap-1">
+                <code class="text-muted" style="font-size: 0.75rem;">${student.mac_address_3}</code>
+                <button class="btn btn-link p-0 text-muted action-copy-mac" data-mac="${student.mac_address_3}" title="Copy MAC Address" style="font-size: 0.75rem; line-height: 1; border: none; background: none;">
+                  <i class="fa-regular fa-copy"></i>
+                </button>
+              </div>` : ''}
+            ${student.mac_address_4 ? `
+              <div class="d-flex align-items-center justify-content-between gap-1">
+                <code class="text-muted" style="font-size: 0.75rem;">${student.mac_address_4}</code>
+                <button class="btn btn-link p-0 text-muted action-copy-mac" data-mac="${student.mac_address_4}" title="Copy MAC Address" style="font-size: 0.75rem; line-height: 1; border: none; background: none;">
+                  <i class="fa-regular fa-copy"></i>
+                </button>
+              </div>` : ''}
           </div>
         </td>
         <td>${statusBadge}</td>
@@ -735,6 +777,28 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
 
+    document.querySelectorAll('.action-copy-mac').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const mac = btn.dataset.mac;
+        navigator.clipboard.writeText(mac)
+          .then(() => {
+            showToast('MAC address copied to clipboard!');
+            const icon = btn.querySelector('i');
+            if (icon) {
+              icon.className = 'fa-solid fa-check text-success';
+              setTimeout(() => {
+                icon.className = 'fa-regular fa-copy';
+              }, 1500);
+            }
+          })
+          .catch(err => {
+            console.error('Failed to copy: ', err);
+            showToast('Failed to copy MAC address.', 'error');
+          });
+      });
+    });
+
     // Opened directly via href link target="_blank"
   }
 
@@ -814,6 +878,17 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('editMac3').value = student.mac_address_3 || '';
     document.getElementById('editMac4').value = student.mac_address_4 || '';
     document.getElementById('editPaymentStatus').value = student.payment_status || 'Unpaid';
+    
+    if (student.pay_later_date) {
+      const dateObj = new Date(student.pay_later_date);
+      const yyyy = dateObj.getFullYear();
+      const mm = String(dateObj.getMonth() + 1).padStart(2, '0');
+      const dd = String(dateObj.getDate()).padStart(2, '0');
+      document.getElementById('editPayLaterDate').value = `${yyyy}-${mm}-${dd}`;
+    } else {
+      document.getElementById('editPayLaterDate').value = '';
+    }
+    
     document.getElementById('editStatus').value = student.status;
 
     editModal.show();
@@ -861,6 +936,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const mac_address_3 = document.getElementById('editMac3').value.trim();
     const mac_address_4 = document.getElementById('editMac4').value.trim();
     const payment_status = document.getElementById('editPaymentStatus').value;
+    const pay_later_date = document.getElementById('editPayLaterDate').value;
     const status = document.getElementById('editStatus').value;
 
     let errors = [];
@@ -896,6 +972,7 @@ document.addEventListener('DOMContentLoaded', () => {
           mac_address_3, 
           mac_address_4, 
           payment_status, 
+          pay_later_date,
           status 
         })
       });

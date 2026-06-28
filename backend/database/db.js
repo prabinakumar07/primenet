@@ -28,6 +28,7 @@ const studentSchema = new mongoose.Schema({
   mac_address_4: { type: String, default: '', trim: true },
   payment_status: { type: String, default: 'Unpaid', enum: ['Paid', 'Unpaid', 'Partially Paid'] },
   screenshot_url: { type: String, default: '' },
+  pay_later_date: { type: Date, default: null },
   status: { type: String, default: 'Pending', enum: ['Pending', 'Accepted', 'Rejected'] },
   created_at: { type: Date, default: Date.now }
 });

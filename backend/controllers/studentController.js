@@ -117,6 +117,7 @@ const mapStudentDoc = (doc) => {
     mac_address_3: doc.mac_address_3 || '',
     mac_address_4: doc.mac_address_4 || '',
     payment_status: doc.payment_status || 'Unpaid',
+    pay_later_date: doc.pay_later_date || null,
     screenshot_url: screenshot,
     status: doc.status,
     created_at: doc.created_at
@@ -335,7 +336,7 @@ exports.updatePaymentStatus = async (req, res) => {
 // 4. Edit Student Registration (Admin only)
 exports.editStudent = async (req, res) => {
   const { id } = req.params;
-  const { name, mobile, email, room_number, room_type, mac_address, mac_address_2, mac_address_3, mac_address_4, payment_status, status, screenshot_url } = req.body;
+  const { name, mobile, email, room_number, room_type, mac_address, mac_address_2, mac_address_3, mac_address_4, payment_status, pay_later_date, status, screenshot_url } = req.body;
 
   if (!name || !mobile || !email || !room_number || !room_type || !mac_address || !status) {
     return res.status(400).json({ message: 'All fields are required.' });
@@ -352,6 +353,7 @@ exports.editStudent = async (req, res) => {
   const cleanMac3 = mac_address_3 ? sanitizeInput(mac_address_3) : '';
   const cleanMac4 = mac_address_4 ? sanitizeInput(mac_address_4) : '';
   const cleanPaymentStatus = payment_status ? sanitizeInput(payment_status) : 'Unpaid';
+  const cleanPayLaterDate = pay_later_date ? sanitizeInput(pay_later_date) : '';
   const cleanStatus = sanitizeInput(status);
 
   // Validate
@@ -463,6 +465,7 @@ exports.editStudent = async (req, res) => {
     student.mac_address_3 = normalizedMac3;
     student.mac_address_4 = normalizedMac4;
     student.payment_status = cleanPaymentStatus;
+    student.pay_later_date = cleanPayLaterDate ? new Date(cleanPayLaterDate) : null;
     student.status = cleanStatus;
 
     if (screenshot_url !== undefined) {
@@ -621,7 +624,7 @@ exports.exportCSV = async (req, res) => {
     const mapped = students.map(mapStudentDoc);
     const sorted = sortStudentsArray(mapped);
 
-    const headers = 'Name,Mobile Number,Email,Room Number,Room Type,MAC Address,MAC Address 2,MAC Address 3,MAC Address 4,Payment Status,Status,Registration Date';
+    const headers = 'Name,Mobile Number,Email,Room Number,Room Type,MAC Address,MAC Address 2,MAC Address 3,MAC Address 4,Payment Status,Status,Pay Later Date,Registration Date';
     const csvRows = sorted.map(r => {
       const escapeCsv = (val) => {
         if (val === null || val === undefined) return '';
@@ -643,6 +646,7 @@ exports.exportCSV = async (req, res) => {
         escapeCsv(r.mac_address_4),
         escapeCsv(r.payment_status),
         escapeCsv(r.status),
+        escapeCsv(r.pay_later_date ? new Date(r.pay_later_date).toLocaleDateString() : ''),
         escapeCsv(r.created_at)
       ].join(',');
     });
