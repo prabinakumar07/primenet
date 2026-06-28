@@ -2,9 +2,31 @@ const Setting = require('../database/db').Setting;
 
 const appUrl = (process.env.APP_URL || 'http://localhost:5000').replace(/\/$/, '');
 
+// Fetch email config from DB, fallback to environment variables
+const getEmailConfig = async () => {
+  try {
+    const emailSetting = await Setting.findOne({ key: 'email_config' });
+    if (emailSetting && emailSetting.value) {
+      return {
+        apiKey: emailSetting.value.api_key || process.env.BREVO_API_KEY || '',
+        senderEmail: emailSetting.value.sender_email || process.env.BREVO_SENDER_EMAIL || '',
+        senderName: emailSetting.value.sender_name || process.env.BREVO_SENDER_NAME || 'PrimeNet Admin'
+      };
+    }
+  } catch (e) {
+    console.error('[Email Service] Error fetching email config:', e.message);
+  }
+  return {
+    apiKey: process.env.BREVO_API_KEY || '',
+    senderEmail: process.env.BREVO_SENDER_EMAIL || '',
+    senderName: process.env.BREVO_SENDER_NAME || 'PrimeNet Admin'
+  };
+};
+
 // Send email using Brevo Transactional Email REST API
 const sendEmail = async (payload) => {
-  const apiKey = (process.env.BREVO_API_KEY || '').trim();
+  const emailConfig = await getEmailConfig();
+  const apiKey = (emailConfig.apiKey || '').trim();
   
   if (!apiKey || apiKey.toLowerCase() === 'none' || apiKey.includes('placeholder')) {
     console.warn('[Email Service] Brevo API Key is not configured. Skipping email sending.');
@@ -57,9 +79,10 @@ const getContactConfig = async () => {
  * Sends a confirmation email to the student once their connection request is approved.
  */
 exports.sendStudentApprovalEmail = async (student) => {
+  const emailConfig = await getEmailConfig();
   const contact = await getContactConfig();
-  const senderEmail = (process.env.BREVO_SENDER_EMAIL || contact.email || 'support@primenet.local').trim();
-  const senderName = (process.env.BREVO_SENDER_NAME || 'PrimeNet Admin').trim();
+  const senderEmail = (emailConfig.senderEmail || contact.email || 'support@primenet.local').trim();
+  const senderName = (emailConfig.senderName || 'PrimeNet Admin').trim();
 
   const htmlContent = `
     <!DOCTYPE html>
@@ -216,23 +239,30 @@ exports.sendStudentApprovalEmail = async (student) => {
           </div>
 
           <div class="steps">
-            <h3 style="margin-top: 0; font-size: 16px; color: #1e293b;">How to get started:</h3>
+            <h3 style="margin-top: 0; font-size: 16px; color: #1e293b;">Process to connect with Wi-Fi:</h3>
             
             <div class="step-item">
               <span class="step-number">1</span>
-              <p class="step-text">Connect your device to the hostel's primary local Wi-Fi router / LAN line.</p>
+              <p class="step-text">Go to Wi-Fi settings on your device.</p>
             </div>
             
             <div class="step-item">
               <span class="step-number">2</span>
-              <p class="step-text">Ensure the physical MAC Address of your connected interface matches the registered address above.</p>
+              <p class="step-text">Connect to the Wi-Fi network SSID: <strong>PRIMENET</strong>.</p>
             </div>
             
             <div class="step-item">
               <span class="step-number">3</span>
-              <p class="step-text">Open any browser, perform a test lookup, and enjoy unlimited high-speed browsing!</p>
+              <p class="step-text">Choose "Use device MAC" in advanced settings.</p>
+            </div>
+            
+            <div class="step-item">
+              <span class="step-number">4</span>
+              <p class="step-text">Enter the Wi-Fi password: <strong>pass-primenet@999</strong> and connect.</p>
             </div>
           </div>
+          
+          <p style="font-size: 15px; font-weight: 600; color: #10b981; margin-top: 15px;">You can connect now!</p>
         </div>
         <div class="footer">
           <p>Need support? Contact us at <strong>${contact.phone}</strong> or reply to <strong>${senderEmail}</strong>.</p>
@@ -270,9 +300,10 @@ exports.sendStudentApprovalEmail = async (student) => {
  * Sends a warning alert email to the admin(s) when the queue of pending connection requests exceeds 8.
  */
 exports.sendAdminAlertEmail = async (pendingCount, adminEmailString) => {
+  const emailConfig = await getEmailConfig();
   const contact = await getContactConfig();
-  const senderEmail = (process.env.BREVO_SENDER_EMAIL || contact.email || 'support@primenet.local').trim();
-  const senderName = (process.env.BREVO_SENDER_NAME || 'PrimeNet Admin').trim();
+  const senderEmail = (emailConfig.senderEmail || contact.email || 'support@primenet.local').trim();
+  const senderName = (emailConfig.senderName || 'PrimeNet Admin').trim();
 
   const htmlContent = `
     <!DOCTYPE html>
@@ -403,9 +434,10 @@ exports.sendAdminAlertEmail = async (pendingCount, adminEmailString) => {
  * Sends a confirmation email to the student upon registration submission.
  */
 exports.sendStudentRegistrationEmail = async (student) => {
+  const emailConfig = await getEmailConfig();
   const contact = await getContactConfig();
-  const senderEmail = (process.env.BREVO_SENDER_EMAIL || contact.email || 'support@primenet.local').trim();
-  const senderName = (process.env.BREVO_SENDER_NAME || 'PrimeNet Admin').trim();
+  const senderEmail = (emailConfig.senderEmail || contact.email || 'support@primenet.local').trim();
+  const senderName = (emailConfig.senderName || 'PrimeNet Admin').trim();
 
   const htmlContent = `
     <!DOCTYPE html>
@@ -578,9 +610,10 @@ exports.sendStudentRegistrationEmail = async (student) => {
  * Sends a broadcast email to a student.
  */
 exports.sendBroadcastEmail = async (email, name, subject, htmlBody) => {
+  const emailConfig = await getEmailConfig();
   const contact = await getContactConfig();
-  const senderEmail = (process.env.BREVO_SENDER_EMAIL || contact.email || 'support@primenet.local').trim();
-  const senderName = (process.env.BREVO_SENDER_NAME || 'PrimeNet Admin').trim();
+  const senderEmail = (emailConfig.senderEmail || contact.email || 'support@primenet.local').trim();
+  const senderName = (emailConfig.senderName || 'PrimeNet Admin').trim();
 
   // Convert plain text line breaks to <br> if it doesn't contain HTML tags.
   const hasHtmlTags = /<[a-z][\s\S]*>/i.test(htmlBody);

@@ -780,6 +780,54 @@ exports.updateContactConfig = async (req, res) => {
   }
 };
 
+// 12b. Get Email Configuration (Admin only)
+exports.getEmailConfig = async (req, res) => {
+  try {
+    const setting = await Setting.findOne({ key: 'email_config' });
+    const defaultEmail = {
+      api_key: process.env.BREVO_API_KEY || '',
+      sender_email: process.env.BREVO_SENDER_EMAIL || '',
+      sender_name: process.env.BREVO_SENDER_NAME || 'PrimeNet Admin'
+    };
+    let config = setting ? JSON.parse(JSON.stringify(setting.value)) : defaultEmail;
+    return res.status(200).json(config);
+  } catch (err) {
+    console.error('Error fetching email config:', err.message);
+    return res.status(500).json({ message: 'Failed to retrieve email configuration.' });
+  }
+};
+
+// 12c. Update Email Configuration (Admin only)
+exports.updateEmailConfig = async (req, res) => {
+  const { api_key, sender_email, sender_name } = req.body;
+
+  if (!sender_email || !sender_name) {
+    return res.status(400).json({ message: 'Sender email and sender name are required.' });
+  }
+
+  const cleanApiKey = api_key ? sanitizeInput(api_key) : '';
+  const cleanSenderEmail = sanitizeInput(sender_email);
+  const cleanSenderName = sanitizeInput(sender_name);
+
+  try {
+    const updated = await Setting.findOneAndUpdate(
+      { key: 'email_config' },
+      {
+        value: {
+          api_key: cleanApiKey,
+          sender_email: cleanSenderEmail,
+          sender_name: cleanSenderName
+        }
+      },
+      { new: true, upsert: true }
+    );
+    return res.status(200).json({ message: 'Email configuration updated successfully.', value: updated.value });
+  } catch (err) {
+    console.error('Error updating email config:', err.message);
+    return res.status(500).json({ message: 'Failed to update email configuration.' });
+  }
+};
+
 // 13. Detect client IP and ISP (Public)
 exports.detectIP = async (req, res) => {
   let clientIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;

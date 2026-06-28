@@ -426,6 +426,9 @@
           <button class="btn btn-outline-secondary" id="btnOpenContactModal" data-bs-toggle="modal" data-bs-target="#contactModal" title="Update Campus Contact Information">
             <i class="fa-solid fa-address-book me-2"></i>Update Contact Info
           </button>
+          <button class="btn btn-outline-secondary" id="btnOpenEmailConfigModal" data-bs-toggle="modal" data-bs-target="#emailConfigModal" title="Configure Mail Server (Brevo)">
+            <i class="fa-solid fa-envelope me-2"></i>Mail Config
+          </button>
           <button class="btn btn-outline-danger" id="btnToggleSpeedtest" title="Toggle Speed Test visibility for students">
             <i class="fa-solid fa-eye-slash me-2"></i>Hide Speed Test
           </button>
@@ -1020,6 +1023,54 @@
             </div>
           </form>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5b. EMAIL CONFIGURATION MODAL -->
+  <div class="modal fade" id="emailConfigModal" tabindex="-1" aria-labelledby="emailConfigModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content glass-card">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title fs-4" id="emailConfigModalLabel">Configure Mail Settings</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body py-4">
+          <div class="alert alert-danger d-none" id="emailConfigAlert" role="alert"></div>
+          <form id="emailConfigForm">
+            <div class="mb-3">
+              <label for="emailConfigApiKey" class="form-label small fw-semibold">Brevo API Key</label>
+              <div class="input-group">
+                <span class="input-group-text bg-transparent text-muted"><i class="fa-solid fa-key"></i></span>
+                <input type="password" class="form-control" id="emailConfigApiKey" placeholder="Enter Brevo API Key">
+              </div>
+              <div class="form-text text-muted small">Required to send automated emails to students.</div>
+            </div>
+            <div class="mb-3">
+              <label for="emailConfigSenderEmail" class="form-label small fw-semibold">Sender Email Address</label>
+              <div class="input-group">
+                <span class="input-group-text bg-transparent text-muted"><i class="fa-solid fa-envelope"></i></span>
+                <input type="email" class="form-control" id="emailConfigSenderEmail" required placeholder="e.g. notifications@yourdomain.com">
+              </div>
+              <div class="form-text text-muted small">Must be a verified sender in your Brevo account.</div>
+            </div>
+            <div class="mb-3">
+              <label for="emailConfigSenderName" class="form-label small fw-semibold">Sender Name</label>
+              <div class="input-group">
+                <span class="input-group-text bg-transparent text-muted"><i class="fa-solid fa-user-gear"></i></span>
+                <input type="text" class="form-control" id="emailConfigSenderName" required placeholder="e.g. PrimeNet Admin">
+              </div>
+            </div>
+            <div class="d-grid mt-4">
+              <button type="submit" class="btn btn-primary" id="btnEmailConfigSave">
+                Save Mail Settings
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
   <!-- 6. SCREENSHOT VIEW MODAL -->
   <div class="modal fade" id="screenshotViewModal" tabindex="-1" aria-labelledby="screenshotViewModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">

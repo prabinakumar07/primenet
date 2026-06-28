@@ -1577,6 +1577,78 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ==========================================
+     EMAIL CONFIGURATION MANAGEMENT
+     ========================================== */
+  const emailConfigModalEl = document.getElementById('emailConfigModal');
+  const emailConfigForm = document.getElementById('emailConfigForm');
+  const emailConfigAlert = document.getElementById('emailConfigAlert');
+
+  if (emailConfigModalEl) {
+    emailConfigModalEl.addEventListener('show.bs.modal', async () => {
+      if (emailConfigAlert) emailConfigAlert.classList.add('d-none');
+      try {
+        const response = await fetch(`${API_BASE}/students/email-config`, {
+          headers: getAuthHeaders()
+        });
+        if (response.ok) {
+          const data = await response.json();
+          document.getElementById('emailConfigApiKey').value = data.api_key || '';
+          document.getElementById('emailConfigSenderEmail').value = data.sender_email || '';
+          document.getElementById('emailConfigSenderName').value = data.sender_name || 'PrimeNet Admin';
+        }
+      } catch (err) {
+        console.error('Failed to fetch email config:', err);
+      }
+    });
+  }
+
+  if (emailConfigForm) {
+    emailConfigForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (emailConfigAlert) emailConfigAlert.classList.add('d-none');
+
+      const api_key = document.getElementById('emailConfigApiKey').value.trim();
+      const sender_email = document.getElementById('emailConfigSenderEmail').value.trim();
+      const sender_name = document.getElementById('emailConfigSenderName').value.trim();
+
+      if (!sender_email || !sender_name) {
+        if (emailConfigAlert) {
+          emailConfigAlert.textContent = 'Sender email and sender name are required.';
+          emailConfigAlert.classList.remove('d-none');
+        }
+        return;
+      }
+
+      toggleSpinner(true);
+
+      try {
+        const response = await fetch(`${API_BASE}/students/email-config`, {
+          method: 'PUT',
+          headers: getAuthHeaders(),
+          body: JSON.stringify({ api_key, sender_email, sender_name })
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message || 'Failed to update email configuration.');
+
+        const modalInstance = bootstrap.Modal.getInstance(emailConfigModalEl);
+        if (modalInstance) {
+          modalInstance.hide();
+        }
+
+        showToast('Email configuration updated successfully!');
+      } catch (err) {
+        if (emailConfigAlert) {
+          emailConfigAlert.textContent = err.message;
+          emailConfigAlert.classList.remove('d-none');
+        }
+      } finally {
+        toggleSpinner(false);
+      }
+    });
+  }
+
+  /* ==========================================
      QR CODE DOWNLOAD HANDLER
      ========================================== */
   const downloadQrBtn = document.getElementById('downloadQrBtn');

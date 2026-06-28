@@ -28,6 +28,8 @@ router.get('/export-mac', verifyToken, studentController.exportAcceptedMac);
 router.get('/export-csv', verifyToken, studentController.exportCSV);
 router.put('/speedtest-config', verifyToken, studentController.updateSpeedtestConfig);
 router.put('/contact-config', verifyToken, studentController.updateContactConfig);
+router.get('/email-config', verifyToken, studentController.getEmailConfig);
+router.put('/email-config', verifyToken, studentController.updateEmailConfig);
 router.post('/broadcast', verifyToken, studentController.sendMailBroadcast);
 router.put('/:id/status', verifyToken, studentController.updateStatus);
 router.put('/:id/payment', verifyToken, studentController.updatePaymentStatus);
