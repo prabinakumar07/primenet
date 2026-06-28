@@ -113,6 +113,10 @@ const mapStudentDoc = (doc) => {
     room_number: doc.room_number,
     room_type: doc.room_type,
     mac_address: doc.mac_address,
+    mac_address_2: doc.mac_address_2 || '',
+    mac_address_3: doc.mac_address_3 || '',
+    mac_address_4: doc.mac_address_4 || '',
+    payment_status: doc.payment_status || 'Unpaid',
     screenshot_url: screenshot,
     status: doc.status,
     created_at: doc.created_at
@@ -180,6 +184,9 @@ exports.registerStudent = async (req, res) => {
       status: { $in: ['Pending', 'Accepted'] },
       $or: [
         { mac_address: normalizedMac },
+        { mac_address_2: normalizedMac },
+        { mac_address_3: normalizedMac },
+        { mac_address_4: normalizedMac },
         { email: cleanEmail },
         { mobile: cleanMobile }
       ]
@@ -187,7 +194,12 @@ exports.registerStudent = async (req, res) => {
 
     if (duplicate) {
       let field = '';
-      if (duplicate.mac_address === normalizedMac) field = 'MAC address';
+      if (duplicate.mac_address === normalizedMac ||
+          duplicate.mac_address_2 === normalizedMac ||
+          duplicate.mac_address_3 === normalizedMac ||
+          duplicate.mac_address_4 === normalizedMac) {
+        field = 'MAC address';
+      }
       else if (duplicate.email === cleanEmail) field = 'Email address';
       else if (duplicate.mobile === cleanMobile) field = 'Mobile number';
 
@@ -295,10 +307,35 @@ exports.updateStatus = async (req, res) => {
   }
 };
 
+// 3b. Update Payment Status (Admin only)
+exports.updatePaymentStatus = async (req, res) => {
+  const { id } = req.params;
+  const { payment_status } = req.body;
+
+  if (!payment_status || !['Paid', 'Unpaid'].includes(payment_status)) {
+    return res.status(400).json({ message: 'Invalid payment status. Must be Paid or Unpaid.' });
+  }
+
+  try {
+    const student = await Student.findById(id);
+    if (!student) {
+      return res.status(404).json({ message: 'Student registration not found.' });
+    }
+
+    student.payment_status = payment_status;
+    await student.save();
+
+    return res.status(200).json({ message: `Student payment status updated to ${payment_status} successfully.` });
+  } catch (err) {
+    console.error('Error updating payment status:', err.message);
+    return res.status(500).json({ message: 'Failed to update student payment status.' });
+  }
+};
+
 // 4. Edit Student Registration (Admin only)
 exports.editStudent = async (req, res) => {
   const { id } = req.params;
-  const { name, mobile, email, room_number, room_type, mac_address, status, screenshot_url } = req.body;
+  const { name, mobile, email, room_number, room_type, mac_address, mac_address_2, mac_address_3, mac_address_4, payment_status, status, screenshot_url } = req.body;
 
   if (!name || !mobile || !email || !room_number || !room_type || !mac_address || !status) {
     return res.status(400).json({ message: 'All fields are required.' });
@@ -311,6 +348,10 @@ exports.editStudent = async (req, res) => {
   const cleanRoomNumber = sanitizeInput(room_number);
   const cleanRoomType = sanitizeInput(room_type).toUpperCase();
   const cleanMac = sanitizeInput(mac_address);
+  const cleanMac2 = mac_address_2 ? sanitizeInput(mac_address_2) : '';
+  const cleanMac3 = mac_address_3 ? sanitizeInput(mac_address_3) : '';
+  const cleanMac4 = mac_address_4 ? sanitizeInput(mac_address_4) : '';
+  const cleanPaymentStatus = payment_status ? sanitizeInput(payment_status) : 'Unpaid';
   const cleanStatus = sanitizeInput(status);
 
   // Validate
@@ -335,17 +376,53 @@ exports.editStudent = async (req, res) => {
     return res.status(400).json({ message: 'Invalid MAC address format.' });
   }
 
+  let normalizedMac2 = '';
+  if (cleanMac2) {
+    normalizedMac2 = validateAndNormalizeMAC(cleanMac2);
+    if (!normalizedMac2) {
+      return res.status(400).json({ message: 'Invalid MAC address 2 format.' });
+    }
+  }
+
+  let normalizedMac3 = '';
+  if (cleanMac3) {
+    normalizedMac3 = validateAndNormalizeMAC(cleanMac3);
+    if (!normalizedMac3) {
+      return res.status(400).json({ message: 'Invalid MAC address 3 format.' });
+    }
+  }
+
+  let normalizedMac4 = '';
+  if (cleanMac4) {
+    normalizedMac4 = validateAndNormalizeMAC(cleanMac4);
+    if (!normalizedMac4) {
+      return res.status(400).json({ message: 'Invalid MAC address 4 format.' });
+    }
+  }
+
+  if (!['Paid', 'Unpaid'].includes(cleanPaymentStatus)) {
+    return res.status(400).json({ message: 'Invalid payment status. Must be Paid or Unpaid.' });
+  }
+
   if (!['Pending', 'Accepted', 'Rejected'].includes(cleanStatus)) {
     return res.status(400).json({ message: 'Invalid status. Must be Pending, Accepted, or Rejected.' });
   }
 
   try {
     // Check duplicate MAC, Email, or Mobile for other active registrations
+    const activeMacs = [normalizedMac];
+    if (normalizedMac2) activeMacs.push(normalizedMac2);
+    if (normalizedMac3) activeMacs.push(normalizedMac3);
+    if (normalizedMac4) activeMacs.push(normalizedMac4);
+
     const duplicate = await Student.findOne({
       status: { $in: ['Pending', 'Accepted'] },
       _id: { $ne: id },
       $or: [
-        { mac_address: normalizedMac },
+        { mac_address: { $in: activeMacs } },
+        { mac_address_2: { $in: activeMacs } },
+        { mac_address_3: { $in: activeMacs } },
+        { mac_address_4: { $in: activeMacs } },
         { email: cleanEmail },
         { mobile: cleanMobile }
       ]
@@ -353,7 +430,12 @@ exports.editStudent = async (req, res) => {
 
     if (duplicate) {
       let field = '';
-      if (duplicate.mac_address === normalizedMac) field = 'MAC address';
+      if (activeMacs.includes(duplicate.mac_address) ||
+          (duplicate.mac_address_2 && activeMacs.includes(duplicate.mac_address_2)) ||
+          (duplicate.mac_address_3 && activeMacs.includes(duplicate.mac_address_3)) ||
+          (duplicate.mac_address_4 && activeMacs.includes(duplicate.mac_address_4))) {
+        field = 'MAC address';
+      }
       else if (duplicate.email === cleanEmail) field = 'Email address';
       else if (duplicate.mobile === cleanMobile) field = 'Mobile number';
 
@@ -377,6 +459,10 @@ exports.editStudent = async (req, res) => {
     student.room_number = cleanRoomNumber;
     student.room_type = cleanRoomType;
     student.mac_address = normalizedMac;
+    student.mac_address_2 = normalizedMac2;
+    student.mac_address_3 = normalizedMac3;
+    student.mac_address_4 = normalizedMac4;
+    student.payment_status = cleanPaymentStatus;
     student.status = cleanStatus;
 
     if (screenshot_url !== undefined) {
@@ -509,8 +595,15 @@ exports.getStats = async (req, res) => {
 // 7. Export accepted MAC list as TXT
 exports.exportAcceptedMac = async (req, res) => {
   try {
-    const students = await Student.find({ status: 'Accepted' }, 'mac_address');
-    const macList = students.map(s => s.mac_address).join('\r\n');
+    const students = await Student.find({ status: 'Accepted' }, 'mac_address mac_address_2 mac_address_3 mac_address_4');
+    const macs = [];
+    students.forEach(s => {
+      if (s.mac_address) macs.push(s.mac_address);
+      if (s.mac_address_2) macs.push(s.mac_address_2);
+      if (s.mac_address_3) macs.push(s.mac_address_3);
+      if (s.mac_address_4) macs.push(s.mac_address_4);
+    });
+    const macList = macs.join('\r\n');
     
     res.setHeader('Content-Disposition', 'attachment; filename="accepted_mac_addresses.txt"');
     res.setHeader('Content-Type', 'text/plain');
@@ -528,7 +621,7 @@ exports.exportCSV = async (req, res) => {
     const mapped = students.map(mapStudentDoc);
     const sorted = sortStudentsArray(mapped);
 
-    const headers = 'Name,Mobile Number,Email,Room Number,Room Type,MAC Address,Status,Registration Date';
+    const headers = 'Name,Mobile Number,Email,Room Number,Room Type,MAC Address,MAC Address 2,MAC Address 3,MAC Address 4,Payment Status,Status,Registration Date';
     const csvRows = sorted.map(r => {
       const escapeCsv = (val) => {
         if (val === null || val === undefined) return '';
@@ -545,6 +638,10 @@ exports.exportCSV = async (req, res) => {
         escapeCsv(r.room_number),
         escapeCsv(r.room_type),
         escapeCsv(r.mac_address),
+        escapeCsv(r.mac_address_2),
+        escapeCsv(r.mac_address_3),
+        escapeCsv(r.mac_address_4),
+        escapeCsv(r.payment_status),
         escapeCsv(r.status),
         escapeCsv(r.created_at)
       ].join(',');

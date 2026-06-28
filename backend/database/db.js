@@ -23,6 +23,10 @@ const studentSchema = new mongoose.Schema({
   room_number: { type: String, required: true, trim: true },
   room_type: { type: String, required: true, enum: ['A', 'B'], uppercase: true },
   mac_address: { type: String, required: true, trim: true },
+  mac_address_2: { type: String, default: '', trim: true },
+  mac_address_3: { type: String, default: '', trim: true },
+  mac_address_4: { type: String, default: '', trim: true },
+  payment_status: { type: String, default: 'Unpaid', enum: ['Paid', 'Unpaid'] },
   screenshot_url: { type: String, default: '' },
   status: { type: String, default: 'Pending', enum: ['Pending', 'Accepted', 'Rejected'] },
   created_at: { type: Date, default: Date.now }

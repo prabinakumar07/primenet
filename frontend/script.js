@@ -645,11 +645,16 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="small text-muted">Type ${student.room_type === 'A' ? 'A (Single)' : 'B (Shared)'}</div>
         </td>
         <td>
-          <code class="text-secondary">${student.mac_address}</code>
+          <div class="d-flex flex-column gap-1">
+            <code class="text-secondary" style="font-size: 0.85rem;">${student.mac_address}</code>
+            ${student.mac_address_2 ? `<code class="text-muted" style="font-size: 0.75rem;">${student.mac_address_2}</code>` : ''}
+            ${student.mac_address_3 ? `<code class="text-muted" style="font-size: 0.75rem;">${student.mac_address_3}</code>` : ''}
+            ${student.mac_address_4 ? `<code class="text-muted" style="font-size: 0.75rem;">${student.mac_address_4}</code>` : ''}
+          </div>
         </td>
         <td>${statusBadge}</td>
         <td>
-          <div class="d-flex justify-content-center gap-1">
+          <div class="d-flex justify-content-center align-items-center gap-1">
             ${student.status === 'Pending' ? `
               <button class="btn btn-sm btn-success action-accept" data-id="${student.id}" title="Accept Connection">
                 <i class="fa-solid fa-check"></i>
@@ -666,6 +671,15 @@ document.addEventListener('DOMContentLoaded', () => {
             <button class="btn btn-sm btn-outline-primary action-edit" data-id="${student.id}" title="Edit Registration">
               <i class="fa-solid fa-pen-to-square"></i>
             </button>
+            ${student.payment_status === 'Paid' ? `
+              <button class="btn btn-sm btn-success action-toggle-payment" data-id="${student.id}" title="Payment Status: Paid. Click to mark as Unpaid.">
+                <i class="fa-solid fa-circle-check"></i> Paid
+              </button>
+            ` : `
+              <button class="btn btn-sm btn-outline-warning action-toggle-payment" data-id="${student.id}" title="Payment Status: Unpaid. Click to mark as Paid.">
+                <i class="fa-solid fa-circle-minus"></i> Unpaid
+              </button>
+            `}
             <button class="btn btn-sm btn-outline-danger action-delete" data-id="${student.id}" title="Delete Registration">
               <i class="fa-solid fa-trash-can"></i>
             </button>
@@ -692,6 +706,17 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.addEventListener('click', () => {
         deleteStudentIdTarget = btn.dataset.id;
         deleteConfirmModal.show();
+      });
+    });
+
+    document.querySelectorAll('.action-toggle-payment').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.id;
+        const student = allStudents.find(s => String(s.id) === String(id));
+        if (student) {
+          const nextStatus = student.payment_status === 'Paid' ? 'Unpaid' : 'Paid';
+          togglePaymentStatus(id, nextStatus);
+        }
       });
     });
 
@@ -736,6 +761,27 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // 1b. Toggle Payment Status (Paid / Unpaid)
+  async function togglePaymentStatus(id, status) {
+    toggleSpinner(true);
+    try {
+      const response = await fetch(`${API_BASE}/students/${id}/payment`, {
+        method: 'PUT',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ payment_status: status })
+      });
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || 'Failed to update payment status.');
+
+      showToast(`Payment status updated to ${status} successfully.`);
+      loadDashboardData();
+    } catch (err) {
+      showToast(err.message, 'error');
+      toggleSpinner(false);
+    }
+  }
+
   // 2. Open & Populate Edit Modal
   function openEditModal(id) {
     const student = allStudents.find(s => String(s.id) === String(id));
@@ -749,6 +795,10 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('editRoomNumber').value = student.room_number;
     document.getElementById('editRoomType').value = student.room_type;
     document.getElementById('editMac').value = student.mac_address;
+    document.getElementById('editMac2').value = student.mac_address_2 || '';
+    document.getElementById('editMac3').value = student.mac_address_3 || '';
+    document.getElementById('editMac4').value = student.mac_address_4 || '';
+    document.getElementById('editPaymentStatus').value = student.payment_status || 'Unpaid';
     document.getElementById('editStatus').value = student.status;
 
     editModal.show();
@@ -792,6 +842,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const room_number = document.getElementById('editRoomNumber').value.trim();
     const room_type = document.getElementById('editRoomType').value;
     const mac_address = document.getElementById('editMac').value.trim();
+    const mac_address_2 = document.getElementById('editMac2').value.trim();
+    const mac_address_3 = document.getElementById('editMac3').value.trim();
+    const mac_address_4 = document.getElementById('editMac4').value.trim();
+    const payment_status = document.getElementById('editPaymentStatus').value;
     const status = document.getElementById('editStatus').value;
 
     let errors = [];
@@ -799,7 +853,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!validateMobile(mobile)) errors.push('Please enter valid 10-digit mobile number.');
     if (!validateEmail(email)) errors.push('Please enter valid email address.');
     if (!room_number) errors.push('Please enter room number.');
-    if (!validateMacAddress(mac_address)) errors.push('Please enter a valid MAC address.');
+    if (!validateMacAddress(mac_address)) errors.push('Please enter a valid primary MAC address.');
+    if (mac_address_2 && !validateMacAddress(mac_address_2)) errors.push('Please enter a valid MAC address 2.');
+    if (mac_address_3 && !validateMacAddress(mac_address_3)) errors.push('Please enter a valid MAC address 3.');
+    if (mac_address_4 && !validateMacAddress(mac_address_4)) errors.push('Please enter a valid MAC address 4.');
 
     if (errors.length > 0) {
       editAlert.innerHTML = errors.join('<br>');
@@ -813,7 +870,19 @@ document.addEventListener('DOMContentLoaded', () => {
       const response = await fetch(`${API_BASE}/students/${id}`, {
         method: 'PUT',
         headers: getAuthHeaders(),
-        body: JSON.stringify({ name, mobile, email, room_number, room_type, mac_address, status })
+        body: JSON.stringify({ 
+          name, 
+          mobile, 
+          email, 
+          room_number, 
+          room_type, 
+          mac_address, 
+          mac_address_2, 
+          mac_address_3, 
+          mac_address_4, 
+          payment_status, 
+          status 
+        })
       });
 
       const data = await response.json();

@@ -30,6 +30,7 @@ router.put('/speedtest-config', verifyToken, studentController.updateSpeedtestCo
 router.put('/contact-config', verifyToken, studentController.updateContactConfig);
 router.post('/broadcast', verifyToken, studentController.sendMailBroadcast);
 router.put('/:id/status', verifyToken, studentController.updateStatus);
+router.put('/:id/payment', verifyToken, studentController.updatePaymentStatus);
 router.put('/:id', verifyToken, studentController.editStudent);
 router.delete('/:id', verifyToken, studentController.deleteStudent);
 

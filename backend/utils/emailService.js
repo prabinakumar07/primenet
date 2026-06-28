@@ -207,7 +207,7 @@ exports.sendStudentApprovalEmail = async (student) => {
             </div>
             <div class="details-row">
               <span class="details-label">Registered MAC Address:</span>
-              <span class="details-value">${student.mac_address}</span>
+              <span class="details-value">${student.mac_address}${student.mac_address_2 ? `, ${student.mac_address_2}` : ''}${student.mac_address_3 ? `, ${student.mac_address_3}` : ''}${student.mac_address_4 ? `, ${student.mac_address_4}` : ''}</span>
             </div>
             <div class="details-row">
               <span class="details-label">Connection Status:</span>
@@ -541,7 +541,7 @@ exports.sendStudentRegistrationEmail = async (student) => {
             </div>
             <div class="details-row">
               <span class="details-label">MAC Address:</span>
-              <span class="details-value">${student.mac_address}</span>
+              <span class="details-value">${student.mac_address}${student.mac_address_2 ? `, ${student.mac_address_2}` : ''}${student.mac_address_3 ? `, ${student.mac_address_3}` : ''}${student.mac_address_4 ? `, ${student.mac_address_4}` : ''}</span>
             </div>
           </div>
           
