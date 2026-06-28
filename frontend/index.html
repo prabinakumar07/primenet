@@ -883,6 +883,7 @@
                   <span class="input-group-text bg-transparent text-muted"><i class="fa-solid fa-money-bill-1"></i></span>
                   <select class="form-select" id="editPaymentStatus" required>
                     <option value="Unpaid">Unpaid</option>
+                    <option value="Partially Paid">Partially Paid</option>
                     <option value="Paid">Paid</option>
                   </select>
                 </div>
@@ -1103,6 +1104,51 @@
             <i class="fa-solid fa-arrow-up-right-from-square me-2"></i>Open Full Size
           </a>
           <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. MESSAGE STUDENT MODAL -->
+  <div class="modal fade" id="messageStudentModal" tabindex="-1" aria-labelledby="messageStudentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content glass-card">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title fs-4" id="messageStudentModalLabel">Send Message / Reminder</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body py-4">
+          <div class="alert alert-danger d-none" id="messageAlert" role="alert"></div>
+          <form id="messageForm">
+            <input type="hidden" id="messageStudentId">
+            <div class="mb-3">
+              <label for="messageTemplate" class="form-label small fw-semibold">Quick Template</label>
+              <div class="input-group">
+                <span class="input-group-text bg-transparent text-muted"><i class="fa-solid fa-paste"></i></span>
+                <select class="form-select" id="messageTemplate">
+                  <option value="custom" selected>Custom Message (No Template)</option>
+                  <option value="unpaid">Unpaid Payment Reminder</option>
+                  <option value="partial">Partial Payment Reminder</option>
+                </select>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="messageSubject" class="form-label small fw-semibold">Subject</label>
+              <div class="input-group">
+                <span class="input-group-text bg-transparent text-muted"><i class="fa-solid fa-heading"></i></span>
+                <input type="text" class="form-control" id="messageSubject" required placeholder="Email Subject">
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="messageBody" class="form-label small fw-semibold">Message Body</label>
+              <textarea class="form-control" id="messageBody" rows="6" required placeholder="Type your message here..."></textarea>
+            </div>
+            <div class="d-grid mt-4">
+              <button type="submit" class="btn btn-primary" id="btnSendMessage">
+                <i class="fa-solid fa-paper-plane me-2"></i>Send Message
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>

@@ -671,12 +671,19 @@ document.addEventListener('DOMContentLoaded', () => {
             <button class="btn btn-sm btn-outline-primary action-edit" data-id="${student.id}" title="Edit Registration">
               <i class="fa-solid fa-pen-to-square"></i>
             </button>
+            <button class="btn btn-sm btn-outline-info action-message" data-id="${student.id}" title="Send Message / Payment Reminder">
+              <i class="fa-solid fa-envelope"></i>
+            </button>
             ${student.payment_status === 'Paid' ? `
-              <button class="btn btn-sm btn-success action-toggle-payment" data-id="${student.id}" title="Payment Status: Paid. Click to mark as Unpaid.">
+              <button class="btn btn-sm btn-success action-toggle-payment" data-id="${student.id}" title="Payment Status: Paid. Click to cycle to Unpaid.">
                 <i class="fa-solid fa-circle-check"></i> Paid
               </button>
+            ` : student.payment_status === 'Partially Paid' ? `
+              <button class="btn btn-sm btn-info text-white action-toggle-payment" data-id="${student.id}" title="Payment Status: Partially Paid. Click to cycle to Paid.">
+                <i class="fa-solid fa-circle-exclamation"></i> Partial
+              </button>
             ` : `
-              <button class="btn btn-sm btn-outline-warning action-toggle-payment" data-id="${student.id}" title="Payment Status: Unpaid. Click to mark as Paid.">
+              <button class="btn btn-sm btn-outline-warning action-toggle-payment" data-id="${student.id}" title="Payment Status: Unpaid. Click to cycle to Partially Paid.">
                 <i class="fa-solid fa-circle-minus"></i> Unpaid
               </button>
             `}
@@ -714,9 +721,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const id = btn.dataset.id;
         const student = allStudents.find(s => String(s.id) === String(id));
         if (student) {
-          const nextStatus = student.payment_status === 'Paid' ? 'Unpaid' : 'Paid';
+          let nextStatus = 'Unpaid';
+          if (student.payment_status === 'Unpaid') nextStatus = 'Partially Paid';
+          else if (student.payment_status === 'Partially Paid') nextStatus = 'Paid';
           togglePaymentStatus(id, nextStatus);
         }
+      });
+    });
+
+    document.querySelectorAll('.action-message').forEach(btn => {
+      btn.addEventListener('click', () => {
+        openMessageModal(btn.dataset.id);
       });
     });
 
@@ -1737,6 +1752,117 @@ document.addEventListener('DOMContentLoaded', () => {
       } catch (err) {
         broadcastAlert.textContent = err.message;
         broadcastAlert.classList.remove('d-none');
+      } finally {
+        toggleSpinner(false);
+      }
+    });
+  }
+
+  /* ==========================================
+     DIRECT STUDENT MESSAGING SYSTEM
+     ========================================== */
+  const messageStudentModalEl = document.getElementById('messageStudentModal');
+  let messageModal = null;
+  if (messageStudentModalEl) {
+    messageModal = new bootstrap.Modal(messageStudentModalEl);
+  }
+
+  function openMessageModal(id) {
+    const student = allStudents.find(s => String(s.id) === String(id));
+    if (!student) return;
+
+    const messageAlert = document.getElementById('messageAlert');
+    if (messageAlert) {
+      messageAlert.classList.add('d-none');
+    }
+    document.getElementById('messageStudentId').value = student.id;
+    document.getElementById('messageTemplate').value = 'custom';
+    document.getElementById('messageSubject').value = '';
+    document.getElementById('messageBody').value = '';
+
+    if (messageModal) {
+      messageModal.show();
+    }
+  }
+
+  const messageTemplate = document.getElementById('messageTemplate');
+  const messageSubject = document.getElementById('messageSubject');
+  const messageBody = document.getElementById('messageBody');
+
+  if (messageTemplate) {
+    messageTemplate.addEventListener('change', () => {
+      const studentId = document.getElementById('messageStudentId').value;
+      const student = allStudents.find(s => String(s.id) === String(studentId));
+      if (!student) return;
+
+      const template = messageTemplate.value;
+      if (template === 'unpaid') {
+        messageSubject.value = 'Action Required: Pending Registration Payment Reminder';
+        messageBody.value = `Hello ${student.name},
+
+This is a reminder that your connection request for Room ${student.room_number} is pending payment verification. 
+
+To activate your broadband connection, please ensure you scan the QR code in the registration portal to pay the registration fee of ₹180 and upload your screenshot. If you have already paid, please reply to this email with your transaction reference.
+
+Thank you,
+PrimeNet Team`;
+      } else if (template === 'partial') {
+        messageSubject.value = 'Important: Partial Payment Received - PrimeNet';
+        messageBody.value = `Hello ${student.name},
+
+We have received a partial payment for your broadband connection in Room ${student.room_number}. 
+
+Please complete the remaining registration payment so we can fully activate your high-speed internet access. You can upload the final payment receipt in the registration portal or reply to this email with details.
+
+Thank you,
+PrimeNet Team`;
+      } else {
+        messageSubject.value = '';
+        messageBody.value = '';
+      }
+    });
+  }
+
+  const messageForm = document.getElementById('messageForm');
+  if (messageForm) {
+    messageForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const messageAlert = document.getElementById('messageAlert');
+      if (messageAlert) messageAlert.classList.add('d-none');
+
+      const id = document.getElementById('messageStudentId').value;
+      const subject = document.getElementById('messageSubject').value.trim();
+      const message = document.getElementById('messageBody').value.trim();
+
+      if (!subject || !message) {
+        if (messageAlert) {
+          messageAlert.textContent = 'Subject and message are required.';
+          messageAlert.classList.remove('d-none');
+        }
+        return;
+      }
+
+      toggleSpinner(true);
+
+      try {
+        const response = await fetch(`${API_BASE}/students/${id}/message`, {
+          method: 'POST',
+          headers: getAuthHeaders(),
+          body: JSON.stringify({ subject, message })
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message || 'Failed to send message.');
+
+        if (messageModal) {
+          messageModal.hide();
+        }
+        showToast('Message sent to student successfully!');
+      } catch (err) {
+        if (messageAlert) {
+          messageAlert.textContent = err.message;
+          messageAlert.classList.remove('d-none');
+        }
       } finally {
         toggleSpinner(false);
       }

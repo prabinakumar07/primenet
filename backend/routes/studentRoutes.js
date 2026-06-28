@@ -33,6 +33,7 @@ router.put('/email-config', verifyToken, studentController.updateEmailConfig);
 router.post('/broadcast', verifyToken, studentController.sendMailBroadcast);
 router.put('/:id/status', verifyToken, studentController.updateStatus);
 router.put('/:id/payment', verifyToken, studentController.updatePaymentStatus);
+router.post('/:id/message', verifyToken, studentController.sendSingleMail);
 router.put('/:id', verifyToken, studentController.editStudent);
 router.delete('/:id', verifyToken, studentController.deleteStudent);
 

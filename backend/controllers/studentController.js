@@ -312,8 +312,8 @@ exports.updatePaymentStatus = async (req, res) => {
   const { id } = req.params;
   const { payment_status } = req.body;
 
-  if (!payment_status || !['Paid', 'Unpaid'].includes(payment_status)) {
-    return res.status(400).json({ message: 'Invalid payment status. Must be Paid or Unpaid.' });
+  if (!payment_status || !['Paid', 'Unpaid', 'Partially Paid'].includes(payment_status)) {
+    return res.status(400).json({ message: 'Invalid payment status. Must be Paid, Unpaid, or Partially Paid.' });
   }
 
   try {
@@ -400,8 +400,8 @@ exports.editStudent = async (req, res) => {
     }
   }
 
-  if (!['Paid', 'Unpaid'].includes(cleanPaymentStatus)) {
-    return res.status(400).json({ message: 'Invalid payment status. Must be Paid or Unpaid.' });
+  if (!['Paid', 'Unpaid', 'Partially Paid'].includes(cleanPaymentStatus)) {
+    return res.status(400).json({ message: 'Invalid payment status. Must be Paid, Unpaid, or Partially Paid.' });
   }
 
   if (!['Pending', 'Accepted', 'Rejected'].includes(cleanStatus)) {
@@ -974,6 +974,34 @@ exports.sendMailBroadcast = async (req, res) => {
   } catch (err) {
     console.error('Mail broadcast error:', err.message);
     return res.status(500).json({ message: 'Failed to process mail broadcast.' });
+  }
+};
+
+// 16. Send Single Student Mail (Admin only)
+exports.sendSingleMail = async (req, res) => {
+  const { id } = req.params;
+  const { subject, message } = req.body;
+
+  if (!subject || !message) {
+    return res.status(400).json({ message: 'Subject and message are required.' });
+  }
+
+  try {
+    const student = await Student.findById(id);
+    if (!student) {
+      return res.status(404).json({ message: 'Student registration not found.' });
+    }
+
+    const emailService = require('../utils/emailService');
+    const sent = await emailService.sendBroadcastEmail(student.email, student.name, subject, message);
+    if (!sent) {
+      return res.status(500).json({ message: 'Failed to send email to the student.' });
+    }
+
+    return res.status(200).json({ message: `Message sent successfully to ${student.name} (${student.email}).` });
+  } catch (err) {
+    console.error('Send single mail error:', err.message);
+    return res.status(500).json({ message: 'Failed to send email to the student.' });
   }
 };
 
