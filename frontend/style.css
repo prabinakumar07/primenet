@@ -868,4 +868,28 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 0 15px rgba(59, 130, 246, 0.25);
 }
 
+/* Dropdown Glassmorphism */
+.dropdown-menu-glass {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 30px -10px var(--glass-shadow) !important;
+  padding: 0.5rem 0 !important;
+}
+
+.dropdown-menu-glass .dropdown-item {
+  color: var(--text-color) !important;
+  font-weight: 500;
+  padding: 0.5rem 1.25rem !important;
+  transition: var(--transition-smooth);
+}
+
+.dropdown-menu-glass .dropdown-item:hover {
+  background-color: rgba(59, 130, 246, 0.15) !important;
+  color: var(--primary-color) !important;
+  transform: translateX(4px);
+}
+
 

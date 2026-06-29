@@ -60,7 +60,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnExportMac = document.getElementById('btnExportMac');
   const btnExportCsv = document.getElementById('btnExportCsv');
   const btnToggleSpeedtest = document.getElementById('btnToggleSpeedtest');
-  const btnCopyAllMac = document.getElementById('btnCopyAllMac');
+  const optCopyStudents = document.getElementById('optCopyStudents');
+  const optCopyNecessary = document.getElementById('optCopyNecessary');
+  const optCopyGuest = document.getElementById('optCopyGuest');
+  const optCopyCombined = document.getElementById('optCopyCombined');
   const necessaryMacList = document.getElementById('necessaryMacList');
   const btnSaveNecessary = document.getElementById('btnSaveNecessary');
   const btnCopyAllNecessary = document.getElementById('btnCopyAllNecessary');
@@ -1057,8 +1060,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Copy all accepted MACs to clipboard
-  btnCopyAllMac.addEventListener('click', () => {
+  // Copy accepted student MACs
+  optCopyStudents.addEventListener('click', (e) => {
+    e.preventDefault();
     const acceptedStudents = allStudents.filter(s => s.status === 'Accepted');
     const macs = [];
     acceptedStudents.forEach(s => {
@@ -1073,14 +1077,91 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    const macText = macs.join('\n');
-    navigator.clipboard.writeText(macText)
+    navigator.clipboard.writeText(macs.join('\n'))
       .then(() => {
-        showToast('All accepted student MAC addresses copied to clipboard!');
+        showToast('Accepted student MAC addresses copied to clipboard!');
       })
       .catch(err => {
-        console.error('Failed to copy: ', err);
-        showToast('Failed to copy MAC addresses.', 'error');
+        console.error('Failed to copy student MACs:', err);
+        showToast('Failed to copy student MAC addresses.', 'error');
+      });
+  });
+
+  // Copy Necessary MACs
+  optCopyNecessary.addEventListener('click', (e) => {
+    e.preventDefault();
+    const text = necessaryMacList.value.trim();
+    if (!text) {
+      showToast('No Necessary MAC addresses to copy.', 'error');
+      return;
+    }
+    navigator.clipboard.writeText(text)
+      .then(() => {
+        showToast('Necessary MAC addresses copied to clipboard!');
+      })
+      .catch(err => {
+        console.error('Failed to copy Necessary MACs:', err);
+        showToast('Failed to copy Necessary MAC addresses.', 'error');
+      });
+  });
+
+  // Copy Guest MACs
+  optCopyGuest.addEventListener('click', (e) => {
+    e.preventDefault();
+    const text = guestMacList.value.trim();
+    if (!text) {
+      showToast('No Guest MAC addresses to copy.', 'error');
+      return;
+    }
+    navigator.clipboard.writeText(text)
+      .then(() => {
+        showToast('Guest MAC addresses copied to clipboard!');
+      })
+      .catch(err => {
+        console.error('Failed to copy Guest MACs:', err);
+        showToast('Failed to copy Guest MAC addresses.', 'error');
+      });
+  });
+
+  // Copy All Combined MACs
+  optCopyCombined.addEventListener('click', (e) => {
+    e.preventDefault();
+    const acceptedStudents = allStudents.filter(s => s.status === 'Accepted');
+    const studentMacs = [];
+    acceptedStudents.forEach(s => {
+      if (s.mac_address) studentMacs.push(s.mac_address);
+      if (s.mac_address_2) studentMacs.push(s.mac_address_2);
+      if (s.mac_address_3) studentMacs.push(s.mac_address_3);
+      if (s.mac_address_4) studentMacs.push(s.mac_address_4);
+    });
+
+    const necessary = necessaryMacList.value.trim();
+    const guest = guestMacList.value.trim();
+
+    let parts = [];
+    if (studentMacs.length > 0) {
+      parts.push(studentMacs.join('\n'));
+    }
+    if (necessary) {
+      parts.push(necessary);
+    }
+    if (guest) {
+      parts.push(guest);
+    }
+
+    if (parts.length === 0) {
+      showToast('No MAC addresses found to copy.', 'error');
+      return;
+    }
+
+    const combinedText = parts.join('\n');
+    navigator.clipboard.writeText(combinedText)
+      .then(() => {
+        showToast('All MAC addresses (Students, Necessary & Guest) copied to clipboard!');
+      })
+      .catch(err => {
+        console.error('Failed to copy combined MACs:', err);
+        showToast('Failed to copy combined MAC addresses.', 'error');
       });
   });
 

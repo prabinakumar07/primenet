@@ -435,9 +435,18 @@
           <button class="btn btn-outline-primary" id="btnExportMac" title="Download accepted MAC list for router configuration">
             <i class="fa-solid fa-download me-2"></i>Download Accepted MACs
           </button>
-          <button class="btn btn-outline-info" id="btnCopyAllMac" title="Copy all accepted MAC addresses to clipboard">
-            <i class="fa-solid fa-copy me-2"></i>Copy All MACs
-          </button>
+          <div class="dropdown d-inline-block">
+            <button class="btn btn-outline-info dropdown-toggle" type="button" id="btnCopyAllMacDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa-solid fa-copy me-2"></i>Copy MACs
+            </button>
+            <ul class="dropdown-menu dropdown-menu-glass dropdown-menu-end shadow" aria-labelledby="btnCopyAllMacDropdown">
+              <li><a class="dropdown-item" href="#" id="optCopyStudents"><i class="fa-solid fa-graduation-cap me-2 text-primary"></i>Accepted Student MACs</a></li>
+              <li><a class="dropdown-item" href="#" id="optCopyNecessary"><i class="fa-solid fa-server me-2 text-info"></i>Necessary MACs</a></li>
+              <li><a class="dropdown-item" href="#" id="optCopyGuest"><i class="fa-solid fa-users-line me-2 text-success"></i>Guest MACs</a></li>
+              <li><hr class="dropdown-divider" style="border-color: var(--glass-border);"></li>
+              <li><a class="dropdown-item" href="#" id="optCopyCombined"><i class="fa-solid fa-layer-group me-2 text-warning"></i>All MACs Combined</a></li>
+            </ul>
+          </div>
           <button class="btn btn-success" id="btnExportCsv" title="Export all user list to CSV file">
             <i class="fa-solid fa-file-csv me-2"></i>Export CSV
           </button>
