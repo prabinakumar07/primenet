@@ -2139,6 +2139,139 @@ PrimeNet Team`;
       }
     });
   }
+
+  /* ==========================================
+     REDESIGN ADDITIONS: ANIMATIONS & INTERACTIVE ELEMENTS
+     ========================================== */
+
+  // 1. Speedometer Dial & Needle updates
+  function updateSpeedometerDial(speed) {
+    const needle = document.getElementById('speedometerNeedle');
+    const arc = document.getElementById('speedometerArc');
+    if (!needle || !arc) return;
+    
+    const maxSpeed = 150; // Cap speedometer dial at 150 Mbps
+    const clampedSpeed = Math.min(Math.max(parseFloat(speed) || 0, 0), maxSpeed);
+    const percentage = clampedSpeed / maxSpeed;
+    
+    // Dashoffset: 534 is empty, 0 is full
+    const dashoffset = 534 * (1 - percentage);
+    arc.style.strokeDashoffset = dashoffset;
+    
+    // Rotation: -135deg to +135deg (total range of 270deg)
+    const rotation = -135 + (270 * percentage);
+    needle.style.transform = `rotate(${rotation}deg)`;
+  }
+
+  // Monitor #speedValue for changes to animate dial in real-time
+  const speedValueEl = document.getElementById('speedValue');
+  if (speedValueEl) {
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        const speed = parseFloat(speedValueEl.textContent) || 0;
+        updateSpeedometerDial(speed);
+      });
+    });
+    observer.observe(speedValueEl, { childList: true, characterData: true, subtree: true });
+    // Initial display
+    updateSpeedometerDial(0);
+  }
+
+  // 2. Animated statistics counters
+  function initStatsCounters() {
+    const counters = document.querySelectorAll('.stats-counter-num');
+    const observerOptions = {
+      threshold: 0.5,
+      triggerOnce: true
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const target = entry.target;
+          const targetVal = parseFloat(target.getAttribute('data-target'));
+          const duration = 2000; // 2 seconds
+          const startTime = performance.now();
+          
+          function updateCounter(currentTime) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            // Ease out quad
+            const easeProgress = progress * (2 - progress);
+            
+            let currentVal = easeProgress * targetVal;
+            if (targetVal % 1 !== 0) {
+              target.textContent = currentVal.toFixed(1) + '%';
+            } else {
+              target.textContent = Math.floor(currentVal) + (targetVal === 1000 ? '+' : targetVal === 24 ? '/7' : '');
+            }
+            
+            if (progress < 1) {
+              requestAnimationFrame(updateCounter);
+            } else {
+              // Ensure final value is exact
+              if (targetVal % 1 !== 0) {
+                target.textContent = targetVal + '%';
+              } else {
+                target.textContent = targetVal + (targetVal === 1000 ? '+' : targetVal === 24 ? '/7' : '');
+              }
+            }
+          }
+          requestAnimationFrame(updateCounter);
+          observer.unobserve(target);
+        }
+      });
+    }, observerOptions);
+    
+    counters.forEach(counter => observer.observe(counter));
+  }
+  initStatsCounters();
+
+  // 3. Scroll reveal reveals
+  function initScrollReveals() {
+    const reveals = document.querySelectorAll('.reveal');
+    const observerOptions = {
+      threshold: 0.15,
+      rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+    
+    reveals.forEach(reveal => observer.observe(reveal));
+  }
+  initScrollReveals();
+
+  // 4. Founder cards 3D tilt
+  function initFounderCardTilts() {
+    const cards = document.querySelectorAll('.founder-card');
+    cards.forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        
+        const rotateX = ((centerY - y) / centerY) * 8; // max 8 degrees tilt
+        const rotateY = ((x - centerX) / centerX) * 8;
+        
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-5px)`;
+      });
+      
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)';
+      });
+    });
+  }
+  initFounderCardTilts();
 });
 
 
