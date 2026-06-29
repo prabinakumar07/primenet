@@ -1009,3 +1009,48 @@ exports.sendSingleMail = async (req, res) => {
   }
 };
 
+// 17. Get Other MACs (Necessary & Guest) (Admin only)
+exports.getOtherMacs = async (req, res) => {
+  try {
+    const setting = await Setting.findOne({ key: 'other_macs' });
+    const defaultOtherMacs = {
+      necessary_macs: '',
+      guest_macs: ''
+    };
+    let config = setting ? JSON.parse(JSON.stringify(setting.value)) : defaultOtherMacs;
+    
+    // Decode HTML slashes if any
+    if (config.necessary_macs) config.necessary_macs = config.necessary_macs.replace(/&#x2F;/g, '/');
+    if (config.guest_macs) config.guest_macs = config.guest_macs.replace(/&#x2F;/g, '/');
+
+    return res.status(200).json(config);
+  } catch (err) {
+    console.error('Error fetching other MACs:', err.message);
+    return res.status(500).json({ message: 'Failed to retrieve other MAC configurations.' });
+  }
+};
+
+// 18. Update Other MACs (Admin only)
+exports.updateOtherMacs = async (req, res) => {
+  const { necessary_macs, guest_macs } = req.body;
+  const cleanNecessary = necessary_macs ? sanitizeInput(necessary_macs) : '';
+  const cleanGuest = guest_macs ? sanitizeInput(guest_macs) : '';
+
+  try {
+    const updated = await Setting.findOneAndUpdate(
+      { key: 'other_macs' },
+      {
+        value: {
+          necessary_macs: cleanNecessary,
+          guest_macs: cleanGuest
+        }
+      },
+      { new: true, upsert: true }
+    );
+    return res.status(200).json({ message: 'Other MAC addresses updated successfully.', config: updated.value });
+  } catch (err) {
+    console.error('Error updating other MACs:', err.message);
+    return res.status(500).json({ message: 'Failed to update other MAC configurations.' });
+  }
+};
+

@@ -435,6 +435,9 @@
           <button class="btn btn-outline-primary" id="btnExportMac" title="Download accepted MAC list for router configuration">
             <i class="fa-solid fa-download me-2"></i>Download Accepted MACs
           </button>
+          <button class="btn btn-outline-info" id="btnCopyAllMac" title="Copy all accepted MAC addresses to clipboard">
+            <i class="fa-solid fa-copy me-2"></i>Copy All MACs
+          </button>
           <button class="btn btn-success" id="btnExportCsv" title="Export all user list to CSV file">
             <i class="fa-solid fa-file-csv me-2"></i>Export CSV
           </button>
@@ -604,6 +607,51 @@
             </div>
           </div>
         </form>
+      </div>
+
+      <!-- Other MAC Addresses Portal (Necessary & Guest) -->
+      <div class="row g-4 mb-5">
+        <!-- Necessary MAC Addresses Card -->
+        <div class="col-md-6">
+          <div class="glass-card p-4 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h4 class="mb-0 text-primary"><i class="fa-solid fa-server me-2"></i>Necessary MACs</h4>
+              <button class="btn btn-sm btn-outline-info" id="btnCopyAllNecessary" title="Copy all Necessary MAC addresses">
+                <i class="fa-solid fa-copy me-1"></i>Copy All
+              </button>
+            </div>
+            <p class="text-muted small mb-3">Store internal admin devices, routers, server components, or other essential hardware MACs (one MAC per line).</p>
+            <div class="mb-3">
+              <textarea class="form-control" id="necessaryMacList" rows="8" placeholder="e.g. AA:BB:CC:DD:EE:01&#10;AA:BB:CC:DD:EE:02" style="font-family: monospace; font-size: 0.9rem;"></textarea>
+            </div>
+            <div class="d-flex justify-content-end">
+              <button class="btn btn-primary btn-sm" id="btnSaveNecessary" title="Save Necessary MAC list">
+                <i class="fa-solid fa-floppy-disk me-1"></i>Save Necessary MACs
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Guest MAC Addresses Card -->
+        <div class="col-md-6">
+          <div class="glass-card p-4 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h4 class="mb-0 text-primary"><i class="fa-solid fa-users-line me-2"></i>Guest MACs</h4>
+              <button class="btn btn-sm btn-outline-info" id="btnCopyAllGuest" title="Copy all Guest MAC addresses">
+                <i class="fa-solid fa-copy me-1"></i>Copy All
+              </button>
+            </div>
+            <p class="text-muted small mb-3">Store temporary guest logins, visitors, event coordinators, or short-term device MAC addresses (one MAC per line).</p>
+            <div class="mb-3">
+              <textarea class="form-control" id="guestMacList" rows="8" placeholder="e.g. 11:22:33:44:55:66&#10;22:33:44:55:66:77" style="font-family: monospace; font-size: 0.9rem;"></textarea>
+            </div>
+            <div class="d-flex justify-content-end">
+              <button class="btn btn-primary btn-sm" id="btnSaveGuest" title="Save Guest MAC list">
+                <i class="fa-solid fa-floppy-disk me-1"></i>Save Guest MACs
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
 
     </div>

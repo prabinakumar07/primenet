@@ -60,6 +60,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnExportMac = document.getElementById('btnExportMac');
   const btnExportCsv = document.getElementById('btnExportCsv');
   const btnToggleSpeedtest = document.getElementById('btnToggleSpeedtest');
+  const btnCopyAllMac = document.getElementById('btnCopyAllMac');
+  const necessaryMacList = document.getElementById('necessaryMacList');
+  const btnSaveNecessary = document.getElementById('btnSaveNecessary');
+  const btnCopyAllNecessary = document.getElementById('btnCopyAllNecessary');
+  const guestMacList = document.getElementById('guestMacList');
+  const btnSaveGuest = document.getElementById('btnSaveGuest');
+  const btnCopyAllGuest = document.getElementById('btnCopyAllGuest');
   
   const statTotal = document.getElementById('statTotal');
   const statPending = document.getElementById('statPending');
@@ -529,6 +536,16 @@ document.addEventListener('DOMContentLoaded', () => {
       
       allStudents = await usersRes.json();
       applyFilters();
+
+      // 3. Fetch other MACs (Necessary & Guest)
+      const otherMacsRes = await fetch(`${API_BASE}/students/other-macs`, {
+        headers: getAuthHeaders()
+      });
+      if (otherMacsRes.ok) {
+        const otherMacs = await otherMacsRes.json();
+        necessaryMacList.value = otherMacs.necessary_macs || '';
+        guestMacList.value = otherMacs.guest_macs || '';
+      }
 
       // Charts rendering removed
 
@@ -1038,6 +1055,111 @@ document.addEventListener('DOMContentLoaded', () => {
     } finally {
       toggleSpinner(false);
     }
+  });
+
+  // Copy all accepted MACs to clipboard
+  btnCopyAllMac.addEventListener('click', () => {
+    const acceptedStudents = allStudents.filter(s => s.status === 'Accepted');
+    const macs = [];
+    acceptedStudents.forEach(s => {
+      if (s.mac_address) macs.push(s.mac_address);
+      if (s.mac_address_2) macs.push(s.mac_address_2);
+      if (s.mac_address_3) macs.push(s.mac_address_3);
+      if (s.mac_address_4) macs.push(s.mac_address_4);
+    });
+
+    if (macs.length === 0) {
+      showToast('No accepted student MAC addresses to copy.', 'error');
+      return;
+    }
+
+    const macText = macs.join('\n');
+    navigator.clipboard.writeText(macText)
+      .then(() => {
+        showToast('All accepted student MAC addresses copied to clipboard!');
+      })
+      .catch(err => {
+        console.error('Failed to copy: ', err);
+        showToast('Failed to copy MAC addresses.', 'error');
+      });
+  });
+
+  // Save Necessary MACs
+  btnSaveNecessary.addEventListener('click', async () => {
+    toggleSpinner(true);
+    try {
+      const response = await fetch(`${API_BASE}/students/other-macs`, {
+        method: 'PUT',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({
+          necessary_macs: necessaryMacList.value,
+          guest_macs: guestMacList.value
+        })
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || 'Failed to save necessary MAC addresses.');
+      showToast('Necessary MAC addresses saved successfully.');
+    } catch (err) {
+      showToast(err.message, 'error');
+    } finally {
+      toggleSpinner(false);
+    }
+  });
+
+  // Save Guest MACs
+  btnSaveGuest.addEventListener('click', async () => {
+    toggleSpinner(true);
+    try {
+      const response = await fetch(`${API_BASE}/students/other-macs`, {
+        method: 'PUT',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({
+          necessary_macs: necessaryMacList.value,
+          guest_macs: guestMacList.value
+        })
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || 'Failed to save guest MAC addresses.');
+      showToast('Guest MAC addresses saved successfully.');
+    } catch (err) {
+      showToast(err.message, 'error');
+    } finally {
+      toggleSpinner(false);
+    }
+  });
+
+  // Copy Necessary MACs
+  btnCopyAllNecessary.addEventListener('click', () => {
+    const text = necessaryMacList.value.trim();
+    if (!text) {
+      showToast('No Necessary MAC addresses to copy.', 'error');
+      return;
+    }
+    navigator.clipboard.writeText(text)
+      .then(() => {
+        showToast('Necessary MAC addresses copied to clipboard!');
+      })
+      .catch(err => {
+        console.error('Failed to copy: ', err);
+        showToast('Failed to copy Necessary MAC addresses.', 'error');
+      });
+  });
+
+  // Copy Guest MACs
+  btnCopyAllGuest.addEventListener('click', () => {
+    const text = guestMacList.value.trim();
+    if (!text) {
+      showToast('No Guest MAC addresses to copy.', 'error');
+      return;
+    }
+    navigator.clipboard.writeText(text)
+      .then(() => {
+        showToast('Guest MAC addresses copied to clipboard!');
+      })
+      .catch(err => {
+        console.error('Failed to copy: ', err);
+        showToast('Failed to copy Guest MAC addresses.', 'error');
+      });
   });
 
   // Download registrations CSV

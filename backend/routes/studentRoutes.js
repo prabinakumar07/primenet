@@ -30,6 +30,8 @@ router.put('/speedtest-config', verifyToken, studentController.updateSpeedtestCo
 router.put('/contact-config', verifyToken, studentController.updateContactConfig);
 router.get('/email-config', verifyToken, studentController.getEmailConfig);
 router.put('/email-config', verifyToken, studentController.updateEmailConfig);
+router.get('/other-macs', verifyToken, studentController.getOtherMacs);
+router.put('/other-macs', verifyToken, studentController.updateOtherMacs);
 router.post('/broadcast', verifyToken, studentController.sendMailBroadcast);
 router.put('/:id/status', verifyToken, studentController.updateStatus);
 router.put('/:id/payment', verifyToken, studentController.updatePaymentStatus);
