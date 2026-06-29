@@ -1775,7 +1775,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (registerQrCode) registerQrCode.src = data.qr_code_url || '/favicon.png';
 
     const downloadQrBtn = document.getElementById('downloadQrBtn');
-    if (downloadQrBtn) downloadQrBtn.href = data.qr_code_url || '/favicon.png';
+    if (downloadQrBtn) {
+      const qrUrl = data.qr_code_url || '/favicon.png';
+      if (qrUrl && qrUrl !== '/favicon.png') {
+        downloadQrBtn.href = `/api/students/download-file?url=${encodeURIComponent(qrUrl)}`;
+      } else {
+        downloadQrBtn.href = '/favicon.png';
+      }
+    }
 
     // Also populate the admin form fields if they exist
     const inputPhone = document.getElementById('contactPhone');
@@ -1948,32 +1955,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ==========================================
-     QR CODE DOWNLOAD HANDLER
+     QR CODE DOWNLOAD HANDLER (Bypassed via Native Server Proxy Link)
      ========================================== */
-  const downloadQrBtn = document.getElementById('downloadQrBtn');
-  if (downloadQrBtn) {
-    downloadQrBtn.addEventListener('click', async (e) => {
-      e.preventDefault();
-      const qrUrl = downloadQrBtn.getAttribute('href');
-      if (!qrUrl) return;
-      try {
-        const response = await fetch(qrUrl);
-        const blob = await response.blob();
-        const blobUrl = URL.createObjectURL(blob);
-        const tempLink = document.createElement('a');
-        tempLink.href = blobUrl;
-        tempLink.download = 'payment_qr.png';
-        document.body.appendChild(tempLink);
-        tempLink.click();
-        document.body.removeChild(tempLink);
-        URL.revokeObjectURL(blobUrl);
-      } catch (err) {
-        console.error('Error downloading QR code:', err);
-        // Fallback: open in new tab
-        window.open(qrUrl, '_blank');
-      }
-    });
-  }
 
   /* ==========================================
      MAIL BROADCAST FORM SUBMISSION

@@ -1054,3 +1054,43 @@ exports.updateOtherMacs = async (req, res) => {
   }
 };
 
+// 19. Download File Proxy (Bypasses browser CORS constraints and enforces direct download attachment)
+exports.downloadFileProxy = (req, res) => {
+  const fileUrl = req.query.url;
+  if (!fileUrl) {
+    return res.status(400).json({ message: 'URL query parameter is required.' });
+  }
+
+  const https = require('https');
+  const http = require('http');
+  const path = require('path');
+
+  if (!fileUrl.startsWith('http://') && !fileUrl.startsWith('https://')) {
+    return res.status(400).json({ message: 'Invalid URL scheme. Must be http or https.' });
+  }
+
+  const client = fileUrl.startsWith('https') ? https : http;
+
+  const fetchAndPipe = (targetUrl) => {
+    client.get(targetUrl, (response) => {
+      if (response.statusCode >= 300 && response.statusCode < 400 && response.headers.location) {
+        return fetchAndPipe(response.headers.location);
+      }
+
+      if (response.statusCode !== 200) {
+        return res.status(response.statusCode).json({ message: `Failed to retrieve file from source. Status code: ${response.statusCode}` });
+      }
+
+      const filename = path.basename(targetUrl.split('?')[0]) || 'payment_qr.png';
+      res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+      res.setHeader('Content-Type', response.headers['content-type'] || 'image/png');
+      response.pipe(res);
+    }).on('error', (err) => {
+      console.error('Error fetching file for proxy:', err.message);
+      res.status(500).json({ message: 'Failed to download file due to proxy stream error.' });
+    });
+  };
+
+  fetchAndPipe(fileUrl);
+};
+

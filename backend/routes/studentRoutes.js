@@ -11,6 +11,7 @@ router.get('/speedtest-payload', studentController.getSpeedtestPayload);
 router.get('/speedtest-config', studentController.getSpeedtestConfig);
 router.get('/contact-config', studentController.getContactConfig);
 router.get('/detect-ip', studentController.detectIP);
+router.get('/download-file', studentController.downloadFileProxy);
 
 const multer = require('multer');
 const uploadTempDir = path.join(__dirname, '../uploads/temp');
