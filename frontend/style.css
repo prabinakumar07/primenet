@@ -1009,6 +1009,111 @@ section {
   background: rgba(var(--primary-rgb), 0.015);
 }
 
+/* Sticky first and last columns for premium horizontal scrolling UX */
+.table-custom-premium th:first-child {
+  position: sticky;
+  left: 0;
+  background: rgba(248, 250, 252, 0.98) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 3;
+}
+
+.table-custom-premium td:first-child:not([colspan]) {
+  position: sticky;
+  left: 0;
+  background: rgba(255, 255, 255, 0.98) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 2;
+}
+
+.table-custom-premium th:last-child {
+  position: sticky;
+  right: 0;
+  background: rgba(248, 250, 252, 0.98) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 3;
+}
+
+.table-custom-premium td:last-child:not([colspan]) {
+  position: sticky;
+  right: 0;
+  background: rgba(255, 255, 255, 0.98) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 2;
+}
+
+[data-theme="dark"] .table-custom-premium th:first-child {
+  background: rgba(15, 23, 42, 0.98) !important;
+}
+
+[data-theme="dark"] .table-custom-premium td:first-child:not([colspan]) {
+  background: rgba(15, 23, 42, 0.98) !important;
+}
+
+[data-theme="dark"] .table-custom-premium th:last-child {
+  background: rgba(15, 23, 42, 0.98) !important;
+}
+
+[data-theme="dark"] .table-custom-premium td:last-child:not([colspan]) {
+  background: rgba(15, 23, 42, 0.98) !important;
+}
+
+/* Hover state for sticky cells */
+.table-custom-premium tr:hover td:first-child:not([colspan]) {
+  background: rgba(241, 245, 249, 0.98) !important;
+}
+
+[data-theme="dark"] .table-custom-premium tr:hover td:first-child:not([colspan]) {
+  background: rgba(30, 41, 59, 0.98) !important;
+}
+
+.table-custom-premium tr:hover td:last-child:not([colspan]) {
+  background: rgba(241, 245, 249, 0.98) !important;
+}
+
+[data-theme="dark"] .table-custom-premium tr:hover td:last-child:not([colspan]) {
+  background: rgba(30, 41, 59, 0.98) !important;
+}
+
+/* Subtle separator shadows for sticky columns */
+.table-custom-premium th:first-child::after,
+.table-custom-premium td:first-child::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -8px;
+  width: 8px;
+  height: 100%;
+  pointer-events: none;
+  background: linear-gradient(to left, transparent, rgba(0, 0, 0, 0.04));
+}
+
+[data-theme="dark"] .table-custom-premium th:first-child::after,
+[data-theme="dark"] .table-custom-premium td:first-child::after {
+  background: linear-gradient(to left, transparent, rgba(0, 0, 0, 0.25));
+}
+
+.table-custom-premium th:last-child::before,
+.table-custom-premium td:last-child::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -8px;
+  width: 8px;
+  height: 100%;
+  pointer-events: none;
+  background: linear-gradient(to right, transparent, rgba(0, 0, 0, 0.04));
+}
+
+[data-theme="dark"] .table-custom-premium th:last-child::before,
+[data-theme="dark"] .table-custom-premium td:last-child::before {
+  background: linear-gradient(to right, transparent, rgba(0, 0, 0, 0.25));
+}
+
 /* Custom Status Pills */
 .badge-capsule-pending {
   background: rgba(245, 158, 11, 0.1);
