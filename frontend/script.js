@@ -101,8 +101,21 @@ document.addEventListener('DOMContentLoaded', () => {
     themeToggleBtn.addEventListener('click', () => {
       const currentTheme = body.getAttribute('data-theme');
       const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-      body.setAttribute('data-theme', newTheme);
-      localStorage.setItem('theme', newTheme);
+      
+      const flashOverlay = document.getElementById('themeFlashOverlay');
+      if (flashOverlay) {
+        flashOverlay.classList.add('active');
+        setTimeout(() => {
+          body.setAttribute('data-theme', newTheme);
+          localStorage.setItem('theme', newTheme);
+          setTimeout(() => {
+            flashOverlay.classList.remove('active');
+          }, 150);
+        }, 150);
+      } else {
+        body.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+      }
     });
   }
 
@@ -2327,6 +2340,55 @@ PrimeNet Team`;
     });
   }
   initMobileNavigation();
+
+  // 6. Mouse-Tracking Glowing Card Borders
+  function initMouseTrackingGlows() {
+    const cards = document.querySelectorAll('.glass-card, .feature-card, .founder-card, .testimonial-card-premium, .stats-counter-box');
+    cards.forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        card.style.setProperty('--mouse-x', `${x}px`);
+        card.style.setProperty('--mouse-y', `${y}px`);
+      });
+    });
+  }
+  initMouseTrackingGlows();
+
+  // 7. Button Ripple Animation
+  function initButtonRipples() {
+    const buttons = document.querySelectorAll('.btn');
+    buttons.forEach(button => {
+      button.addEventListener('click', function(e) {
+        const rect = button.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        const ripple = document.createElement('span');
+        ripple.style.position = 'absolute';
+        ripple.style.borderRadius = '50%';
+        ripple.style.backgroundColor = 'rgba(255, 255, 255, 0.4)';
+        ripple.style.width = ripple.style.height = '100px';
+        ripple.style.left = `${x - 50}px`;
+        ripple.style.top = `${y - 50}px`;
+        ripple.style.transform = 'scale(0)';
+        ripple.style.transition = 'transform 0.5s ease-out, opacity 0.5s ease-out';
+        ripple.style.pointerEvents = 'none';
+        
+        button.appendChild(ripple);
+        
+        // Force reflow
+        ripple.offsetWidth;
+        
+        ripple.style.transform = 'scale(3)';
+        ripple.style.opacity = '0';
+        
+        setTimeout(() => {
+          ripple.remove();
+        }, 500);
+      });
+    });
+  }
+  initButtonRipples();
 });
-
-
