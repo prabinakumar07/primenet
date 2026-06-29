@@ -2272,6 +2272,61 @@ PrimeNet Team`;
     });
   }
   initFounderCardTilts();
+
+  // 5. Mobile Navigation Rebuild (Overlay, Scroll Lock, Auto-dismiss, Outside Click)
+  function initMobileNavigation() {
+    const navbarCollapseEl = document.getElementById('navbarNav');
+    const navbarToggler = document.querySelector('.navbar-toggler');
+    if (!navbarCollapseEl || !navbarToggler) return;
+
+    // Toggle scroll-lock and active classes on show/hide
+    navbarCollapseEl.addEventListener('show.bs.collapse', () => {
+      document.body.classList.add('mobile-nav-open');
+      navbarToggler.classList.add('active');
+    });
+
+    navbarCollapseEl.addEventListener('hide.bs.collapse', () => {
+      document.body.classList.remove('mobile-nav-open');
+      navbarToggler.classList.remove('active');
+    });
+
+    // Close mobile menu when clicking any navigation link or action button
+    const navLinks = navbarCollapseEl.querySelectorAll('.nav-link, .btn');
+    navLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapseEl);
+        if (bsCollapse) {
+          bsCollapse.hide();
+        }
+      });
+    });
+
+    // Close menu when clicking anywhere outside of the navbar container
+    document.addEventListener('click', (e) => {
+      const isClickInside = navbarCollapseEl.contains(e.target) || navbarToggler.contains(e.target);
+      const isShown = navbarCollapseEl.classList.contains('show');
+      if (!isClickInside && isShown) {
+        const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapseEl);
+        if (bsCollapse) {
+          bsCollapse.hide();
+        }
+      }
+    });
+
+    // Reset layout scroll lock if viewport is resized to desktop width
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 992) {
+        if (document.body.classList.contains('mobile-nav-open')) {
+          document.body.classList.remove('mobile-nav-open');
+        }
+        const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapseEl);
+        if (bsCollapse && navbarCollapseEl.classList.contains('show')) {
+          bsCollapse.hide();
+        }
+      }
+    });
+  }
+  initMobileNavigation();
 });
 
 

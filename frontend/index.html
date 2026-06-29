@@ -38,7 +38,7 @@
         <i class="fa-solid fa-wifi me-2"></i>PrimeNet
       </a>
       <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+        <span class="toggler-bar"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto align-items-center" id="mainNavLinks">
@@ -123,7 +123,7 @@
             </p>
             <div class="d-flex flex-wrap gap-3">
               <button class="btn btn-accent btn-lg pulse-glow px-4 py-3" id="getConnectionHeroBtn" data-bs-toggle="modal" data-bs-target="#registerModal">
-                <i class="fa-solid fa-circle-plus me-2"></i>Get Connection
+                <i class="fa-solid fa-circle-plus me-2"></i>Get Connected
               </button>
               <a href="#plans" class="btn btn-outline-primary btn-lg px-4 py-3">
                 <i class="fa-solid fa-circle-info me-2"></i>View Plans
@@ -148,32 +148,75 @@
                 </span>
               </div>
               
-              <!-- Metrics Grid -->
-              <div class="row g-3 mb-4">
-                <div class="col-6">
-                  <div class="dashboard-stat-tile">
-                    <span class="text-muted small d-block mb-1">Max Port Speed</span>
-                    <span class="dashboard-stat-val">1.2 <small style="font-size: 0.8rem; font-weight: 500;">Gbps</small></span>
-                  </div>
-                </div>
-                <div class="col-6">
-                  <div class="dashboard-stat-tile">
-                    <span class="text-muted small d-block mb-1">Uptime SLA</span>
-                    <span class="dashboard-stat-val text-success">99.9%</span>
-                  </div>
-                </div>
-                <div class="col-6">
-                  <div class="dashboard-stat-tile">
-                    <span class="text-muted small d-block mb-1">Active Students</span>
-                    <span class="dashboard-stat-val text-info">1,240+</span>
-                  </div>
-                </div>
-                <div class="col-6">
-                  <div class="dashboard-stat-tile">
-                    <span class="text-muted small d-block mb-1">Avg Ping Rate</span>
-                    <span class="dashboard-stat-val text-warning">8 <small style="font-size: 0.8rem; font-weight: 500;">ms</small></span>
-                  </div>
-                </div>
+              <!-- Animated Network Illustration (Replaces fake stats) -->
+              <div class="network-illustration-wrapper mb-4" style="height: 160px; display: flex; align-items: center; justify-content: center; position: relative;">
+                <svg width="100%" height="100%" viewBox="0 0 400 160" xmlns="http://www.w3.org/2000/svg" style="max-width: 100%;">
+                  <!-- Background grid -->
+                  <defs>
+                    <pattern id="illustrationGrid" width="20" height="20" patternUnits="userSpaceOnUse">
+                      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(37, 99, 235, 0.04)" stroke-width="1" />
+                    </pattern>
+                    <linearGradient id="hubGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="var(--primary)" />
+                      <stop offset="100%" stop-color="var(--secondary)" />
+                    </linearGradient>
+                    <linearGradient id="nodeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="var(--secondary)" />
+                      <stop offset="100%" stop-color="var(--accent)" />
+                    </linearGradient>
+                  </defs>
+                  <rect width="100%" height="100%" fill="url(#illustrationGrid)" rx="12" />
+                  
+                  <!-- Pulsing waves from center (Router hub) -->
+                  <circle cx="200" cy="80" r="45" fill="none" stroke="rgba(37, 99, 235, 0.08)" stroke-width="2">
+                    <animate attributeName="r" values="30;70;30" dur="6s" repeatCount="indefinite" />
+                    <animate attributeName="opacity" values="0.8;0;0.8" dur="6s" repeatCount="indefinite" />
+                  </circle>
+                  <circle cx="200" cy="80" r="65" fill="none" stroke="rgba(6, 182, 212, 0.06)" stroke-width="1.5">
+                    <animate attributeName="r" values="45;95;45" dur="8s" repeatCount="indefinite" />
+                    <animate attributeName="opacity" values="0.6;0;0.6" dur="8s" repeatCount="indefinite" />
+                  </circle>
+
+                  <!-- Connection Lines -->
+                  <line x1="200" y1="80" x2="90" y2="40" stroke="rgba(37, 99, 235, 0.15)" stroke-width="2" stroke-dasharray="4 4" />
+                  <line x1="200" y1="80" x2="310" y2="40" stroke="rgba(37, 99, 235, 0.15)" stroke-width="2" stroke-dasharray="4 4" />
+                  <line x1="200" y1="80" x2="120" y2="120" stroke="rgba(37, 99, 235, 0.15)" stroke-width="2" stroke-dasharray="4 4" />
+                  <line x1="200" y1="80" x2="280" y2="120" stroke="rgba(37, 99, 235, 0.15)" stroke-width="2" stroke-dasharray="4 4" />
+
+                  <!-- Central Router/Hub node -->
+                  <g>
+                    <circle cx="200" cy="80" r="18" fill="url(#hubGrad)" />
+                    <circle cx="200" cy="80" r="10" fill="#FFFFFF" opacity="0.9">
+                      <animate attributeName="r" values="6;10;6" dur="3s" repeatCount="indefinite" />
+                    </circle>
+                  </g>
+
+                  <!-- Secondary connected nodes -->
+                  <g>
+                    <circle cx="90" cy="40" r="10" fill="url(#nodeGrad)" />
+                    <circle cx="90" cy="40" r="14" fill="none" stroke="var(--accent)" stroke-width="1" opacity="0.5">
+                      <animate attributeName="r" values="10;16;10" dur="4s" repeatCount="indefinite" />
+                    </circle>
+                  </g>
+                  <g>
+                    <circle cx="310" cy="40" r="10" fill="url(#nodeGrad)" />
+                    <circle cx="310" cy="40" r="14" fill="none" stroke="var(--accent)" stroke-width="1" opacity="0.5">
+                      <animate attributeName="r" values="10;16;10" dur="5s" repeatCount="indefinite" />
+                    </circle>
+                  </g>
+                  <g>
+                    <circle cx="120" cy="120" r="10" fill="url(#nodeGrad)" />
+                    <circle cx="120" cy="120" r="14" fill="none" stroke="var(--accent)" stroke-width="1" opacity="0.5">
+                      <animate attributeName="r" values="10;16;10" dur="4.5s" repeatCount="indefinite" />
+                    </circle>
+                  </g>
+                  <g>
+                    <circle cx="280" cy="120" r="10" fill="url(#nodeGrad)" />
+                    <circle cx="280" cy="120" r="14" fill="none" stroke="var(--accent)" stroke-width="1" opacity="0.5">
+                      <animate attributeName="r" values="10;16;10" dur="3.5s" repeatCount="indefinite" />
+                    </circle>
+                  </g>
+                </svg>
               </div>
               
               <!-- Video card / interactive overlay inside dashboard -->
@@ -609,18 +652,17 @@
           <!-- Founder 1 -->
           <div class="col-md-4 reveal">
             <div class="glass-card founder-card text-center">
-              <a href="https://shakti69.github.io/" target="_blank" class="text-decoration-none text-reset">
-                <div class="founder-img-container">
-                  <img src="assets/admin1.JPG" alt="Shakti Prasad Hota">
-                </div>
-                <h4>Shakti Prasad Hota</h4>
-                <p class="text-primary small mb-2 fw-semibold">Co-Founder & CEO</p>
-                <p class="text-muted small px-2">Leading operations and strategic growth to power hostel communities.</p>
-              </a>
+              <div class="founder-img-container">
+                <img src="assets/admin1.JPG" alt="Shakti Prasad Hota" loading="lazy">
+              </div>
+              <h4>Shakti Prasad Hota</h4>
+              <p class="text-primary small mb-2 fw-semibold">Co-Founder & CEO</p>
+              <p class="text-muted small px-2">Leading operations and strategic growth to power hostel communities.</p>
               <div class="founder-socials">
-                <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
-                <a href="https://github.com/shakti69" target="_blank"><i class="fa-brands fa-github"></i></a>
-                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://shakti69.github.io/" target="_blank" title="Portfolio Website"><i class="fa-solid fa-globe"></i></a>
+                <a href="https://github.com/shakti69" target="_blank" title="GitHub"><i class="fa-brands fa-github"></i></a>
+                <a href="#" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                <a href="mailto:support@primenet.local" title="Email"><i class="fa-solid fa-envelope"></i></a>
               </div>
             </div>
           </div>
@@ -628,33 +670,33 @@
           <div class="col-md-4 reveal">
             <div class="glass-card founder-card text-center">
               <div class="founder-img-container">
-                <img src="assets/admin2.JPG" alt="Prabina Kumar Sahoo">
+                <img src="assets/admin2.JPG" alt="Prabina Kumar Sahoo" loading="lazy">
               </div>
               <h4>Prabina Kumar Sahoo</h4>
               <p class="text-primary small mb-2 fw-semibold">Co-Founder & CTO</p>
               <p class="text-muted small px-2">Driving technical innovation and maintaining high-speed network reliability.</p>
               <div class="founder-socials">
-                <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
-                <a href="#" target="_blank"><i class="fa-brands fa-github"></i></a>
-                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://github.com/prabinakumar07" target="_blank" title="Portfolio Website"><i class="fa-solid fa-globe"></i></a>
+                <a href="https://github.com/prabinakumar07" target="_blank" title="GitHub"><i class="fa-brands fa-github"></i></a>
+                <a href="#" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                <a href="mailto:support@primenet.local" title="Email"><i class="fa-solid fa-envelope"></i></a>
               </div>
             </div>
           </div>
           <!-- Founder 3 -->
           <div class="col-md-4 reveal">
             <div class="glass-card founder-card text-center">
-              <a href="https://universeluxury.vercel.app/" target="_blank" class="text-decoration-none text-reset">
-                <div class="founder-img-container">
-                  <img src="assets/admin3.JPG" alt="Biswa Bhushana Satpathy">
-                </div>
-                <h4>Biswa Bhushana Satpathy</h4>
-                <p class="text-primary small mb-2 fw-semibold">Co-Founder & Lead Architect</p>
-                <p class="text-muted small px-2">Designing robust network backbones and structural hardware routing.</p>
-              </a>
+              <div class="founder-img-container">
+                <img src="assets/admin3.JPG" alt="Biswa Bhushana Satpathy" loading="lazy">
+              </div>
+              <h4>Biswa Bhushana Satpathy</h4>
+              <p class="text-primary small mb-2 fw-semibold">Co-Founder & Lead Architect</p>
+              <p class="text-muted small px-2">Designing robust network backbones and structural hardware routing.</p>
               <div class="founder-socials">
-                <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
-                <a href="#" target="_blank"><i class="fa-brands fa-github"></i></a>
-                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://universeluxury.vercel.app/" target="_blank" title="Portfolio Website"><i class="fa-solid fa-globe"></i></a>
+                <a href="#" target="_blank" title="GitHub"><i class="fa-brands fa-github"></i></a>
+                <a href="#" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                <a href="mailto:support@primenet.local" title="Email"><i class="fa-solid fa-envelope"></i></a>
               </div>
             </div>
           </div>
