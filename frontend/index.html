@@ -51,10 +51,19 @@
             <a class="nav-link text-primary fw-bold" href="#dashboard" id="navAdminPortal"><i class="fa-solid fa-gauge me-1"></i>Dashboard</a>
           </li>
         </ul>
-        <div class="d-flex align-items-center ms-lg-3 mt-3 mt-lg-0 gap-2">
-          <!-- Dark Mode Toggle -->
-          <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Dark Mode" title="Toggle Dark/Light Mode">
-            <i class="fa-solid fa-moon"></i>
+        <div class="d-flex align-items-center ms-lg-3 mt-3 mt-lg-0 gap-3">
+          <!-- Theme Switcher -->
+          <div class="theme-switch-wrapper" title="Toggle Dark/Light Mode">
+            <button class="theme-switch-btn" id="themeToggleBtn" aria-label="Toggle Theme">
+              <span class="theme-switch-icon sun-icon"><i class="fa-solid fa-sun"></i></span>
+              <span class="theme-switch-icon moon-icon"><i class="fa-solid fa-moon"></i></span>
+              <span class="theme-switch-slider"></span>
+            </button>
+          </div>
+
+          <!-- Get Connection Button (Navbar) -->
+          <button class="btn btn-accent btn-nav-connect pulse-glow" id="getConnectionNavBtn" data-bs-toggle="modal" data-bs-target="#registerModal">
+            <i class="fa-solid fa-circle-plus me-2"></i>Get Connection
           </button>
           
           <!-- Admin Login / Logout button -->
@@ -83,6 +92,10 @@
 
   <!-- Landing Page Wrapper (Hidden when Admin Dashboard is active) -->
   <div id="landingPageWrapper">
+    <!-- Background Glow shapes -->
+    <div class="bg-glow-shape bg-glow-1"></div>
+    <div class="bg-glow-shape bg-glow-2"></div>
+
     <!-- Hero Section -->
     <header class="hero-section" id="home">
       <div class="container">
@@ -94,7 +107,7 @@
             <h1 class="hero-title">Unlimited High-Speed <br>Internet for <span>Hostel Students</span></h1>
             <p class="hero-subtitle">Reliable, fast, and highly affordable internet connection. Built to support online studying, entertainment, and browsing without limits.</p>
             <div class="d-flex flex-wrap gap-3">
-              <button class="btn btn-accent btn-lg" id="getConnectionHeroBtn" data-bs-toggle="modal" data-bs-target="#registerModal">
+              <button class="btn btn-accent btn-lg pulse-glow" id="getConnectionHeroBtn" data-bs-toggle="modal" data-bs-target="#registerModal">
                 <i class="fa-solid fa-circle-plus me-2"></i>Get Connection
               </button>
               <button class="btn btn-outline-primary btn-lg" id="adminLoginHeroBtn" data-bs-toggle="modal" data-bs-target="#loginModal">
@@ -258,7 +271,7 @@
               <li><strong>Student Budget-Friendly:</strong> Optimized rate structuring at just ₹30/month (billed semi-annually as ₹180 for 6 months).</li>
               <li><strong>High Availability:</strong> Secondary backup links ensure 99.9% uptime during crucial exam and class times.</li>
             </ul>
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registerModal">
+            <button class="btn btn-accent pulse-glow" data-bs-toggle="modal" data-bs-target="#registerModal">
               <i class="fa-solid fa-circle-plus me-2"></i>Apply for Connection
             </button>
           </div>
