@@ -120,7 +120,8 @@ const mapStudentDoc = (doc) => {
     pay_later_date: doc.pay_later_date || null,
     screenshot_url: screenshot,
     status: doc.status,
-    created_at: doc.created_at
+    created_at: doc.created_at,
+    payment_method: doc.payment_method || 'O'
   };
 };
 
@@ -141,11 +142,11 @@ const sortStudentsArray = (arr) => {
   });
 };
 
-// 1. Register a connection
 exports.registerStudent = async (req, res) => {
-  const { name, mobile, email, room_number, room_type, mac_address, screenshot_url } = req.body;
+  const { name, mobile, email, room_number, room_type, mac_address, screenshot_url, payment_method } = req.body;
+  const cleanPaymentMethod = payment_method === 'C' ? 'C' : 'O';
 
-  if (!name || !mobile || !email || !room_number || !room_type || !mac_address || !screenshot_url) {
+  if (!name || !mobile || !email || !room_number || !room_type || !mac_address || (cleanPaymentMethod === 'O' && !screenshot_url)) {
     return res.status(400).json({ message: 'All fields, including payment screenshot, are required.' });
   }
 
@@ -216,7 +217,8 @@ exports.registerStudent = async (req, res) => {
       room_number: cleanRoomNumber,
       room_type: cleanRoomType,
       mac_address: normalizedMac,
-      screenshot_url: sanitizeUrl(screenshot_url),
+      screenshot_url: cleanPaymentMethod === 'O' ? sanitizeUrl(screenshot_url) : '',
+      payment_method: cleanPaymentMethod,
       status: 'Pending'
     });
 
@@ -336,7 +338,7 @@ exports.updatePaymentStatus = async (req, res) => {
 // 4. Edit Student Registration (Admin only)
 exports.editStudent = async (req, res) => {
   const { id } = req.params;
-  const { name, mobile, email, room_number, room_type, mac_address, mac_address_2, mac_address_3, mac_address_4, payment_status, pay_later_date, status, screenshot_url } = req.body;
+  const { name, mobile, email, room_number, room_type, mac_address, mac_address_2, mac_address_3, mac_address_4, payment_status, pay_later_date, status, screenshot_url, payment_method } = req.body;
 
   if (!name || !mobile || !email || !room_number || !room_type || !mac_address || !status) {
     return res.status(400).json({ message: 'All fields are required.' });
@@ -355,6 +357,7 @@ exports.editStudent = async (req, res) => {
   const cleanPaymentStatus = payment_status ? sanitizeInput(payment_status) : 'Unpaid';
   const cleanPayLaterDate = pay_later_date ? sanitizeInput(pay_later_date) : '';
   const cleanStatus = sanitizeInput(status);
+  const cleanPaymentMethod = payment_method === 'C' ? 'C' : 'O';
 
   // Validate
   if (cleanName.length < 2) {
@@ -467,9 +470,10 @@ exports.editStudent = async (req, res) => {
     student.payment_status = cleanPaymentStatus;
     student.pay_later_date = cleanPayLaterDate ? new Date(cleanPayLaterDate) : null;
     student.status = cleanStatus;
+    student.payment_method = cleanPaymentMethod;
 
     if (screenshot_url !== undefined) {
-      student.screenshot_url = sanitizeUrl(screenshot_url);
+      student.screenshot_url = cleanPaymentMethod === 'O' ? sanitizeUrl(screenshot_url) : '';
     }
 
     await student.save();
@@ -624,7 +628,7 @@ exports.exportCSV = async (req, res) => {
     const mapped = students.map(mapStudentDoc);
     const sorted = sortStudentsArray(mapped);
 
-    const headers = 'Name,Mobile Number,Email,Room Number,Room Type,MAC Address,MAC Address 2,MAC Address 3,MAC Address 4,Payment Status,Status,Pay Later Date,Registration Date';
+    const headers = 'Name,Mobile Number,Email,Room Number,Room Type,Payment Method,MAC Address,MAC Address 2,MAC Address 3,MAC Address 4,Payment Status,Status,Pay Later Date,Registration Date';
     const csvRows = sorted.map(r => {
       const escapeCsv = (val) => {
         if (val === null || val === undefined) return '';
@@ -640,6 +644,7 @@ exports.exportCSV = async (req, res) => {
         escapeCsv(r.email),
         escapeCsv(r.room_number),
         escapeCsv(r.room_type),
+        escapeCsv(r.payment_method === 'C' ? 'Cash' : 'Online'),
         escapeCsv(r.mac_address),
         escapeCsv(r.mac_address_2),
         escapeCsv(r.mac_address_3),

@@ -1051,15 +1051,26 @@
 
       <!-- Filters & Search Toolbar -->
       <div class="glass-card p-4 mb-4">
-        <div class="row g-3 align-items-center">
-          <div class="col-md-4">
+        <div class="row g-3 align-items-end">
+          <div class="col-md-3">
             <label class="form-label small text-muted">Search User</label>
             <div class="input-group">
               <span class="input-group-text bg-transparent border-end-0 text-muted" style="border: 1px solid var(--card-border); border-radius: var(--radius-md) 0 0 var(--radius-md);"><i class="fa-solid fa-magnifying-glass"></i></span>
               <input type="text" class="form-control border-start-0" id="searchBar" placeholder="Search by name, room, MAC..." style="border-radius: 0 var(--radius-md) var(--radius-md) 0 !important;">
             </div>
           </div>
-          <div class="col-sm-6 col-md-3">
+          <div class="col-sm-6 col-md-2">
+            <label class="form-label small text-muted">Sort By</label>
+            <select class="form-select" id="sortFilter">
+              <option value="newest">Newest First</option>
+              <option value="oldest">Oldest First</option>
+              <option value="name_asc">Name (A-Z)</option>
+              <option value="name_desc">Name (Z-A)</option>
+              <option value="room_asc">Room (Asc)</option>
+              <option value="room_desc">Room (Desc)</option>
+            </select>
+          </div>
+          <div class="col-sm-6 col-md-2">
             <label class="form-label small text-muted">Filter by Status</label>
             <select class="form-select" id="filterStatus">
               <option value="All">All Registrations</option>
@@ -1068,20 +1079,35 @@
               <option value="Rejected">Rejected</option>
             </select>
           </div>
-          <div class="col-sm-6 col-md-3">
-            <label class="form-label small text-muted">Filter by Room Type</label>
-            <select class="form-select" id="filterRoomType">
-              <option value="All">All Room Types</option>
-              <option value="A">Type A</option>
-              <option value="B">Type B</option>
+          <div class="col-sm-6 col-md-2">
+            <label class="form-label small text-muted">Payment Status</label>
+            <select class="form-select" id="filterPaymentStatus">
+              <option value="All">All Statuses</option>
+              <option value="Paid">Paid</option>
+              <option value="Unpaid">Unpaid</option>
+              <option value="Partially Paid">Partially Paid</option>
             </select>
           </div>
-          <div class="col-md-2 d-grid mt-auto pt-2">
-            <button class="btn btn-outline-primary" id="btnClearFilters">
-              <i class="fa-solid fa-rotate-left me-1"></i>Clear Filters
+          <div class="col-sm-6 col-md-2">
+            <label class="form-label small text-muted">Payment Method</label>
+            <select class="form-select" id="filterPaymentMethod">
+              <option value="All">All Methods</option>
+              <option value="O">Online (O)</option>
+              <option value="C">Cash (C)</option>
+            </select>
+          </div>
+          <div class="col-md-1 d-grid mt-auto">
+            <button class="btn btn-outline-primary w-100" id="btnClearFilters" title="Clear Filters" style="height: 38px;">
+              <i class="fa-solid fa-rotate-left"></i>
             </button>
           </div>
         </div>
+      </div>
+
+      <!-- Results Count & Title Header -->
+      <div class="d-flex justify-content-between align-items-center mb-3 px-1">
+        <h5 class="mb-0 text-secondary" style="font-size: 1.1rem; font-weight: 600;"><i class="fa-solid fa-list me-2"></i>Registrations</h5>
+        <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-3 py-2" id="filterResultsCount" style="font-size: 0.85rem; font-weight: 600;">0 results found</span>
       </div>
 
       <!-- User Management Table -->
@@ -1093,6 +1119,7 @@
                 <th scope="col">Student Name</th>
                 <th scope="col">Contact Info</th>
                 <th scope="col">Room Details</th>
+                <th scope="col">Pay Method</th>
                 <th scope="col">MAC Address</th>
                 <th scope="col">Status</th>
                 <th scope="col" class="text-center">Actions</th>
@@ -1100,7 +1127,7 @@
             </thead>
             <tbody id="studentTableBody">
               <tr>
-                <td colspan="6" class="text-center text-muted py-5">
+                <td colspan="7" class="text-center text-muted py-5">
                   <i class="fa-solid fa-folder-open fa-2x mb-3 d-block text-light"></i>
                   No student registrations found.
                 </td>
@@ -1311,17 +1338,27 @@
               <div class="invalid-feedback">Enter a valid MAC address (e.g. AA:BB:CC:DD:EE:01).</div>
             </div>
 
+            <div class="contact-input-wrapper mb-3">
+              <select id="regPaymentMethod" required>
+                <option value="" disabled selected>Select Payment Method</option>
+                <option value="O">Online Payment</option>
+                <option value="C">Cash Payment</option>
+              </select>
+              <i class="fa-solid fa-wallet"></i>
+              <div class="invalid-feedback">Select payment method.</div>
+            </div>
+
             <!-- Payment Step -->
-            <div class="mb-4 p-3 rounded-3 border" style="background: rgba(0, 0, 0, 0.02); border-color: var(--card-border) !important;">
-              <h6 class="fw-bold mb-2 text-primary"><i class="fa-solid fa-qrcode me-2"></i>Pay ₹180 for Registration</h6>
-              <p class="small text-muted mb-3">Scan the QR code below using any UPI app to pay ₹180, then upload the payment screenshot.</p>
-              <div class="text-center mb-3">
+            <div id="paymentInstructionsBlock" class="mb-4 p-3 rounded-3 border" style="background: rgba(0, 0, 0, 0.02); border-color: var(--card-border) !important;">
+              <h6 class="fw-bold mb-2 text-primary" id="paymentInstructionsTitle"><i class="fa-solid fa-qrcode me-2"></i>Pay ₹180 for Registration</h6>
+              <p class="small text-muted mb-3" id="paymentInstructionsText">Scan the QR code below using any UPI app to pay ₹180, then upload the payment screenshot.</p>
+              <div class="text-center mb-3" id="qrCodeContainer">
                 <img id="registerQrCode" src="/favicon.png" alt="Payment QR Code" class="img-fluid rounded border shadow-sm p-1" style="max-height: 180px; display: block; margin: 0 auto 10px auto;">
                 <a id="downloadQrBtn" href="/favicon.png" download="payment_qr.png" class="btn btn-outline-primary btn-sm mt-1 px-3">
                   <i class="fa-solid fa-download me-1"></i> Download QR Code
                 </a>
               </div>
-              <div>
+              <div id="screenshotContainer">
                 <label for="regScreenshot" class="form-label small fw-semibold text-muted">Upload Payment Screenshot *</label>
                 <input type="file" class="form-control" id="regScreenshot" accept="image/*" required>
                 <div class="invalid-feedback">Please upload your payment screenshot.</div>
@@ -1456,6 +1493,21 @@
                   <input type="date" id="editPayLaterDate">
                   <i class="fa-solid fa-calendar-days"></i>
                 </div>
+              </div>
+            </div>
+
+            <div class="row g-2">
+              <div class="col-md-6">
+                <div class="contact-input-wrapper">
+                  <select id="editPaymentMethod" required>
+                    <option value="O">Online</option>
+                    <option value="C">Cash</option>
+                  </select>
+                  <i class="fa-solid fa-wallet"></i>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <!-- spacing -->
               </div>
             </div>
 

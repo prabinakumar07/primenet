@@ -963,14 +963,73 @@ section {
 }
 
 .admin-stats-panel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 1.8rem;
   border-radius: var(--radius-lg);
   border-left: 5px solid var(--primary);
+  background: var(--card-bg);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--card-border);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.admin-stats-panel:hover {
+  transform: translateY(-5px) !important;
+  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.12);
 }
 
 .admin-stats-panel.pending { border-left-color: #F59E0B; }
 .admin-stats-panel.accepted { border-left-color: var(--accent); }
 .admin-stats-panel.rejected { border-left-color: #EF4444; }
+
+.stats-number {
+  font-size: 2.8rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-top: 0.4rem;
+  font-family: var(--font-heading);
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, var(--text-color) 0%, rgba(var(--primary-rgb), 0.8) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+[data-theme="dark"] .stats-number {
+  background: linear-gradient(135deg, #FFFFFF 0%, rgba(255, 255, 255, 0.7) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.admin-stats-panel.pending .stats-number {
+  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.admin-stats-panel.accepted .stats-number {
+  background: linear-gradient(135deg, var(--accent) 0%, #059669 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.admin-stats-panel.rejected .stats-number {
+  background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.stats-icon {
+  font-size: 2.4rem;
+  opacity: 0.3;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.admin-stats-panel:hover .stats-icon {
+  transform: scale(1.15) rotate(8deg);
+  opacity: 0.65;
+}
 
 .admin-table-card {
   border-radius: var(--radius-lg);

@@ -30,6 +30,7 @@ const studentSchema = new mongoose.Schema({
   screenshot_url: { type: String, default: '' },
   pay_later_date: { type: Date, default: null },
   status: { type: String, default: 'Pending', enum: ['Pending', 'Accepted', 'Rejected'] },
+  payment_method: { type: String, default: 'O', enum: ['C', 'O'] },
   created_at: { type: Date, default: Date.now }
 });
 

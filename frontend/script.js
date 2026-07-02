@@ -54,7 +54,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const studentTableBody = document.getElementById('studentTableBody');
   const searchBar = document.getElementById('searchBar');
   const filterStatus = document.getElementById('filterStatus');
-  const filterRoomType = document.getElementById('filterRoomType');
+  const filterPaymentStatus = document.getElementById('filterPaymentStatus');
+  const filterPaymentMethod = document.getElementById('filterPaymentMethod');
+  const sortFilter = document.getElementById('sortFilter');
   const btnClearFilters = document.getElementById('btnClearFilters');
   const btnExportMac = document.getElementById('btnExportMac');
   const btnExportCsv = document.getElementById('btnExportCsv');
@@ -237,6 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const room_number = document.getElementById('regRoomNumber').value.trim();
     const room_type = document.getElementById('regRoomType').value;
     const mac_address = document.getElementById('regMac').value.trim();
+    const payment_method = document.getElementById('regPaymentMethod').value;
     const screenshotFile = document.getElementById('regScreenshot').files[0];
 
     // Client Side Validations
@@ -247,7 +250,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!room_number) errors.push('Please enter room number.');
     if (!room_type) errors.push('Please select a room type.');
     if (!validateMacAddress(mac_address)) errors.push('Please enter a valid MAC address (e.g. AA:BB:CC:DD:EE:01).');
-    if (!screenshotFile) errors.push('Please upload a payment screenshot.');
+    if (!payment_method) errors.push('Please select a payment method.');
+    if (payment_method === 'O' && !screenshotFile) errors.push('Please upload a payment screenshot.');
 
     if (errors.length > 0) {
       registerAlert.innerHTML = errors.join('<br>');
@@ -259,27 +263,30 @@ document.addEventListener('DOMContentLoaded', () => {
     toggleSpinner(true);
 
     try {
-      // 1. Upload payment screenshot first
-      const formData = new FormData();
-      formData.append('file', screenshotFile);
+      let screenshot_url = '';
+      if (payment_method === 'O') {
+        // 1. Upload payment screenshot first
+        const formData = new FormData();
+        formData.append('file', screenshotFile);
 
-      const uploadRes = await fetch(`${API_BASE}/students/upload`, {
-        method: 'POST',
-        body: formData
-      });
+        const uploadRes = await fetch(`${API_BASE}/students/upload`, {
+          method: 'POST',
+          body: formData
+        });
 
-      const uploadData = await uploadRes.json();
-      if (!uploadRes.ok) {
-        throw new Error(uploadData.message || 'Failed to upload payment screenshot.');
+        const uploadData = await uploadRes.json();
+        if (!uploadRes.ok) {
+          throw new Error(uploadData.message || 'Failed to upload payment screenshot.');
+        }
+
+        screenshot_url = uploadData.url;
       }
 
-      const screenshot_url = uploadData.url;
-
-      // 2. Submit student registration with screenshot_url
+      // 2. Submit student registration with screenshot_url & payment_method
       const response = await fetch(`${API_BASE}/students/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, mobile, email, room_number, room_type, mac_address, screenshot_url })
+        body: JSON.stringify({ name, mobile, email, room_number, room_type, mac_address, screenshot_url, payment_method })
       });
 
       const data = await response.json();
@@ -314,7 +321,48 @@ document.addEventListener('DOMContentLoaded', () => {
     registerForm.classList.remove('was-validated');
     registerAlert.classList.add('d-none');
     registerSuccessAlert.classList.add('d-none');
+    
+    // Reset payment instructions state
+    const qrCodeContainer = document.getElementById('qrCodeContainer');
+    const screenshotContainer = document.getElementById('screenshotContainer');
+    const regScreenshot = document.getElementById('regScreenshot');
+    const paymentInstructionsText = document.getElementById('paymentInstructionsText');
+    if (qrCodeContainer) qrCodeContainer.classList.remove('d-none');
+    if (screenshotContainer) screenshotContainer.classList.remove('d-none');
+    if (regScreenshot) regScreenshot.setAttribute('required', '');
+    if (paymentInstructionsText) {
+      paymentInstructionsText.textContent = 'Scan the QR code below using any UPI app to pay ₹180, then upload the payment screenshot.';
+    }
   });
+
+  // Dynamic payment method toggling for Student Registration Form
+  const regPaymentMethod = document.getElementById('regPaymentMethod');
+  if (regPaymentMethod) {
+    regPaymentMethod.addEventListener('change', () => {
+      const val = regPaymentMethod.value;
+      const qrCodeContainer = document.getElementById('qrCodeContainer');
+      const screenshotContainer = document.getElementById('screenshotContainer');
+      const regScreenshot = document.getElementById('regScreenshot');
+      const paymentInstructionsText = document.getElementById('paymentInstructionsText');
+      if (val === 'C') {
+        // Cash selected
+        if (qrCodeContainer) qrCodeContainer.classList.add('d-none');
+        if (screenshotContainer) screenshotContainer.classList.add('d-none');
+        if (regScreenshot) regScreenshot.removeAttribute('required');
+        if (paymentInstructionsText) {
+          paymentInstructionsText.textContent = 'Please pay ₹180 in cash to the administrator to complete your registration.';
+        }
+      } else {
+        // Online selected
+        if (qrCodeContainer) qrCodeContainer.classList.remove('d-none');
+        if (screenshotContainer) screenshotContainer.classList.remove('d-none');
+        if (regScreenshot) regScreenshot.setAttribute('required', '');
+        if (paymentInstructionsText) {
+          paymentInstructionsText.textContent = 'Scan the QR code below using any UPI app to pay ₹180, then upload the payment screenshot.';
+        }
+      }
+    });
+  }
 
   /* ==========================================
      ADMIN AUTHENTICATION & SESSION CHECK
@@ -604,27 +652,68 @@ document.addEventListener('DOMContentLoaded', () => {
       recentActivityList.appendChild(item);
     });
   }
-
-  function applyFilters() {
+   function applyFilters() {
     const searchVal = searchBar.value.toLowerCase().trim();
     const statusVal = filterStatus.value;
-    const roomTypeVal = filterRoomType.value;
+    const paymentStatusVal = filterPaymentStatus ? filterPaymentStatus.value : 'All';
+    const paymentMethodVal = filterPaymentMethod ? filterPaymentMethod.value : 'All';
+    const sortVal = sortFilter ? sortFilter.value : 'newest';
 
-    const filtered = allStudents.filter(student => {
+    let filtered = allStudents.filter(student => {
       // 1. Search Query Match
       const matchesSearch = 
         student.name.toLowerCase().includes(searchVal) ||
         student.room_number.toLowerCase().includes(searchVal) ||
-        student.mac_address.toLowerCase().includes(searchVal);
+        student.mac_address.toLowerCase().includes(searchVal) ||
+        (student.mac_address_2 && student.mac_address_2.toLowerCase().includes(searchVal)) ||
+        (student.mac_address_3 && student.mac_address_3.toLowerCase().includes(searchVal)) ||
+        (student.mac_address_4 && student.mac_address_4.toLowerCase().includes(searchVal));
       
       // 2. Status Match
       const matchesStatus = (statusVal === 'All') || (student.status === statusVal);
       
-      // 3. Room Type Match
-      const matchesRoomType = (roomTypeVal === 'All') || (student.room_type === roomTypeVal);
+      // 3. Payment Status Match
+      const matchesPaymentStatus = (paymentStatusVal === 'All') || (student.payment_status === paymentStatusVal);
+      
+      // 4. Payment Method Match
+      const matchesPaymentMethod = (paymentMethodVal === 'All') || (student.payment_method === paymentMethodVal);
 
-      return matchesSearch && matchesStatus && matchesRoomType;
+      return matchesSearch && matchesStatus && matchesPaymentStatus && matchesPaymentMethod;
     });
+
+    // Sort Results
+    filtered.sort((a, b) => {
+      if (sortVal === 'newest') {
+        return new Date(b.created_at) - new Date(a.created_at);
+      } else if (sortVal === 'oldest') {
+        return new Date(a.created_at) - new Date(b.created_at);
+      } else if (sortVal === 'name_asc') {
+        return a.name.localeCompare(b.name);
+      } else if (sortVal === 'name_desc') {
+        return b.name.localeCompare(a.name);
+      } else if (sortVal === 'room_asc') {
+        const roomA = parseInt(a.room_number, 10);
+        const roomB = parseInt(b.room_number, 10);
+        if (!isNaN(roomA) && !isNaN(roomB)) {
+          return roomA - roomB;
+        }
+        return a.room_number.localeCompare(b.room_number);
+      } else if (sortVal === 'room_desc') {
+        const roomA = parseInt(a.room_number, 10);
+        const roomB = parseInt(b.room_number, 10);
+        if (!isNaN(roomA) && !isNaN(roomB)) {
+          return roomB - roomA;
+        }
+        return b.room_number.localeCompare(a.room_number);
+      }
+      return 0;
+    });
+
+    // Update results counter
+    const filterResultsCount = document.getElementById('filterResultsCount');
+    if (filterResultsCount) {
+      filterResultsCount.textContent = `${filtered.length} result${filtered.length === 1 ? '' : 's'} found`;
+    }
 
     renderStudentsTable(filtered);
   }
@@ -635,7 +724,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (students.length === 0) {
       studentTableBody.innerHTML = `
         <tr>
-          <td colspan="6" class="text-center text-muted py-5">
+          <td colspan="7" class="text-center text-muted py-5">
             <i class="fa-solid fa-folder-open fa-2x mb-3 d-block"></i>
             No matching student records found.
           </td>
@@ -686,6 +775,11 @@ document.addEventListener('DOMContentLoaded', () => {
         <td>
           <div>Room <strong>${student.room_number}</strong></div>
           <div class="small text-muted">Type ${student.room_type === 'A' ? 'A (Single)' : 'B (Shared)'}</div>
+        </td>
+        <td>
+          <span class="badge ${student.payment_method === 'C' ? 'bg-success-subtle text-success border border-success-subtle' : 'bg-info-subtle text-info border border-info-subtle'} px-2 py-1" style="font-size: 0.8rem; font-weight: 600;" title="${student.payment_method === 'C' ? 'Cash Payment' : 'Online Payment'}">
+            ${student.payment_method === 'C' ? 'C' : 'O'}
+          </span>
         </td>
         <td>
           <div class="d-flex flex-column gap-1">
@@ -831,12 +925,16 @@ document.addEventListener('DOMContentLoaded', () => {
      ========================================== */
   searchBar.addEventListener('input', applyFilters);
   filterStatus.addEventListener('change', applyFilters);
-  filterRoomType.addEventListener('change', applyFilters);
+  if (filterPaymentStatus) filterPaymentStatus.addEventListener('change', applyFilters);
+  if (filterPaymentMethod) filterPaymentMethod.addEventListener('change', applyFilters);
+  if (sortFilter) sortFilter.addEventListener('change', applyFilters);
 
   btnClearFilters.addEventListener('click', () => {
     searchBar.value = '';
     filterStatus.value = 'All';
-    filterRoomType.value = 'All';
+    if (filterPaymentStatus) filterPaymentStatus.value = 'All';
+    if (filterPaymentMethod) filterPaymentMethod.value = 'All';
+    if (sortFilter) sortFilter.value = 'newest';
     applyFilters();
   });
 
@@ -902,6 +1000,10 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('editMac3').value = student.mac_address_3 || '';
     document.getElementById('editMac4').value = student.mac_address_4 || '';
     document.getElementById('editPaymentStatus').value = student.payment_status || 'Unpaid';
+    const editPayMethodEl = document.getElementById('editPaymentMethod');
+    if (editPayMethodEl) {
+      editPayMethodEl.value = student.payment_method || 'O';
+    }
     
     if (student.pay_later_date) {
       const dateObj = new Date(student.pay_later_date);
@@ -962,6 +1064,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const payment_status = document.getElementById('editPaymentStatus').value;
     const pay_later_date = document.getElementById('editPayLaterDate').value;
     const status = document.getElementById('editStatus').value;
+    const payment_method = document.getElementById('editPaymentMethod').value;
 
     let errors = [];
     if (!name || name.length < 2) errors.push('Please enter student name.');
@@ -997,7 +1100,8 @@ document.addEventListener('DOMContentLoaded', () => {
           mac_address_4, 
           payment_status, 
           pay_later_date,
-          status 
+          status,
+          payment_method
         })
       });
 
