@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function getAuthHeaders() {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     return {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
@@ -426,8 +426,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   async function checkSession() {
-    const token = localStorage.getItem('token');
-    if (!token) return;
+    const token = sessionStorage.getItem('token');
+    if (!token || token === 'undefined' || token === 'null') {
+      clearAdminSession();
+      return;
+    }
 
     try {
       const response = await fetch(`${API_BASE}/auth/verify`, {
@@ -501,12 +504,22 @@ document.addEventListener('DOMContentLoaded', () => {
     switchToAdminDashboard(false);
   });
 
+  // Admin Login button click (Login or Enter Dashboard)
+  adminLoginBtn.addEventListener('click', () => {
+    const token = sessionStorage.getItem('token');
+    if (token && token !== 'undefined' && token !== 'null') {
+      switchToAdminDashboard(true);
+    } else {
+      loginModal.show();
+    }
+  });
+
   function setupAdminSession(token, username) {
-    localStorage.setItem('token', token);
-    localStorage.setItem('adminUser', username);
+    sessionStorage.setItem('token', token);
+    sessionStorage.setItem('adminUser', username);
     
     // Toggle Nav buttons
-    adminLoginBtn.classList.add('d-none');
+    adminLoginBtn.classList.remove('d-none');
     adminLogoutBtn.classList.remove('d-none');
     
     // Show dashboard link in nav
@@ -514,8 +527,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function clearAdminSession() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('adminUser');
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('adminUser');
     
     // Toggle Nav buttons
     adminLoginBtn.classList.remove('d-none');
@@ -774,7 +787,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </td>
         <td>
           <div>Room <strong>${student.room_number}</strong></div>
-          <div class="small text-muted">Type ${student.room_type === 'A' ? 'A (Single)' : 'B (Shared)'}</div>
+          <div class="small text-muted">Type ${student.room_type}</div>
         </td>
         <td>
           <span class="badge ${student.payment_method === 'C' ? 'bg-success-subtle text-success border border-success-subtle' : 'bg-info-subtle text-info border border-info-subtle'} px-2 py-1" style="font-size: 0.8rem; font-weight: 600;" title="${student.payment_method === 'C' ? 'Cash Payment' : 'Online Payment'}">
