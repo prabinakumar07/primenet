@@ -33,6 +33,11 @@
     <div class="spinner-custom"></div>
   </div>
 
+  <!-- Top Banner -->
+  <div class="top-banner">
+    <span><i class="fa-solid fa-wand-magic-sparkles text-warning me-1"></i> Want a premium custom website? We design & build bespoke digital products. <a href="#web-agency" class="text-white text-decoration-underline ms-2 fw-bold">Get a Free Quote</a></span>
+  </div>
+
   <!-- Navigation Bar -->
   <nav class="navbar navbar-expand-lg navbar-custom fixed-top py-3">
     <div class="container">
@@ -57,7 +62,7 @@
             <a class="nav-link" href="#about" id="navAbout">About</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#services" id="navServices">Services</a>
+            <a class="nav-link" href="#web-agency" id="navServices">Web Agency</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#contact" id="navContact">Contact</a>
@@ -82,12 +87,9 @@
             <i class="fa-solid fa-circle-plus me-2"></i>Get Connection
           </button>
           
-          <!-- Admin Login / Logout button -->
+          <!-- Admin Login button -->
           <button class="btn btn-outline-primary" id="adminLoginBtn">
             <i class="fa-solid fa-lock me-2"></i>Admin Portal
-          </button>
-          <button class="btn btn-danger d-none" id="adminLogoutBtn">
-            <i class="fa-solid fa-right-from-bracket me-2"></i>Logout
           </button>
         </div>
       </div>
@@ -115,21 +117,21 @@
         <div class="row align-items-center gy-5">
           <div class="col-lg-6 text-start reveal active">
             <span class="hero-price-badge">
-              <i class="fa-solid fa-fire me-2"></i>₹180 for 6 Months Unlimited
+              <i class="fa-solid fa-fire me-2"></i>SaaS Product Showcase
             </span>
             <h1 class="hero-title fw-extrabold mb-3">
-              Unlimited Internet <br>Built for <span class="gradient-text-blue-cyan">Hostel Students</span>
+              Premium Web Apps <br>Built for <span class="gradient-text-blue-cyan" id="typingHeroText">Modern Teams</span>
             </h1>
             <p class="hero-subtitle">
-              Reliable, high-bandwidth campus broadband. Tailored for study, gaming, and buffer-free streaming without data caps.
+              We design and build bespoke, high-performance digital products. PrimeNet is our flagship broadband management SaaS application—featuring live network metrics, secure portal control, and a modern responsive dashboard interface.
             </p>
             <div class="d-flex flex-wrap gap-3">
-              <button class="btn btn-accent btn-lg pulse-glow px-4 py-3" id="getConnectionHeroBtn" data-bs-toggle="modal" data-bs-target="#registerModal">
-                <i class="fa-solid fa-circle-plus me-2"></i>Get Connected
-              </button>
-              <a href="#plans" class="btn btn-outline-primary btn-lg px-4 py-3">
-                <i class="fa-solid fa-circle-info me-2"></i>View Plans
+              <a href="#web-agency" class="btn btn-accent btn-lg pulse-glow px-4 py-3">
+                <i class="fa-solid fa-rocket me-2"></i>Hire Our Studio
               </a>
+              <button class="btn btn-outline-primary btn-lg px-4 py-3" id="getConnectionHeroBtn" data-bs-toggle="modal" data-bs-target="#registerModal">
+                <i class="fa-solid fa-laptop-code me-2"></i>Test Live App
+              </button>
             </div>
           </div>
           
@@ -290,11 +292,40 @@
                   <button class="btn btn-sm btn-link text-white text-decoration-none border-0 p-1" id="btnMuteVideo" aria-label="Mute/Unmute Video">
                     <i class="fa-solid fa-volume-xmark"></i>
                   </button>
-                </div>
-              </div>
             </div>
           </div>
         </div>
+        
+        <!-- Tech Stack Marquee -->
+        <div class="tech-stack-marquee-wrapper mt-5 reveal">
+          <p class="text-center text-muted small fw-semibold mb-3 text-uppercase tracking-wider">Engineered Using Premium Modern Technologies</p>
+          <div class="tech-marquee">
+            <div class="tech-marquee-track">
+              <span><i class="fa-brands fa-html5 text-danger"></i> HTML5</span>
+              <span><i class="fa-brands fa-css3-alt text-primary"></i> CSS3</span>
+              <span><i class="fa-brands fa-js text-warning"></i> JavaScript</span>
+              <span><i class="fa-brands fa-react text-info"></i> React</span>
+              <span><i class="fa-brands fa-node-js text-success"></i> Node.js</span>
+              <span><i class="fa-solid fa-database text-success"></i> MongoDB</span>
+              <span><i class="fa-brands fa-bootstrap text-purple"></i> Bootstrap</span>
+              <span><i class="fa-brands fa-figma text-pink"></i> Figma UI/UX</span>
+              <span><i class="fa-solid fa-code text-info"></i> RESTful APIs</span>
+              <span><i class="fa-solid fa-shield-halved text-warning"></i> Web Security</span>
+              <!-- Duplicate for loop -->
+              <span><i class="fa-brands fa-html5 text-danger"></i> HTML5</span>
+              <span><i class="fa-brands fa-css3-alt text-primary"></i> CSS3</span>
+              <span><i class="fa-brands fa-js text-warning"></i> JavaScript</span>
+              <span><i class="fa-brands fa-react text-info"></i> React</span>
+              <span><i class="fa-brands fa-node-js text-success"></i> Node.js</span>
+              <span><i class="fa-solid fa-database text-success"></i> MongoDB</span>
+              <span><i class="fa-brands fa-bootstrap text-purple"></i> Bootstrap</span>
+              <span><i class="fa-brands fa-figma text-pink"></i> Figma UI/UX</span>
+              <span><i class="fa-solid fa-code text-info"></i> RESTful APIs</span>
+              <span><i class="fa-solid fa-shield-halved text-warning"></i> Web Security</span>
+            </div>
+          </div>
+        </div>
+
       </div>
     </header>
 
@@ -756,92 +787,142 @@
             </div>
           </div>
         </div>
-      </div>
     </section>
 
-    <!-- Testimonials Section with custom sliding track -->
-    <section class="testimonials-section" id="testimonials">
+    <!-- Web Design & Agency Services Section -->
+    <section class="agency-section" id="web-agency">
       <div class="container">
         <div class="section-header reveal">
-          <span class="badge bg-primary-subtle text-primary mb-2 px-3 py-2 border border-primary-subtle">Student Success</span>
-          <h2>What Hostel Students Say</h2>
-          <p>See reviews from verified hostel students who rely on PrimeNet daily.</p>
+          <span class="badge bg-purple-subtle text-purple mb-2 px-3 py-2 border border-purple-subtle">Digital Creative Studio</span>
+          <h2>Crafting Premium Digital Products</h2>
+          <p>We build highly performant, custom-designed, and interactive web experiences that drive business growth.</p>
         </div>
-        <div class="testimonial-marquee reveal">
-          <div class="marquee-track">
-            <!-- Review 1 -->
-            <div class="glass-card testimonial-card-premium">
-              <div class="d-flex align-items-center gap-3 mb-3">
-                <div style="width: 48px; height: 48px; border-radius: 50%; overflow: hidden; border: 2px solid var(--primary);">
-                  <img src="assets/profile.jpg" alt="Student avatar" class="img-fluid">
+        
+        <div class="row g-4 mb-5">
+          <!-- Service Card 1 -->
+          <div class="col-md-6 col-lg-3 reveal">
+            <div class="glass-card agency-card p-4 text-start h-100 d-flex flex-column justify-content-between">
+              <div>
+                <div class="feature-icon-box bg-primary-subtle text-primary" style="width: 50px; height: 50px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.5rem;">
+                  <i class="fa-solid fa-cubes-stacked"></i>
                 </div>
-                <div>
-                  <h6 class="mb-0 fw-bold">Rahul Sharma</h6>
-                  <span class="text-success small fw-semibold"><i class="fa-solid fa-circle-check"></i> Verified Room 304</span>
-                </div>
+                <h4 class="mb-3 fw-bold">Custom SaaS & Apps</h4>
+                <p class="text-muted small mb-0">From complex database platforms to live monitoring panels, we build robust web applications from the ground up.</p>
               </div>
-              <p class="text-muted mb-2 small">"The MAC login is a life saver. I just walk into my hostel room and my laptop and phone link instantly. 80Mbps avg is perfect for gaming!"</p>
-              <div class="text-warning small"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
             </div>
-            <!-- Review 2 -->
-            <div class="glass-card testimonial-card-premium">
-              <div class="d-flex align-items-center gap-3 mb-3">
-                <div style="width: 48px; height: 48px; border-radius: 50%; overflow: hidden; border: 2px solid var(--primary); background: #64748B; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold;">
-                  AP
+          </div>
+          <!-- Service Card 2 -->
+          <div class="col-md-6 col-lg-3 reveal">
+            <div class="glass-card agency-card p-4 text-start h-100 d-flex flex-column justify-content-between">
+              <div>
+                <div class="feature-icon-box bg-secondary-subtle text-secondary" style="width: 50px; height: 50px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.5rem;">
+                  <i class="fa-solid fa-wand-magic-sparkles"></i>
                 </div>
-                <div>
-                  <h6 class="mb-0 fw-bold">Ananya Patel</h6>
-                  <span class="text-success small fw-semibold"><i class="fa-solid fa-circle-check"></i> Verified Room 102</span>
-                </div>
+                <h4 class="mb-3 fw-bold">UI/UX & Creative Design</h4>
+                <p class="text-muted small mb-0">We focus on stunning visual aesthetics, micro-interactions, sleek dark mode palettes, and seamless responsive structures.</p>
               </div>
-              <p class="text-muted mb-2 small">"Super cheap! Paying ₹180 for a full six months is basically free. Uptime is great, especially during exam weeks when we study late."</p>
-              <div class="text-warning small"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
             </div>
-            <!-- Review 3 -->
-            <div class="glass-card testimonial-card-premium">
-              <div class="d-flex align-items-center gap-3 mb-3">
-                <div style="width: 48px; height: 48px; border-radius: 50%; overflow: hidden; border: 2px solid var(--primary); background: #3B82F6; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold;">
-                  VJ
+          </div>
+          <!-- Service Card 3 -->
+          <div class="col-md-6 col-lg-3 reveal">
+            <div class="glass-card agency-card p-4 text-start h-100 d-flex flex-column justify-content-between">
+              <div>
+                <div class="feature-icon-box bg-success-subtle text-success" style="width: 50px; height: 50px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.5rem;">
+                  <i class="fa-solid fa-gauge-high"></i>
                 </div>
-                <div>
-                  <h6 class="mb-0 fw-bold">Vikram Jha</h6>
-                  <span class="text-success small fw-semibold"><i class="fa-solid fa-circle-check"></i> Verified Room 408</span>
-                </div>
+                <h4 class="mb-3 fw-bold">Lightning-Fast Speed</h4>
+                <p class="text-muted small mb-0">Optimized asset delivery and clean client-server pipelines ensuring your sites load instantly on all devices.</p>
               </div>
-              <p class="text-muted mb-2 small">"Zero buffer streams on YouTube. When I had a port breakdown on my wall, the Support Head fixed it within 1 hour."</p>
-              <div class="text-warning small"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i></div>
             </div>
-            <!-- Duplicate reviews for loop -->
-            <div class="glass-card testimonial-card-premium">
-              <div class="d-flex align-items-center gap-3 mb-3">
-                <div style="width: 48px; height: 48px; border-radius: 50%; overflow: hidden; border: 2px solid var(--primary);">
-                  <img src="assets/profile.jpg" alt="Student avatar" class="img-fluid">
+          </div>
+          <!-- Service Card 4 -->
+          <div class="col-md-6 col-lg-3 reveal">
+            <div class="glass-card agency-card p-4 text-start h-100 d-flex flex-column justify-content-between">
+              <div>
+                <div class="feature-icon-box bg-purple-subtle text-purple" style="width: 50px; height: 50px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.5rem;">
+                  <i class="fa-solid fa-rocket"></i>
                 </div>
-                <div>
-                  <h6 class="mb-0 fw-bold">Rahul Sharma</h6>
-                  <span class="text-success small fw-semibold"><i class="fa-solid fa-circle-check"></i> Verified Room 304</span>
-                </div>
+                <h4 class="mb-3 fw-bold">SEO & Brand Strategy</h4>
+                <p class="text-muted small mb-0">Engineered with structured semantic HTML and meta optimization to rank highly in search engine pages.</p>
               </div>
-              <p class="text-muted mb-2 small">"The MAC login is a life saver. I just walk into my hostel room and my laptop and phone link instantly. 80Mbps avg is perfect for gaming!"</p>
-              <div class="text-warning small"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
             </div>
-            <div class="glass-card testimonial-card-premium">
-              <div class="d-flex align-items-center gap-3 mb-3">
-                <div style="width: 48px; height: 48px; border-radius: 50%; overflow: hidden; border: 2px solid var(--primary); background: #64748B; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold;">
-                  AP
+          </div>
+        </div>
+
+        <!-- Interactive Web Design Playground Widget -->
+        <div class="row gy-5 align-items-center mt-5">
+          <div class="col-lg-5 reveal text-start">
+            <span class="badge bg-accent-subtle text-accent mb-2 px-3 py-2 border border-accent-subtle">Interactive Experience</span>
+            <h3 class="fw-extrabold mb-3">Live UI Customizer</h3>
+            <p class="text-muted">
+              Adjust the sliders on the right to see how we build dynamic CSS-driven elements. Control properties like card border radius, backdrop glass blur, background opacity, and interactive glow density.
+            </p>
+            <p class="text-muted small">
+              This sandbox proves our capability in translating user actions into fluid, browser-native UI changes instantly.
+            </p>
+          </div>
+          <div class="col-lg-7 reveal">
+            <div class="glass-card sandbox-card p-4">
+              <div class="row g-4 align-items-center">
+                <!-- Sandbox Controls -->
+                <div class="col-md-6 text-start text-light">
+                  <h5 class="fw-bold mb-4 text-white"><i class="fa-solid fa-sliders me-2 text-primary"></i>UI Controller</h5>
+                  
+                  <div class="mb-3">
+                    <label class="form-label small fw-semibold d-flex justify-content-between text-muted">
+                      <span>Border Radius</span>
+                      <span id="radiusVal" class="text-white">16px</span>
+                    </label>
+                    <input type="range" class="form-range" id="radiusSlider" min="0" max="32" value="16">
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label class="form-label small fw-semibold d-flex justify-content-between text-muted">
+                      <span>Background Opacity</span>
+                      <span id="opacityVal" class="text-white">45%</span>
+                    </label>
+                    <input type="range" class="form-range" id="opacitySlider" min="10" max="95" value="45">
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label class="form-label small fw-semibold d-flex justify-content-between text-muted">
+                      <span>Glow Intensity</span>
+                      <span id="glowVal" class="text-white">30%</span>
+                    </label>
+                    <input type="range" class="form-range" id="glowSlider" min="0" max="100" value="30">
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label small fw-semibold d-flex justify-content-between text-muted">
+                      <span>Backdrop Blur</span>
+                      <span id="blurVal" class="text-white">20px</span>
+                    </label>
+                    <input type="range" class="form-range" id="blurSlider" min="0" max="40" value="20">
+                  </div>
                 </div>
-                <div>
-                  <h6 class="mb-0 fw-bold">Ananya Patel</h6>
-                  <span class="text-success small fw-semibold"><i class="fa-solid fa-circle-check"></i> Verified Room 102</span>
+                
+                <!-- Live UI Preview -->
+                <div class="col-md-6 text-center">
+                  <div class="sandbox-preview-container" style="background: rgba(0,0,0,0.2); padding: 2.5rem; border-radius: var(--radius-lg); border: 1px dashed rgba(255,255,255,0.08);">
+                    <!-- The customizable card -->
+                    <div class="preview-card" id="previewCard" style="padding: 2rem; border-radius: 16px; background: rgba(255,255,255,0.45); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); position: relative; transition: all 0.1s ease;">
+                      <div class="preview-icon mb-3" style="font-size: 2.5rem; color: var(--primary);">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                      </div>
+                      <h5 class="fw-bold text-white mb-2" id="previewCardTitle">Custom Card</h5>
+                      <p class="small text-muted mb-0">Adjust my properties dynamically using the sliders.</p>
+                      <div class="preview-glow-ring" id="previewGlowRing" style="position: absolute; inset: 0; border-radius: inherit; pointer-events: none; border: 1.5px solid rgba(var(--primary-rgb), 0.3); opacity: 0.3; transition: all 0.1s ease;"></div>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <p class="text-muted mb-2 small">"Super cheap! Paying ₹180 for a full six months is basically free. Uptime is great, especially during exam weeks when we study late."</p>
-              <div class="text-warning small"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
             </div>
           </div>
         </div>
       </div>
     </section>
+
+
 
     <!-- FAQ Accordion section -->
     <section class="faq-section" id="faq">
@@ -906,47 +987,108 @@
     <section class="contact-section" id="contact">
       <div class="container">
         <div class="section-header reveal">
-          <span class="badge bg-primary-subtle text-primary mb-2 px-3 py-2 border border-primary-subtle">Get In Touch</span>
-          <h2>Contact Campus Support</h2>
-          <p>Reach out to hostel broadband network heads for line repairs or support.</p>
+          <span class="badge bg-success-subtle text-success mb-2 px-3 py-2 border border-success-subtle">Get In Touch</span>
+          <h2>Start Your Digital Project</h2>
+          <p>Tell us what you are building, and we'll estimate your timeline and cost instantly.</p>
         </div>
-        <div class="row g-4 justify-content-center reveal">
-          <div class="col-md-4">
-            <div class="glass-card contact-info-card h-100 flex-column text-start">
-              <div class="d-flex align-items-center mb-3">
-                <div class="contact-info-icon">
-                  <i class="fa-solid fa-phone"></i>
+        <div class="row g-5 align-items-stretch reveal">
+          <!-- Estimator Form -->
+          <div class="col-lg-7 text-start">
+            <div class="glass-card quote-estimator-card p-4 h-100">
+              <h4 class="fw-bold mb-4 text-white"><i class="fa-solid fa-calculator text-success me-2"></i>Project Planner & Cost Estimator</h4>
+              <form id="estimatorForm">
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label small fw-semibold text-muted">Your Name</label>
+                    <input type="text" class="form-control bg-dark border-secondary-subtle text-white p-3" id="estName" placeholder="e.g. John Doe" style="border-radius: var(--radius-md);" required>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label small fw-semibold text-muted">Email Address</label>
+                    <input type="email" class="form-control bg-dark border-secondary-subtle text-white p-3" id="estEmail" placeholder="e.g. john@example.com" style="border-radius: var(--radius-md);" required>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label small fw-semibold text-muted">Project Type</label>
+                    <select class="form-select bg-dark border-secondary-subtle text-white p-3" id="estType" style="border-radius: var(--radius-md);" required>
+                      <option value="landing">Custom Landing Page</option>
+                      <option value="saas" selected>SaaS / Web Application</option>
+                      <option value="ecommerce">E-Commerce Store</option>
+                      <option value="portfolio">Creative Portfolio</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label small fw-semibold text-muted">Estimated Budget</label>
+                    <select class="form-select bg-dark border-secondary-subtle text-white p-3" id="estBudget" style="border-radius: var(--radius-md);" required>
+                      <option value="low">$500 - $1,500</option>
+                      <option value="mid" selected>$1,500 - $5,000</option>
+                      <option value="high">$5,000 - $15,000</option>
+                      <option value="enterprise">$15,000+</option>
+                    </select>
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label small fw-semibold text-muted">Tell Us About Your Project</label>
+                    <textarea class="form-control bg-dark border-secondary-subtle text-white p-3" id="estDetails" rows="4" placeholder="Describe features, integrations, and design inspiration..." style="border-radius: var(--radius-md);" required></textarea>
+                  </div>
                 </div>
-                <h5 class="mb-0">Call Support</h5>
-              </div>
-              <p class="text-muted mb-1 small" id="displayContactPhone">+91 98765 43210</p>
-              <span class="text-muted small">Hours: Mon - Sat (9am - 8pm)</span>
+
+                <!-- Live Estimator Output -->
+                <div class="estimator-result-box mt-4 p-3 rounded text-primary border" style="background: rgba(var(--primary-rgb), 0.08); border-color: rgba(var(--primary-rgb), 0.15) !important;">
+                  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <div>
+                      <span class="small fw-semibold text-uppercase tracking-wider text-muted">Estimated Timeline</span>
+                      <h5 class="mb-0 fw-bold text-white mt-1" id="estTimeline">4 - 6 Weeks</h5>
+                    </div>
+                    <div>
+                      <span class="small fw-semibold text-uppercase tracking-wider text-muted">Complexity Tier</span>
+                      <h5 class="mb-0 fw-bold text-white mt-1" id="estComplexity">Professional SaaS Tier</h5>
+                    </div>
+                  </div>
+                </div>
+
+                <button type="submit" class="btn btn-accent w-100 mt-4 py-3 text-white fw-bold">
+                  <i class="fa-solid fa-paper-plane me-2"></i>Send Project Brief
+                </button>
+              </form>
             </div>
           </div>
           
-          <div class="col-md-4">
-            <div class="glass-card contact-info-card h-100 flex-column text-start">
-              <div class="d-flex align-items-center mb-3">
-                <div class="contact-info-icon">
-                  <i class="fa-solid fa-envelope"></i>
+          <!-- Contact Cards -->
+          <div class="col-lg-5">
+            <div class="d-flex flex-column gap-4 h-100 justify-content-between">
+              <!-- Card 1 -->
+              <div class="glass-card contact-info-card text-start p-4 h-100 flex-column justify-content-center">
+                <div class="d-flex align-items-center mb-3">
+                  <div class="contact-info-icon" style="width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(var(--primary-rgb), 0.1); color: var(--primary); font-size: 1.2rem;">
+                    <i class="fa-solid fa-envelope"></i>
+                  </div>
+                  <h5 class="mb-0 fw-bold ms-3 text-white">Email Agency</h5>
                 </div>
-                <h5 class="mb-0">Email Support</h5>
+                <p class="text-white fw-semibold mb-1 small" id="displayContactEmail">support@primenet.local</p>
+                <span class="text-muted small">We reply within 12 hours.</span>
               </div>
-              <p class="text-muted mb-1 small" id="displayContactEmail">support@primenet.local</p>
-              <span class="text-muted small">Avg Response: within 2 hours</span>
-            </div>
-          </div>
-          
-          <div class="col-md-4">
-            <div class="glass-card contact-info-card h-100 flex-column text-start">
-              <div class="d-flex align-items-center mb-3">
-                <div class="contact-info-icon">
-                  <i class="fa-solid fa-location-dot"></i>
+              
+              <!-- Card 2 -->
+              <div class="glass-card contact-info-card text-start p-4 h-100 flex-column justify-content-center">
+                <div class="d-flex align-items-center mb-3">
+                  <div class="contact-info-icon" style="width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(var(--accent-rgb), 0.1); color: var(--accent); font-size: 1.2rem;">
+                    <i class="fa-solid fa-phone"></i>
+                  </div>
+                  <h5 class="mb-0 fw-bold ms-3 text-white">Direct Call</h5>
                 </div>
-                <h5 class="mb-0">Server Room</h5>
+                <p class="text-white fw-semibold mb-1 small" id="displayContactPhone">+91 98765 43210</p>
+                <span class="text-muted small">Mon - Sat (10am - 6pm IST)</span>
               </div>
-              <p class="text-muted mb-0 small" id="displayContactAddress1">Hostel Block-C, Server Room 10</p>
-              <p class="text-muted mb-0 small" id="displayContactAddress2">Campus Ground, Pin 751024</p>
+
+              <!-- Card 3 -->
+              <div class="glass-card contact-info-card text-start p-4 h-100 flex-column justify-content-center">
+                <div class="d-flex align-items-center mb-3">
+                  <div class="contact-info-icon" style="width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(var(--purple-rgb), 0.1); color: var(--purple); font-size: 1.2rem;">
+                    <i class="fa-solid fa-location-dot"></i>
+                  </div>
+                  <h5 class="mb-0 fw-bold ms-3 text-white">Headquarters</h5>
+                </div>
+                <p class="text-white fw-semibold mb-0 small" id="displayContactAddress1">Hostel Block-C, Server Room 10</p>
+                <p class="text-muted mb-0 small" id="displayContactAddress2">Campus Ground, Pin 751024</p>
+              </div>
             </div>
           </div>
         </div>

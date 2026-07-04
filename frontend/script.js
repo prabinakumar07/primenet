@@ -2491,4 +2491,169 @@ PrimeNet Team`;
     });
   }
   initButtonRipples();
+
+  // --- Rebranded Studio JS Logic ---
+
+  // 1. Typing Effect for Hero Title
+  function initHeroTypingEffect() {
+    const typingEl = document.getElementById('typingHeroText');
+    if (!typingEl) return;
+    
+    const words = ["Modern Teams", "Creative Brands", "SaaS Startups", "High Performance"];
+    let wordIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    
+    function type() {
+      const currentWord = words[wordIndex];
+      if (isDeleting) {
+        typingEl.textContent = currentWord.substring(0, charIndex - 1);
+        charIndex--;
+      } else {
+        typingEl.textContent = currentWord.substring(0, charIndex + 1);
+        charIndex++;
+      }
+      
+      let speed = isDeleting ? 40 : 80;
+      
+      if (!isDeleting && charIndex === currentWord.length) {
+        speed = 2000; // Pause at end of word
+        isDeleting = true;
+      } else if (isDeleting && charIndex === 0) {
+        isDeleting = false;
+        wordIndex = (wordIndex + 1) % words.length;
+        speed = 500; // Pause before typing next word
+      }
+      
+      setTimeout(type, speed);
+    }
+    
+    type();
+  }
+  initHeroTypingEffect();
+
+  // 2. Live UI Customizer Sandbox
+  function initUiSandbox() {
+    const radiusSlider = document.getElementById('radiusSlider');
+    const opacitySlider = document.getElementById('opacitySlider');
+    const glowSlider = document.getElementById('glowSlider');
+    const blurSlider = document.getElementById('blurSlider');
+    
+    const radiusVal = document.getElementById('radiusVal');
+    const opacityVal = document.getElementById('opacityVal');
+    const glowVal = document.getElementById('glowVal');
+    const blurVal = document.getElementById('blurVal');
+    
+    const previewCard = document.getElementById('previewCard');
+    const previewGlowRing = document.getElementById('previewGlowRing');
+    
+    if (!radiusSlider || !previewCard) return;
+    
+    function updatePreview() {
+      const r = radiusSlider.value;
+      const o = opacitySlider.value;
+      const g = glowSlider.value;
+      const b = blurSlider.value;
+      
+      // Update displayed values
+      radiusVal.textContent = `${r}px`;
+      opacityVal.textContent = `${o}%`;
+      glowVal.textContent = `${g}%`;
+      blurVal.textContent = `${b}px`;
+      
+      // Update card styles
+      previewCard.style.borderRadius = `${r}px`;
+      previewCard.style.background = `rgba(255, 255, 255, ${o / 100})`;
+      previewCard.style.backdropFilter = `blur(${b}px)`;
+      previewCard.style.webkitBackdropFilter = `blur(${b}px)`;
+      
+      // Update glow ring border styles
+      if (previewGlowRing) {
+        previewGlowRing.style.opacity = g / 100;
+        previewGlowRing.style.borderWidth = `${1 + (g / 50)}px`;
+        previewGlowRing.style.boxShadow = `0 0 ${r}px rgba(var(--primary-rgb), ${g / 150})`;
+      }
+    }
+    
+    [radiusSlider, opacitySlider, glowSlider, blurSlider].forEach(slider => {
+      slider.addEventListener('input', updatePreview);
+    });
+    
+    updatePreview();
+  }
+  initUiSandbox();
+
+  // 3. Project Planner & Cost Estimator
+  function initProjectEstimator() {
+    const estType = document.getElementById('estType');
+    const estBudget = document.getElementById('estBudget');
+    const estTimeline = document.getElementById('estTimeline');
+    const estComplexity = document.getElementById('estComplexity');
+    const estimatorForm = document.getElementById('estimatorForm');
+    
+    if (!estType || !estimatorForm) return;
+    
+    function updateEstimates() {
+      const type = estType.value;
+      const budget = estBudget.value;
+      
+      let timeline = "4 - 6 Weeks";
+      let complexity = "Professional SaaS Tier";
+      
+      // Calculate Timeline
+      switch (type) {
+        case 'landing':
+          timeline = "1 - 2 Weeks";
+          break;
+        case 'saas':
+          timeline = "6 - 10 Weeks";
+          break;
+        case 'ecommerce':
+          timeline = "4 - 7 Weeks";
+          break;
+        case 'portfolio':
+          timeline = "2 - 3 Weeks";
+          break;
+      }
+      
+      // Calculate Complexity Tier
+      switch (budget) {
+        case 'low':
+          complexity = "Standard Core Tier";
+          break;
+        case 'mid':
+          complexity = "Professional Custom Tier";
+          break;
+        case 'high':
+          complexity = "Premium Enterprise Tier";
+          break;
+        case 'enterprise':
+          complexity = "Bespoke Multi-Cloud Tier";
+          break;
+      }
+      
+      estTimeline.textContent = timeline;
+      estComplexity.textContent = complexity;
+    }
+    
+    estType.addEventListener('change', updateEstimates);
+    estBudget.addEventListener('change', updateEstimates);
+    
+    estimatorForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      toggleSpinner(true);
+      
+      // Simulate API submission latency
+      setTimeout(() => {
+        toggleSpinner(false);
+        showToast("Success! Your project brief has been sent. Our team will contact you within 12 hours.");
+        estimatorForm.reset();
+        updateEstimates();
+      }, 1500);
+    });
+    
+    updateEstimates();
+  }
+  initProjectEstimator();
 });

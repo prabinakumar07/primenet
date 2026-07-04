@@ -1627,3 +1627,158 @@ p {
     font-size: 0.85rem !important;
   }
 }
+
+/* Rebranding & Agency Styling Overhaul */
+
+/* Top Banner */
+.top-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 38px;
+  background: linear-gradient(90deg, var(--primary) 0%, var(--purple) 50%, var(--secondary) 100%);
+  color: #ffffff;
+  z-index: 1060;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 0 1rem;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+}
+
+.top-banner a {
+  transition: opacity 0.2s ease;
+}
+
+.top-banner a:hover {
+  opacity: 0.85;
+}
+
+/* Adjust fixed components for Top Banner */
+.navbar-custom {
+  top: 38px !important;
+}
+
+body {
+  padding-top: 38px !important;
+}
+
+/* Tech Stack Marquee */
+.tech-stack-marquee-wrapper {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.tech-marquee {
+  display: flex;
+  overflow: hidden;
+  user-select: none;
+  gap: 2rem;
+  mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+}
+
+.tech-marquee-track {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: space-around;
+  gap: 2rem;
+  min-width: 100%;
+  animation: scroll-marquee 25s linear infinite;
+}
+
+.tech-marquee-track span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 700;
+  font-size: 1rem;
+  white-space: nowrap;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radius-md);
+  color: var(--text-color);
+}
+
+[data-theme="light"] .tech-marquee-track span {
+  background: rgba(0, 0, 0, 0.02);
+  border-color: rgba(0, 0, 0, 0.05);
+}
+
+.tech-marquee-track i {
+  font-size: 1.25rem;
+}
+
+@keyframes scroll-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100% - 2rem));
+  }
+}
+
+/* Agency services section */
+.agency-section {
+  position: relative;
+  z-index: 1;
+}
+
+.agency-card {
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.agency-card:hover {
+  transform: translateY(-8px) scale(1.02) !important;
+  border-color: rgba(var(--primary-rgb), 0.3) !important;
+}
+
+/* UI Sandbox Styling */
+.sandbox-card {
+  background: rgba(var(--bg-rgb), 0.35) !important;
+  border: 1px solid var(--card-border);
+  box-shadow: 0 20px 40px -15px var(--card-shadow);
+}
+
+.form-range::-webkit-slider-thumb {
+  background: var(--primary) !important;
+}
+
+.form-range::-moz-range-thumb {
+  background: var(--primary) !important;
+}
+
+/* Quote Estimator */
+.quote-estimator-card {
+  border: 1px solid var(--card-border);
+}
+
+.quote-estimator-card input, 
+.quote-estimator-card select, 
+.quote-estimator-card textarea {
+  background: rgba(var(--bg-rgb), 0.5) !important;
+  border: 1px solid var(--card-border) !important;
+  color: var(--text-color) !important;
+  transition: var(--transition-fast);
+}
+
+.quote-estimator-card input:focus, 
+.quote-estimator-card select:focus, 
+.quote-estimator-card textarea:focus {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 0.25rem rgba(var(--primary-rgb), 0.15) !important;
+}
+
+.estimator-result-box {
+  transition: var(--transition-smooth);
+}
+
