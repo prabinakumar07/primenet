@@ -15,7 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const adminPortalLinkItem = document.getElementById('adminPortalLinkItem');
   
   const adminLoginBtn = document.getElementById('adminLoginBtn');
-  const adminLogoutBtn = document.getElementById('adminLogoutBtn');
   
   // Modals
   const registerModalEl = document.getElementById('registerModal');
@@ -497,12 +496,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loginAlert.classList.add('d-none');
   });
 
-  // Logout button action
-  adminLogoutBtn.addEventListener('click', () => {
-    clearAdminSession();
-    showToast('Logged out successfully.');
-    switchToAdminDashboard(false);
-  });
+
 
   // Admin Login button click (Login or Enter Dashboard)
   adminLoginBtn.addEventListener('click', () => {
@@ -520,7 +514,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Toggle Nav buttons
     adminLoginBtn.classList.remove('d-none');
-    adminLogoutBtn.classList.remove('d-none');
     
     // Show dashboard link in nav
     adminPortalLinkItem.classList.remove('d-none');
@@ -532,7 +525,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Toggle Nav buttons
     adminLoginBtn.classList.remove('d-none');
-    adminLogoutBtn.classList.add('d-none');
     
     // Hide dashboard link in nav
     adminPortalLinkItem.classList.add('d-none');
