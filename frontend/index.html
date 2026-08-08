@@ -18,10 +18,9 @@
   <!-- Bootstrap 5 CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 
-  <!-- Bootstrap Icons (Multi-CDN for 100% Reliable Loading Across All Networks) -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
-  <link rel="stylesheet" href="https://unpkg.com/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <!-- Lucide Pure SVG Vector Icons Engine (Local + CDN Redundancy, Zero Font Dependencies, Zero Missing-Glyph Tofu Boxes) -->
+  <script src="lucide.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
 
   <!-- Early Theme Detection Script (Prevents FOUT) -->
   <script>
@@ -33,7 +32,7 @@
   </script>
 
   <!-- 2026 Custom Design System Stylesheet -->
-  <link rel="stylesheet" href="style.css?v=7.0.0">
+  <link rel="stylesheet" href="style.css?v=8.0.0">
 </head>
 <body>
 
@@ -62,18 +61,18 @@
   <nav class="navbar navbar-expand-lg fixed-top">
     <div class="container">
       <a class="navbar-brand" href="#home" id="navLogo">
-        <i class="bi bi-wifi text-primary"></i>
+        <i data-lucide="wifi" class="text-primary me-2"></i>
         <span>PrimeNet</span>
       </a>
 
       <div class="d-flex align-items-center gap-2 d-lg-none ms-auto me-2">
         <button class="theme-switch-btn" id="mobileThemeToggleBtn" aria-label="Toggle Dark/Light Mode" title="Switch Theme">
-          <i class="bi bi-sun-fill text-warning fs-5"></i>
+          <i data-lucide="sun" class="text-warning"></i>
         </button>
       </div>
 
       <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <i class="bi bi-list fs-4" style="color: var(--text-color);"></i>
+        <i data-lucide="menu" style="color: var(--text-color);"></i>
       </button>
 
       <div class="collapse navbar-collapse" id="navbarNav">
@@ -97,19 +96,19 @@
             <a class="nav-link" href="#contact" id="navContact">Support</a>
           </li>
           <li class="nav-item d-none" id="adminPortalLinkItem">
-            <a class="nav-link text-primary fw-bold" href="#dashboard" id="navAdminPortal"><i class="bi bi-speedometer2 me-1"></i>Dashboard</a>
+            <a class="nav-link text-primary fw-bold" href="#dashboard" id="navAdminPortal"><i data-lucide="gauge" class="me-1"></i>Dashboard</a>
           </li>
         </ul>
 
         <div class="d-flex align-items-center gap-2 gap-lg-3 ms-lg-4 mt-3 mt-lg-0">
           <button class="theme-switch-btn" id="themeToggleBtn" aria-label="Toggle Dark/Light Mode" title="Switch Theme (Day/Night)">
-            <i class="bi bi-sun-fill text-warning fs-5"></i>
+            <i data-lucide="sun" class="text-warning"></i>
           </button>
           <button class="btn btn-accent pulse-glow" id="getConnectionNavBtn" data-bs-toggle="modal" data-bs-target="#registerModal">
-            <i class="bi bi-lightning-charge-fill me-1"></i> Get Connection
+            <i data-lucide="zap" class="me-1"></i> Get Connection
           </button>
           <button class="btn btn-outline-primary" id="adminLoginBtn">
-            <i class="bi bi-shield-lock-fill me-1"></i> Admin Portal
+            <i data-lucide="shield-check" class="me-1"></i> Admin Portal
           </button>
         </div>
       </div>
@@ -139,7 +138,7 @@
             
             <div class="d-inline-flex align-items-center gap-2 px-3.5 py-1.5 rounded-pill bg-success-subtle border border-success-subtle mb-4">
               <span class="spinner-grow spinner-grow-sm text-success" role="status" aria-hidden="true"></span>
-              <span class="badge bg-transparent text-success p-0 fw-bold"><i class="bi bi-wifi me-1"></i> ONLINE · 4ms Server Room 10 Fiber Backbone</span>
+              <span class="badge bg-transparent text-success p-0 fw-bold"><i data-lucide="wifi" class="me-1" style="width: 15px; height: 15px;"></i> ONLINE · 4ms Server Room 10 Fiber Backbone</span>
             </div>
 
             <h1 class="hero-title-centered">
@@ -152,10 +151,10 @@
 
             <div class="d-flex flex-wrap justify-content-center gap-3 mb-5">
               <button class="btn btn-accent btn-lg pulse-glow px-4 py-3" id="getConnectionHeroBtn" data-bs-toggle="modal" data-bs-target="#registerModal">
-                <i class="bi bi-rocket-takeoff-fill me-2"></i> Get Connected
+                <i data-lucide="rocket" class="me-2"></i> Get Connected
               </button>
               <a href="#about" class="btn btn-outline-primary btn-lg px-4 py-3" id="btnSpeedtestHero">
-                <i class="bi bi-speedometer me-2"></i> Check Speed
+                <i data-lucide="gauge" class="me-2"></i> Check Speed
               </a>
             </div>
 
@@ -163,25 +162,25 @@
             <div class="row g-3 justify-content-center text-start">
               <div class="col-6 col-md-3">
                 <div class="hero-stat-card">
-                  <span class="hero-stat-number text-primary"><i class="bi bi-cpu-fill me-1"></i> MAC</span>
+                  <span class="hero-stat-number text-primary"><i data-lucide="cpu" class="me-1"></i> MAC</span>
                   <span class="text-muted small d-block">Auto Hardware Binding</span>
                 </div>
               </div>
               <div class="col-6 col-md-3">
                 <div class="hero-stat-card">
-                  <span class="hero-stat-number text-success"><i class="bi bi-lightning-charge-fill me-1"></i> 1 Gbps</span>
+                  <span class="hero-stat-number text-success"><i data-lucide="zap" class="me-1"></i> 1 Gbps</span>
                   <span class="text-muted small d-block">Gigabit Backhaul</span>
                 </div>
               </div>
               <div class="col-6 col-md-3">
                 <div class="hero-stat-card">
-                  <span class="hero-stat-number text-accent"><i class="bi bi-laptop me-1"></i> 4</span>
+                  <span class="hero-stat-number text-accent"><i data-lucide="laptop" class="me-1"></i> 4</span>
                   <span class="text-muted small d-block">Devices Per Student</span>
                 </div>
               </div>
               <div class="col-6 col-md-3">
                 <div class="hero-stat-card">
-                  <span class="hero-stat-number text-warning"><i class="bi bi-currency-rupee me-1"></i> 180</span>
+                  <span class="hero-stat-number text-warning"><i data-lucide="indian-rupee" class="me-1"></i> 180</span>
                   <span class="text-muted small d-block">Semester Package</span>
                 </div>
               </div>
@@ -231,25 +230,25 @@
               <div class="row g-3 mb-4 text-center">
                 <div class="col-6 col-md-3">
                   <div class="p-3 glass-card">
-                    <span class="text-muted small fw-semibold d-block"><i class="bi bi-globe-americas text-accent me-1"></i> Public Latency</span>
+                    <span class="text-muted small fw-semibold d-block"><i data-lucide="globe" class="text-accent me-1" style="width: 16px; height: 16px;"></i> Public Latency</span>
                     <span class="fs-4 fw-bold text-accent"><span id="pingValue">--</span> <small class="text-muted fs-6">ms</small></span>
                   </div>
                 </div>
                 <div class="col-6 col-md-3">
                   <div class="p-3 glass-card">
-                    <span class="text-muted small fw-semibold d-block"><i class="bi bi-hdd-network-fill text-primary me-1"></i> Hostel Ping</span>
+                    <span class="text-muted small fw-semibold d-block"><i data-lucide="network" class="text-primary me-1" style="width: 16px; height: 16px;"></i> Hostel Ping</span>
                     <span class="fs-4 fw-bold text-primary"><span id="intranetPing">4</span> <small class="text-muted fs-6">ms</small></span>
                   </div>
                 </div>
                 <div class="col-6 col-md-3">
                   <div class="p-3 glass-card">
-                    <span class="text-muted small fw-semibold d-block"><i class="bi bi-geo-alt-fill text-info me-1"></i> IPv4 Address</span>
+                    <span class="text-muted small fw-semibold d-block"><i data-lucide="map-pin" class="text-info me-1" style="width: 16px; height: 16px;"></i> IPv4 Address</span>
                     <span id="ipv4Status" class="fw-semibold small text-truncate d-block">Detecting...</span>
                   </div>
                 </div>
                 <div class="col-6 col-md-3">
                   <div class="p-3 glass-card">
-                    <span class="text-muted small fw-semibold d-block"><i class="bi bi-hdd-stack-fill text-success me-1"></i> ISP Provider</span>
+                    <span class="text-muted small fw-semibold d-block"><i data-lucide="server" class="text-success me-1" style="width: 16px; height: 16px;"></i> ISP Provider</span>
                     <span id="ispStatus" class="fw-semibold small text-truncate d-block">Detecting...</span>
                   </div>
                 </div>
@@ -258,7 +257,7 @@
               <span id="ipv6Status" class="d-none">Detecting...</span>
 
               <button class="btn btn-accent btn-lg px-5 py-3 pulse-glow" id="btnStartSpeedtest">
-                <i class="bi bi-play-fill me-2"></i> Start Speed Test
+                <i data-lucide="play" class="me-2"></i> Start Speed Test
               </button>
             </div>
           </div>
@@ -270,7 +269,7 @@
     <section class="services-section plans-section" id="plans">
       <div class="container">
         <div class="section-header">
-          <span class="badge bg-primary-subtle text-primary mb-2"><i class="bi bi-layers-fill me-1"></i> High-Speed Packages</span>
+          <span class="badge bg-primary-subtle text-primary mb-2"><i data-lucide="layers" class="me-1" style="width: 14px; height: 14px;"></i> High-Speed Packages</span>
           <h2>Hostel Broadband Connection Plans</h2>
           <p>Choose your plan and register your MAC address instantly.</p>
         </div>
@@ -280,21 +279,21 @@
           <div class="col-md-6 col-lg-4">
             <div class="glass-card plan-card">
               <div>
-                <span class="badge bg-primary-subtle text-primary mb-3"><i class="bi bi-mortarboard-fill me-1"></i> Standard Hostel</span>
-                <h4 class="fw-bold"><i class="bi bi-wifi text-primary me-2"></i>Prime Basic</h4>
+                <span class="badge bg-primary-subtle text-primary mb-3"><i data-lucide="graduation-cap" class="me-1" style="width: 14px; height: 14px;"></i> Standard Hostel</span>
+                <h4 class="fw-bold"><i data-lucide="wifi" class="text-primary me-2"></i>Prime Basic</h4>
                 <p class="small text-muted">Ideal for study, browsing & video lectures.</p>
-                <div class="plan-price"><i class="bi bi-currency-rupee fs-5"></i>180 <span>/ semester</span></div>
+                <div class="plan-price"><i data-lucide="indian-rupee" style="width: 28px; height: 28px;"></i>180 <span>/ semester</span></div>
                 
                 <ul class="plan-features-list">
-                  <li><i class="bi bi-speedometer2 text-primary"></i> Up to 50 Mbps Speed</li>
-                  <li><i class="bi bi-laptop text-primary"></i> 1 Primary MAC Address</li>
-                  <li><i class="bi bi-infinity text-primary"></i> Unlimited Data Download</li>
-                  <li><i class="bi bi-headset text-primary"></i> Campus Support Access</li>
+                  <li><i data-lucide="gauge" class="text-primary"></i> Up to 50 Mbps Speed</li>
+                  <li><i data-lucide="laptop" class="text-primary"></i> 1 Primary MAC Address</li>
+                  <li><i data-lucide="infinity" class="text-primary"></i> Unlimited Data Download</li>
+                  <li><i data-lucide="headphones" class="text-primary"></i> Campus Support Access</li>
                 </ul>
               </div>
 
               <button class="btn btn-outline-primary w-100 mt-4" data-bs-toggle="modal" data-bs-target="#registerModal">
-                <i class="bi bi-arrow-right-circle-fill me-1"></i> Select Plan
+                <i data-lucide="arrow-right" class="me-1"></i> Select Plan
               </button>
             </div>
           </div>
@@ -302,23 +301,23 @@
           <!-- Plan 2 (Featured) -->
           <div class="col-md-6 col-lg-4">
             <div class="glass-card plan-card featured">
-              <div class="plan-badge"><i class="bi bi-star-fill me-1"></i> MOST POPULAR</div>
+              <div class="plan-badge"><i data-lucide="sparkles" class="me-1" style="width: 14px; height: 14px;"></i> MOST POPULAR</div>
               <div>
-                <span class="badge bg-accent-subtle text-accent mb-3"><i class="bi bi-fire me-1"></i> Pro Student</span>
-                <h4 class="fw-bold"><i class="bi bi-lightning-charge-fill text-accent me-2"></i>Prime Turbo</h4>
+                <span class="badge bg-accent-subtle text-accent mb-3"><i data-lucide="flame" class="me-1" style="width: 14px; height: 14px;"></i> Pro Student</span>
+                <h4 class="fw-bold"><i data-lucide="zap" class="text-accent me-2"></i>Prime Turbo</h4>
                 <p class="small text-muted">Designed for heavy streaming, gaming & coding.</p>
-                <div class="plan-price"><i class="bi bi-currency-rupee fs-5"></i>180 <span>/ semester</span></div>
+                <div class="plan-price"><i data-lucide="indian-rupee" style="width: 28px; height: 28px;"></i>180 <span>/ semester</span></div>
                 
                 <ul class="plan-features-list">
-                  <li><i class="bi bi-speedometer text-accent"></i> Up to 100 Mbps Speed</li>
-                  <li><i class="bi bi-hdd-network-fill text-accent"></i> Up to 4 MAC Addresses</li>
-                  <li><i class="bi bi-shield-check text-accent"></i> Zero Throttling Guarantee</li>
-                  <li><i class="bi bi-hdd-stack-fill text-accent"></i> Priority Server Room Support</li>
+                  <li><i data-lucide="gauge" class="text-accent"></i> Up to 100 Mbps Speed</li>
+                  <li><i data-lucide="network" class="text-accent"></i> Up to 4 MAC Addresses</li>
+                  <li><i data-lucide="shield-check" class="text-accent"></i> Zero Throttling Guarantee</li>
+                  <li><i data-lucide="server" class="text-accent"></i> Priority Server Room Support</li>
                 </ul>
               </div>
 
               <button class="btn btn-accent w-100 mt-4 pulse-glow" data-bs-toggle="modal" data-bs-target="#registerModal">
-                <i class="bi bi-lightning-charge-fill me-1"></i> Get Connected Now
+                <i data-lucide="zap" class="me-1"></i> Get Connected Now
               </button>
             </div>
           </div>
@@ -327,21 +326,21 @@
           <div class="col-md-6 col-lg-4">
             <div class="glass-card plan-card">
               <div>
-                <span class="badge bg-primary-subtle text-primary mb-3"><i class="bi bi-trophy-fill me-1"></i> Ultra Speed</span>
-                <h4 class="fw-bold"><i class="bi bi-rocket-takeoff-fill text-primary me-2"></i>Prime Ultra</h4>
+                <span class="badge bg-primary-subtle text-primary mb-3"><i data-lucide="award" class="me-1" style="width: 14px; height: 14px;"></i> Ultra Speed</span>
+                <h4 class="fw-bold"><i data-lucide="rocket" class="text-primary me-2"></i>Prime Ultra</h4>
                 <p class="small text-muted">Maximum throughput for power users.</p>
-                <div class="plan-price"><i class="bi bi-currency-rupee fs-5"></i>180 <span>/ semester</span></div>
+                <div class="plan-price"><i data-lucide="indian-rupee" style="width: 28px; height: 28px;"></i>180 <span>/ semester</span></div>
                 
                 <ul class="plan-features-list">
-                  <li><i class="bi bi-lightning-fill text-primary"></i> Gigabit Fiber Access</li>
-                  <li><i class="bi bi-code-slash text-primary"></i> Multi-Device Auto-Link</li>
-                  <li><i class="bi bi-controller text-primary"></i> Low Ping Gaming Mode</li>
-                  <li><i class="bi bi-telephone-outbound-fill text-primary"></i> 24/7 Priority Tech Line</li>
+                  <li><i data-lucide="zap" class="text-primary"></i> Gigabit Fiber Access</li>
+                  <li><i data-lucide="code-2" class="text-primary"></i> Multi-Device Auto-Link</li>
+                  <li><i data-lucide="gamepad-2" class="text-primary"></i> Low Ping Gaming Mode</li>
+                  <li><i data-lucide="headphones" class="text-primary"></i> 24/7 Priority Tech Line</li>
                 </ul>
               </div>
 
               <button class="btn btn-outline-primary w-100 mt-4" data-bs-toggle="modal" data-bs-target="#registerModal">
-                <i class="bi bi-arrow-right-circle-fill me-1"></i> Select Plan
+                <i data-lucide="arrow-right" class="me-1"></i> Select Plan
               </button>
             </div>
           </div>
@@ -363,34 +362,34 @@
           <div class="glass-card bento-card bento-card-lg">
             <div>
               <div class="d-flex align-items-center gap-2 mb-3">
-                <div class="bento-icon m-0" style="width: 44px; height: 44px;"><i class="bi bi-broadcast"></i></div>
+                <div class="bento-icon m-0" style="width: 44px; height: 44px;"><i data-lucide="radio"></i></div>
                 <div class="badge bg-primary-subtle text-primary">Pure Fiber Backbone</div>
               </div>
               <h3 class="fw-bold mb-3">Ultra-Reliable Dual Band Coverage</h3>
               <p>Our hostel infrastructure deploys high-density dual-band access points ensuring full coverage across all floors, study halls, and common rooms without packet dropouts.</p>
             </div>
             <div class="mt-4 pt-3 border-top border-secondary-subtle d-flex justify-content-between align-items-center">
-              <span class="fw-bold text-primary"><i class="bi bi-lightning-charge-fill me-1"></i> 5GHz & 2.4GHz Auto-Switching</span>
-              <span class="badge bg-success-subtle text-success"><i class="bi bi-shield-fill-check me-1"></i> 99.9% Uptime SLA</span>
+              <span class="fw-bold text-primary"><i data-lucide="zap" class="me-1" style="width: 16px; height: 16px;"></i> 5GHz & 2.4GHz Auto-Switching</span>
+              <span class="badge bg-success-subtle text-success"><i data-lucide="shield-check" class="me-1" style="width: 14px; height: 14px;"></i> 99.9% Uptime SLA</span>
             </div>
           </div>
 
           <!-- Card 2: Passwordless (Medium) -->
           <div class="glass-card bento-card bento-card-md">
             <div>
-              <div class="bento-icon"><i class="bi bi-key-fill"></i></div>
+              <div class="bento-icon"><i data-lucide="key"></i></div>
               <h4 class="fw-bold mb-2">Zero Portal Logins</h4>
               <p class="small">No annoying web portals asking for passwords every morning. Direct hardware router authentication.</p>
             </div>
             <div class="mt-3">
-              <span class="text-success small fw-semibold"><i class="bi bi-check-circle-fill me-1"></i> Instant Connection</span>
+              <span class="text-success small fw-semibold"><i data-lucide="check-circle" class="me-1" style="width: 15px; height: 15px;"></i> Instant Connection</span>
             </div>
           </div>
 
           <!-- Card 3: Semester Pricing (Small) -->
           <div class="glass-card bento-card bento-card-sm">
             <div>
-              <div class="bento-icon"><i class="bi bi-wallet2"></i></div>
+              <div class="bento-icon"><i data-lucide="indian-rupee"></i></div>
               <h4 class="fw-bold mb-2">Students First Pricing</h4>
               <p class="small">Affordable flat fee of ₹180 for full 6-month semester coverage with zero hidden fees.</p>
             </div>
@@ -400,14 +399,14 @@
           <div class="glass-card bento-card bento-card-lg">
             <div>
               <div class="d-flex align-items-center gap-2 mb-3">
-                <div class="bento-icon m-0" style="width: 44px; height: 44px;"><i class="bi bi-headset"></i></div>
+                <div class="bento-icon m-0" style="width: 44px; height: 44px;"><i data-lucide="headphones"></i></div>
                 <div class="badge bg-accent-subtle text-accent">On-Campus Network Team</div>
               </div>
               <h3 class="fw-bold mb-3">Direct Server Room 10 Support</h3>
               <p>Experiencing a loose wall jack or line query? Visit our Server Room 10 in Hostel Block-C for immediate hardware inspection or raise a ticket instantly.</p>
             </div>
             <div class="mt-3">
-              <a href="#contact" class="btn btn-sm btn-outline-primary"><i class="bi bi-telephone-fill me-1"></i> Contact Server Room</a>
+              <a href="#contact" class="btn btn-sm btn-outline-primary"><i data-lucide="phone" class="me-1"></i> Contact Server Room</a>
             </div>
           </div>
         </div>
@@ -427,12 +426,12 @@
           <div class="col-md-4">
             <div class="glass-card control-card">
               <div>
-                <div class="bento-icon"><i class="bi bi-wallet2"></i></div>
+                <div class="bento-icon"><i data-lucide="qr-code"></i></div>
                 <h5 class="fw-bold mb-2">Pay Semester Bill</h5>
                 <p class="small">Scan UPI QR code and submit your ₹180 payment receipt directly online.</p>
               </div>
               <button class="btn btn-outline-primary btn-sm mt-3 w-100" data-bs-toggle="modal" data-bs-target="#registerModal">
-                <i class="bi bi-qr-code-scan me-1"></i> Pay Now
+                <i data-lucide="qr-code" class="me-1"></i> Pay Now
               </button>
             </div>
           </div>
@@ -440,12 +439,12 @@
           <div class="col-md-4">
             <div class="glass-card control-card">
               <div>
-                <div class="bento-icon"><i class="bi bi-cpu-fill"></i></div>
+                <div class="bento-icon"><i data-lucide="cpu"></i></div>
                 <h5 class="fw-bold mb-2">Manage MAC Addresses</h5>
                 <p class="small">Register up to 4 device MAC addresses for instant passwordless connection.</p>
               </div>
               <button class="btn btn-outline-primary btn-sm mt-3 w-100" data-bs-toggle="modal" data-bs-target="#registerModal">
-                <i class="bi bi-plus-lg me-1"></i> Register MACs
+                <i data-lucide="cpu" class="me-1"></i> Register MACs
               </button>
             </div>
           </div>
@@ -453,12 +452,12 @@
           <div class="col-md-4">
             <div class="glass-card control-card">
               <div>
-                <div class="bento-icon"><i class="bi bi-headset"></i></div>
+                <div class="bento-icon"><i data-lucide="headphones"></i></div>
                 <h5 class="fw-bold mb-2">Server Room Support</h5>
                 <p class="small">Contact network engineers at Server Room 10 for physical line inspections.</p>
               </div>
               <a href="#contact" class="btn btn-outline-primary btn-sm mt-3 w-100">
-                <i class="bi bi-telephone-fill me-1"></i> Contact Support
+                <i data-lucide="phone" class="me-1"></i> Contact Support
               </a>
             </div>
           </div>
@@ -488,9 +487,11 @@
                 <p class="small text-muted mb-3">Leading operations and strategic growth to power hostel communities.</p>
               </div>
               <div class="d-flex justify-content-center gap-3 pt-2 border-top border-secondary-subtle">
-                <a href="https://shakti69.github.io/" target="_blank" rel="noopener" class="footer-social-pill" title="Portfolio Website"><i class="bi bi-globe"></i></a>
-                <a href="https://github.com/shakti69" target="_blank" rel="noopener" class="footer-social-pill" title="GitHub"><i class="bi bi-github"></i></a>
-                <a href="mailto:support@primenet.local" class="footer-social-pill" title="Email"><i class="bi bi-envelope-fill"></i></a>
+                <a href="https://shakti69.github.io/" target="_blank" rel="noopener" class="founder-social-pill" title="Portfolio Website"><i data-lucide="globe"></i></a>
+                <a href="https://github.com/shakti69" target="_blank" rel="noopener" class="founder-social-pill" title="GitHub">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                </a>
+                <a href="mailto:support@primenet.local" class="founder-social-pill" title="Email"><i data-lucide="mail"></i></a>
               </div>
             </div>
           </div>
@@ -507,9 +508,11 @@
                 <p class="small text-muted mb-3">Driving technical innovation and maintaining high-speed network reliability.</p>
               </div>
               <div class="d-flex justify-content-center gap-3 pt-2 border-top border-secondary-subtle">
-                <a href="https://github.com/prabinakumar07" target="_blank" rel="noopener" class="footer-social-pill" title="Portfolio Website"><i class="bi bi-globe"></i></a>
-                <a href="https://github.com/prabinakumar07" target="_blank" rel="noopener" class="footer-social-pill" title="GitHub"><i class="bi bi-github"></i></a>
-                <a href="mailto:support@primenet.local" class="footer-social-pill" title="Email"><i class="bi bi-envelope-fill"></i></a>
+                <a href="https://github.com/prabinakumar07" target="_blank" rel="noopener" class="founder-social-pill" title="Portfolio Website"><i data-lucide="globe"></i></a>
+                <a href="https://github.com/prabinakumar07" target="_blank" rel="noopener" class="founder-social-pill" title="GitHub">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                </a>
+                <a href="mailto:support@primenet.local" class="founder-social-pill" title="Email"><i data-lucide="mail"></i></a>
               </div>
             </div>
           </div>
@@ -526,8 +529,8 @@
                 <p class="small text-muted mb-3">Designing robust network backbones and structural hardware routing.</p>
               </div>
               <div class="d-flex justify-content-center gap-3 pt-2 border-top border-secondary-subtle">
-                <a href="https://universeluxury.vercel.app/" target="_blank" rel="noopener" class="footer-social-pill" title="Portfolio Website"><i class="bi bi-globe"></i></a>
-                <a href="mailto:support@primenet.local" class="footer-social-pill" title="Email"><i class="bi bi-envelope-fill"></i></a>
+                <a href="https://universeluxury.vercel.app/" target="_blank" rel="noopener" class="founder-social-pill" title="Portfolio Website"><i data-lucide="globe"></i></a>
+                <a href="mailto:support@primenet.local" class="founder-social-pill" title="Email"><i data-lucide="mail"></i></a>
               </div>
             </div>
           </div>
@@ -551,7 +554,7 @@
                 <h2 class="accordion-header">
                   <button class="accordion-button accordion-button-glass collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
                     <span>What is a device MAC Address and how do I find it?</span>
-                    <i class="bi bi-plus-lg ms-auto text-primary"></i>
+                    <i data-lucide="help-circle" class="ms-auto text-primary"></i>
                   </button>
                 </h2>
                 <div id="collapseOne" class="accordion-collapse accordion-collapse-glass collapse" data-bs-parent="#faqAccordion">
@@ -565,7 +568,7 @@
                 <h2 class="accordion-header">
                   <button class="accordion-button accordion-button-glass collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                     <span>Can I register multiple devices under one room connection?</span>
-                    <i class="bi bi-plus-lg ms-auto text-primary"></i>
+                    <i data-lucide="help-circle" class="ms-auto text-primary"></i>
                   </button>
                 </h2>
                 <div id="collapseTwo" class="accordion-collapse accordion-collapse-glass collapse" data-bs-parent="#faqAccordion">
@@ -579,7 +582,7 @@
                 <h2 class="accordion-header">
                   <button class="accordion-button accordion-button-glass collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
                     <span>How do I pay the ₹180 semester fee?</span>
-                    <i class="bi bi-plus-lg ms-auto text-primary"></i>
+                    <i data-lucide="help-circle" class="ms-auto text-primary"></i>
                   </button>
                 </h2>
                 <div id="collapseThree" class="accordion-collapse accordion-collapse-glass collapse" data-bs-parent="#faqAccordion">
@@ -607,7 +610,7 @@
           <div class="col-md-4">
             <div class="glass-card p-4 h-100">
               <div class="d-flex align-items-center mb-3 gap-3">
-                <div class="bento-icon m-0" style="width: 44px; height: 44px;"><i class="bi bi-telephone-fill"></i></div>
+                <div class="bento-icon m-0" style="width: 44px; height: 44px;"><i data-lucide="phone"></i></div>
                 <h5 class="mb-0 fw-bold">Call Support</h5>
               </div>
               <p class="text-muted mb-1 small" id="displayContactPhone">+91 98765 43210</p>
@@ -618,7 +621,7 @@
           <div class="col-md-4">
             <div class="glass-card p-4 h-100">
               <div class="d-flex align-items-center mb-3 gap-3">
-                <div class="bento-icon m-0" style="width: 44px; height: 44px;"><i class="bi bi-envelope-fill"></i></div>
+                <div class="bento-icon m-0" style="width: 44px; height: 44px;"><i data-lucide="mail"></i></div>
                 <h5 class="mb-0 fw-bold">Email Support</h5>
               </div>
               <p class="text-muted mb-1 small" id="displayContactEmail">support@primenet.local</p>
@@ -629,7 +632,7 @@
           <div class="col-md-4">
             <div class="glass-card p-4 h-100">
               <div class="d-flex align-items-center mb-3 gap-3">
-                <div class="bento-icon m-0" style="width: 44px; height: 44px;"><i class="bi bi-geo-alt-fill"></i></div>
+                <div class="bento-icon m-0" style="width: 44px; height: 44px;"><i data-lucide="map-pin"></i></div>
                 <h5 class="mb-0 fw-bold">Server Room</h5>
               </div>
               <p class="text-muted mb-0 small" id="displayContactAddress1">Hostel Block-C, Server Room 10</p>
@@ -655,31 +658,31 @@
         </div>
         <div class="d-flex flex-wrap gap-2">
           <button class="btn btn-outline-primary btn-sm" id="btnOpenContactModal" data-bs-toggle="modal" data-bs-target="#contactModal">
-            <i class="bi bi-person-lines-fill me-1"></i> Contact Details
+            <i data-lucide="phone" class="me-1"></i> Contact Details
           </button>
           <button class="btn btn-outline-primary btn-sm" id="btnOpenEmailConfigModal" data-bs-toggle="modal" data-bs-target="#emailConfigModal">
-            <i class="bi bi-envelope-gear me-1"></i> Brevo Config
+            <i data-lucide="mail" class="me-1"></i> Brevo Config
           </button>
           <button class="btn btn-outline-danger btn-sm" id="btnToggleSpeedtest">
-            <i class="bi bi-eye-slash-fill me-1"></i> Toggle Speed Test
+            <i data-lucide="eye-off" class="me-1"></i> Toggle Speed Test
           </button>
           <button class="btn btn-outline-primary btn-sm" id="btnExportMac">
-            <i class="bi bi-download me-1"></i> Export MACs
+            <i data-lucide="download" class="me-1"></i> Export MACs
           </button>
           <div class="dropdown d-inline-block">
             <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" id="btnCopyAllMacDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="bi bi-copy me-1"></i> Copy MACs
+              <i data-lucide="copy" class="me-1"></i> Copy MACs
             </button>
             <ul class="dropdown-menu dropdown-menu-glass shadow" aria-labelledby="btnCopyAllMacDropdown">
-              <li><a class="dropdown-item" href="#" id="optCopyStudents"><i class="bi bi-mortarboard-fill me-2 text-primary"></i>Student MACs</a></li>
-              <li><a class="dropdown-item" href="#" id="optCopyNecessary"><i class="bi bi-hdd-stack-fill me-2 text-info"></i>Necessary MACs</a></li>
-              <li><a class="dropdown-item" href="#" id="optCopyGuest"><i class="bi bi-people-fill me-2 text-success"></i>Guest MACs</a></li>
+              <li><a class="dropdown-item" href="#" id="optCopyStudents"><i data-lucide="graduation-cap" class="me-2 text-primary"></i>Student MACs</a></li>
+              <li><a class="dropdown-item" href="#" id="optCopyNecessary"><i data-lucide="server" class="me-2 text-info"></i>Necessary MACs</a></li>
+              <li><a class="dropdown-item" href="#" id="optCopyGuest"><i data-lucide="users" class="me-2 text-success"></i>Guest MACs</a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="#" id="optCopyCombined"><i class="bi bi-layers-fill me-2 text-warning"></i>All Combined</a></li>
+              <li><a class="dropdown-item" href="#" id="optCopyCombined"><i data-lucide="layers" class="me-2 text-warning"></i>All Combined</a></li>
             </ul>
           </div>
           <button class="btn btn-accent btn-sm" id="btnExportCsv">
-            <i class="bi bi-file-earmark-spreadsheet-fill me-1"></i> Export CSV
+            <i data-lucide="file-spreadsheet" class="me-1"></i> Export CSV
           </button>
         </div>
       </div>
@@ -692,7 +695,7 @@
               <span class="text-muted fw-semibold small">Total Registrations</span>
               <div class="stats-number text-primary" id="statTotal">0</div>
             </div>
-            <div class="stats-icon text-primary"><i class="bi bi-people-fill"></i></div>
+            <div class="stats-icon text-primary"><i data-lucide="users"></i></div>
           </div>
         </div>
         <div class="col-sm-6 col-lg-3">
@@ -701,7 +704,7 @@
               <span class="text-muted fw-semibold small">Pending Requests</span>
               <div class="stats-number text-warning" id="statPending">0</div>
             </div>
-            <div class="stats-icon text-warning"><i class="bi bi-clock-fill"></i></div>
+            <div class="stats-icon text-warning"><i data-lucide="clock"></i></div>
           </div>
         </div>
         <div class="col-sm-6 col-lg-3">
@@ -710,7 +713,7 @@
               <span class="text-muted fw-semibold small">Accepted Users</span>
               <div class="stats-number text-success" id="statAccepted">0</div>
             </div>
-            <div class="stats-icon text-success"><i class="bi bi-check-circle-fill"></i></div>
+            <div class="stats-icon text-success"><i data-lucide="check-circle"></i></div>
           </div>
         </div>
         <div class="col-sm-6 col-lg-3">
@@ -719,7 +722,7 @@
               <span class="text-muted fw-semibold small">Rejected Users</span>
               <div class="stats-number text-danger" id="statRejected">0</div>
             </div>
-            <div class="stats-icon text-danger"><i class="bi bi-x-circle-fill"></i></div>
+            <div class="stats-icon text-danger"><i data-lucide="x-circle"></i></div>
           </div>
         </div>
       </div>
@@ -728,7 +731,7 @@
       <div class="row g-4 mb-5 text-start">
         <div class="col-12">
           <div class="glass-card p-4">
-            <h5 class="mb-4 text-primary"><i class="bi bi-clock-history me-2"></i>Recent Signups</h5>
+            <h5 class="mb-4 text-primary"><i data-lucide="clock" class="me-2"></i>Recent Signups</h5>
             <div id="recentActivityList" class="list-group list-group-flush" style="max-height: 250px; overflow-y: auto;">
               <div class="text-center text-muted py-3">No recent signups</div>
             </div>
@@ -782,7 +785,7 @@
           </div>
           <div class="col-md-1 d-grid">
             <button class="btn btn-outline-primary" id="btnClearFilters" title="Clear Filters">
-              <i class="bi bi-arrow-counterclockwise"></i>
+              <i data-lucide="rotate-ccw"></i>
             </button>
           </div>
         </div>
@@ -790,7 +793,7 @@
 
       <!-- Results Count Bar -->
       <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="mb-0 text-secondary fw-semibold"><i class="bi bi-card-list me-2"></i>Student Records</h5>
+        <h5 class="mb-0 text-secondary fw-semibold"><i data-lucide="users" class="me-2"></i>Student Records</h5>
         <span class="badge bg-secondary-subtle text-secondary" id="filterResultsCount">0 results found</span>
       </div>
 
@@ -812,7 +815,7 @@
             <tbody id="studentTableBody">
               <tr>
                 <td colspan="7" class="text-center text-muted py-5">
-                  <i class="bi bi-folder2-open display-6 mb-3 d-block"></i>
+                  <i data-lucide="folder-open" class="display-6 mb-3 d-block"></i>
                   No student registrations found.
                 </td>
               </tr>
@@ -823,7 +826,7 @@
 
       <!-- Broadcast Email Portal Card -->
       <div class="glass-card p-4 mb-5 text-start">
-        <h4 class="mb-3 text-primary"><i class="bi bi-send-fill me-2"></i>Broadcast Portal</h4>
+        <h4 class="mb-3 text-primary"><i data-lucide="send" class="me-2"></i>Broadcast Portal</h4>
         <p class="text-muted small mb-4">Send email updates to registered students or targeted sub-groups.</p>
         
         <div class="alert alert-danger d-none" id="broadcastAlert" role="alert"></div>
@@ -854,7 +857,7 @@
             
             <div class="col-12 d-flex justify-content-end mt-4">
               <button type="submit" class="btn btn-accent" id="btnBroadcastSubmit">
-                <i class="bi bi-megaphone-fill me-2"></i> Send Broadcast Email
+                <i data-lucide="megaphone" class="me-2"></i> Send Broadcast Email
               </button>
             </div>
           </div>
@@ -866,9 +869,9 @@
         <div class="col-md-6">
           <div class="glass-card p-4 h-100">
             <div class="d-flex justify-content-between align-items-center mb-3">
-              <h4 class="mb-0 text-primary"><i class="bi bi-hdd-stack-fill me-2"></i>Necessary MACs</h4>
+              <h4 class="mb-0 text-primary"><i data-lucide="server" class="me-2"></i>Necessary MACs</h4>
               <button class="btn btn-sm btn-outline-primary" id="btnCopyAllNecessary">
-                <i class="bi bi-copy me-1"></i> Copy
+                <i data-lucide="copy" class="me-1"></i> Copy
               </button>
             </div>
             <textarea class="form-control mb-3" id="necessaryMacList" rows="6" placeholder="One MAC per line..."></textarea>
@@ -879,9 +882,9 @@
         <div class="col-md-6">
           <div class="glass-card p-4 h-100">
             <div class="d-flex justify-content-between align-items-center mb-3">
-              <h4 class="mb-0 text-primary"><i class="bi bi-people-fill me-2"></i>Guest MACs</h4>
+              <h4 class="mb-0 text-primary"><i data-lucide="users" class="me-2"></i>Guest MACs</h4>
               <button class="btn btn-sm btn-outline-primary" id="btnCopyAllGuest">
-                <i class="bi bi-copy me-1"></i> Copy
+                <i data-lucide="copy" class="me-1"></i> Copy
               </button>
             </div>
             <textarea class="form-control mb-3" id="guestMacList" rows="6" placeholder="One MAC per line..."></textarea>
@@ -898,9 +901,9 @@
     <div class="container">
       <div class="row g-4 mb-4">
         <div class="col-md-3">
-          <h5 class="fw-bold mb-3" style="color: var(--text-color);"><i class="bi bi-wifi text-primary me-2"></i>PrimeNet</h5>
+          <h5 class="fw-bold mb-3" style="color: var(--text-color);"><i data-lucide="wifi" class="text-primary me-2"></i>PrimeNet</h5>
           <p class="small text-muted mb-3">High-speed, unlimited fiber broadband internet designed for campus hostel living.</p>
-          <span class="badge bg-success-subtle text-success"><i class="bi bi-shield-check me-1"></i> Official Campus ISP</span>
+          <span class="badge bg-success-subtle text-success"><i data-lucide="shield-check" class="me-1" style="width: 14px; height: 14px;"></i> Official Campus ISP</span>
         </div>
 
         <div class="col-md-3">
@@ -920,20 +923,26 @@
           <p class="small mb-2 text-muted">Email: <span id="footerDisplayEmail" class="fw-semibold" style="color: var(--text-color);">support@primenet.local</span></p>
           <p class="small mb-3 text-muted">Location: Hostel Block-C, Server Room 10</p>
           <div class="d-flex gap-2">
-            <a href="#" id="footerInstagram" target="_blank" rel="noopener noreferrer" class="footer-social-pill" title="Instagram"><i class="bi bi-instagram"></i></a>
-            <a href="#" id="footerFacebook" target="_blank" rel="noopener noreferrer" class="footer-social-pill" title="Facebook"><i class="bi bi-facebook"></i></a>
-            <a href="#" id="footerYoutube" target="_blank" rel="noopener noreferrer" class="footer-social-pill" title="YouTube"><i class="bi bi-youtube"></i></a>
+            <a href="#" id="footerInstagram" target="_blank" rel="noopener noreferrer" class="footer-social-pill" title="Instagram">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-svg"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+            </a>
+            <a href="#" id="footerFacebook" target="_blank" rel="noopener noreferrer" class="footer-social-pill" title="Facebook">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" class="social-svg"><path d="M9 8H6v4h3v12h5V12h3.642L18 8h-4V6.333C14 5.374 14.5 5 15.667 5H18V0h-3.808C10.596 0 9 1.583 9 4.615V8z"/></svg>
+            </a>
+            <a href="#" id="footerYoutube" target="_blank" rel="noopener noreferrer" class="footer-social-pill" title="YouTube">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" class="social-svg"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            </a>
           </div>
         </div>
 
         <!-- Scannable Payment QR Code Card -->
         <div class="col-md-3">
           <div class="footer-qr-card">
-            <span class="text-primary small fw-bold mb-2"><i class="bi bi-qr-code-scan me-1"></i> Scan to Pay / Continue</span>
+            <span class="text-primary small fw-bold mb-2"><i data-lucide="qr-code" class="me-1"></i> Scan to Pay / Continue</span>
             <img src="assets/payment_qr.png" alt="PrimeNet UPI Payment QR Code" class="footer-qr-img mb-2">
             <span class="small text-muted text-center" style="font-size: 0.78rem;">UPI Payment QR · ₹180</span>
             <a id="footerDownloadQrBtn" href="assets/payment_qr.png" download="payment_qr.png" class="btn btn-outline-primary btn-sm mt-2 px-3 py-1 text-nowrap">
-              <i class="bi bi-download me-1"></i> Download QR
+              <i data-lucide="download" class="me-1"></i> Download QR
             </a>
           </div>
         </div>
@@ -948,7 +957,7 @@
 
   <!-- SCROLL TO TOP BUTTON -->
   <button class="scroll-top-btn" id="scrollTopBtn" aria-label="Scroll to top">
-    <i class="bi bi-arrow-up"></i>
+    <i data-lucide="arrow-up"></i>
   </button>
 
   <!-- ==================== MODALS ==================== -->
@@ -968,20 +977,20 @@
           <form id="registerForm" novalidate>
             <div class="contact-input-wrapper">
               <input type="text" id="regName" required placeholder="Student Full Name">
-              <i class="bi bi-person-fill"></i>
+              <i data-lucide="user"></i>
             </div>
 
             <div class="row g-2">
               <div class="col-md-6">
                 <div class="contact-input-wrapper">
                   <input type="tel" id="regMobile" required placeholder="Mobile Number" pattern="\d{10}">
-                  <i class="bi bi-telephone-fill"></i>
+                  <i data-lucide="phone"></i>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="contact-input-wrapper">
                   <input type="email" id="regEmail" required placeholder="Email ID">
-                  <i class="bi bi-envelope-fill"></i>
+                  <i data-lucide="mail"></i>
                 </div>
               </div>
             </div>
@@ -990,7 +999,7 @@
               <div class="col-md-6">
                 <div class="contact-input-wrapper">
                   <input type="text" id="regRoomNumber" required placeholder="Room Number">
-                  <i class="bi bi-door-closed-fill"></i>
+                  <i data-lucide="door-closed"></i>
                 </div>
               </div>
               <div class="col-md-6">
@@ -1000,14 +1009,14 @@
                     <option value="A">A</option>
                     <option value="B">B</option>
                   </select>
-                  <i class="bi bi-house-fill"></i>
+                  <i data-lucide="home"></i>
                 </div>
               </div>
             </div>
 
             <div class="contact-input-wrapper">
               <input type="text" id="regMac" required placeholder="Device MAC Address (e.g. AA:BB:CC:DD:EE:01)">
-              <i class="bi bi-cpu-fill"></i>
+              <i data-lucide="cpu"></i>
               <div class="form-text text-muted small mt-1">Found under Device Settings -> WiFi MAC Address.</div>
             </div>
 
@@ -1017,16 +1026,16 @@
                 <option value="O">Online Payment</option>
                 <option value="C">Cash Payment</option>
               </select>
-              <i class="bi bi-wallet2"></i>
+              <i data-lucide="indian-rupee"></i>
             </div>
 
             <div id="paymentInstructionsBlock" class="mb-4 p-3 rounded-3 border" style="background: rgba(0, 0, 0, 0.02); border-color: var(--card-border) !important;">
-              <h6 class="fw-bold mb-2 text-primary" id="paymentInstructionsTitle"><i class="bi bi-qr-code-scan me-2"></i>Pay ₹180 for Registration</h6>
+              <h6 class="fw-bold mb-2 text-primary" id="paymentInstructionsTitle"><i data-lucide="qr-code" class="me-2"></i>Pay ₹180 for Registration</h6>
               <p class="small text-muted mb-3" id="paymentInstructionsText">Scan the UPI QR code below using any UPI app (GPay, PhonePe, Paytm) to pay ₹180, then upload the payment screenshot.</p>
               <div class="text-center mb-3" id="qrCodeContainer">
                 <img id="registerQrCode" src="assets/payment_qr.png" alt="Payment UPI QR Code" class="img-fluid rounded border shadow-sm p-1" style="max-height: 180px; display: block; margin: 0 auto 10px auto;">
                 <a id="downloadQrBtn" href="assets/payment_qr.png" download="payment_qr.png" class="btn btn-outline-primary btn-sm mt-1 px-3">
-                  <i class="bi bi-download me-1"></i> Download QR Code
+                  <i data-lucide="download" class="me-1"></i> Download QR Code
                 </a>
               </div>
               <div id="screenshotContainer">
@@ -1060,11 +1069,11 @@
           <form id="loginForm" novalidate>
             <div class="contact-input-wrapper">
               <input type="text" id="loginUsername" required placeholder="Admin Username" autocapitalize="none" autocorrect="off" spellcheck="false">
-              <i class="bi bi-shield-lock-fill"></i>
+              <i data-lucide="shield-check"></i>
             </div>
             <div class="contact-input-wrapper mb-4">
               <input type="password" id="loginPassword" required placeholder="Password">
-              <i class="bi bi-key-fill"></i>
+              <i data-lucide="key"></i>
             </div>
             <div class="d-grid">
               <button type="submit" class="btn btn-primary btn-lg" id="btnLoginSubmit">
@@ -1092,20 +1101,20 @@
             <input type="hidden" id="editStudentId">
             <div class="contact-input-wrapper">
               <input type="text" id="editName" required placeholder="Student Name">
-              <i class="bi bi-person-fill"></i>
+              <i data-lucide="user"></i>
             </div>
 
             <div class="row g-2">
               <div class="col-md-6">
                 <div class="contact-input-wrapper">
                   <input type="tel" id="editMobile" required placeholder="Mobile" pattern="\d{10}">
-                  <i class="bi bi-telephone-fill"></i>
+                  <i data-lucide="phone"></i>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="contact-input-wrapper">
                   <input type="email" id="editEmail" required placeholder="Email">
-                  <i class="bi bi-envelope-fill"></i>
+                  <i data-lucide="mail"></i>
                 </div>
               </div>
             </div>
@@ -1114,7 +1123,7 @@
               <div class="col-md-6">
                 <div class="contact-input-wrapper">
                   <input type="text" id="editRoomNumber" required placeholder="Room Number">
-                  <i class="bi bi-door-closed-fill"></i>
+                  <i data-lucide="door-closed"></i>
                 </div>
               </div>
               <div class="col-md-6">
@@ -1123,7 +1132,7 @@
                     <option value="A">A</option>
                     <option value="B">B</option>
                   </select>
-                  <i class="bi bi-house-fill"></i>
+                  <i data-lucide="home"></i>
                 </div>
               </div>
             </div>
@@ -1132,7 +1141,7 @@
               <div class="col-md-6">
                 <div class="contact-input-wrapper">
                   <input type="text" id="editMac" required placeholder="Primary MAC Address">
-                  <i class="bi bi-cpu-fill"></i>
+                  <i data-lucide="cpu"></i>
                 </div>
               </div>
               <div class="col-md-6">
@@ -1142,7 +1151,7 @@
                     <option value="Accepted">Accepted</option>
                     <option value="Rejected">Rejected</option>
                   </select>
-                  <i class="bi bi-question-circle-fill"></i>
+                  <i data-lucide="help-circle"></i>
                 </div>
               </div>
             </div>
@@ -1155,13 +1164,13 @@
                     <option value="Partially Paid">Partially Paid</option>
                     <option value="Paid">Paid</option>
                   </select>
-                  <i class="bi bi-currency-rupee"></i>
+                  <i data-lucide="indian-rupee"></i>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="contact-input-wrapper">
                   <input type="date" id="editPayLaterDate">
-                  <i class="bi bi-calendar-date-fill"></i>
+                  <i data-lucide="clock"></i>
                 </div>
               </div>
             </div>
@@ -1173,7 +1182,7 @@
                     <option value="O">Online</option>
                     <option value="C">Cash</option>
                   </select>
-                  <i class="bi bi-wallet2"></i>
+                  <i data-lucide="indian-rupee"></i>
                 </div>
               </div>
             </div>
@@ -1182,13 +1191,13 @@
               <div class="col-md-6">
                 <div class="contact-input-wrapper">
                   <input type="text" id="editMac2" placeholder="MAC Address 2 (Optional)">
-                  <i class="bi bi-cpu-fill"></i>
+                  <i data-lucide="cpu"></i>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="contact-input-wrapper">
                   <input type="text" id="editMac3" placeholder="MAC Address 3 (Optional)">
-                  <i class="bi bi-cpu-fill"></i>
+                  <i data-lucide="cpu"></i>
                 </div>
               </div>
             </div>
@@ -1197,7 +1206,7 @@
               <div class="col-md-6">
                 <div class="contact-input-wrapper">
                   <input type="text" id="editMac4" placeholder="MAC Address 4 (Optional)">
-                  <i class="bi bi-cpu-fill"></i>
+                  <i data-lucide="cpu"></i>
                 </div>
               </div>
             </div>
@@ -1222,7 +1231,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body text-center py-4">
-          <i class="bi bi-exclamation-triangle-fill text-danger display-4 mb-3 d-block"></i>
+          <i data-lucide="alert-triangle" class="text-danger mb-3 d-block mx-auto" style="width: 48px; height: 48px;"></i>
           <p class="mb-0">Are you sure you want to permanently delete this registration record?</p>
           <p class="text-danger small mt-1">This action cannot be undone.</p>
         </div>
@@ -1247,31 +1256,31 @@
           <form id="contactForm">
             <div class="contact-input-wrapper">
               <input type="text" id="contactPhone" required placeholder="Phone Number">
-              <i class="bi bi-telephone-fill"></i>
+              <i data-lucide="phone"></i>
             </div>
             <div class="contact-input-wrapper">
               <input type="email" id="contactEmail" required placeholder="Email ID">
-              <i class="bi bi-envelope-fill"></i>
+              <i data-lucide="mail"></i>
             </div>
             <div class="contact-input-wrapper">
               <input type="text" id="contactAddress1" required placeholder="Address Line 1">
-              <i class="bi bi-geo-alt-fill"></i>
+              <i data-lucide="map-pin"></i>
             </div>
             <div class="contact-input-wrapper">
               <input type="text" id="contactAddress2" required placeholder="Address Line 2">
-              <i class="bi bi-geo-fill"></i>
+              <i data-lucide="map-pin"></i>
             </div>
             <div class="contact-input-wrapper">
               <input type="url" id="contactInstagram" placeholder="Instagram Profile Link">
-              <i class="bi bi-instagram"></i>
+              <i data-lucide="globe"></i>
             </div>
             <div class="contact-input-wrapper">
               <input type="url" id="contactFacebook" placeholder="Facebook Profile Link">
-              <i class="bi bi-facebook"></i>
+              <i data-lucide="globe"></i>
             </div>
             <div class="contact-input-wrapper">
               <input type="url" id="contactYoutube" placeholder="YouTube Channel Link">
-              <i class="bi bi-youtube"></i>
+              <i data-lucide="globe"></i>
             </div>
             
             <div class="mb-3 p-3 rounded-3 border" style="background: rgba(0,0,0,0.02); border-color: var(--card-border) !important;">
@@ -1307,15 +1316,15 @@
           <form id="emailConfigForm">
             <div class="contact-input-wrapper">
               <input type="password" id="emailConfigApiKey" placeholder="Enter Brevo API Key">
-              <i class="bi bi-key-fill"></i>
+              <i data-lucide="key"></i>
             </div>
             <div class="contact-input-wrapper">
               <input type="email" id="emailConfigSenderEmail" required placeholder="Sender Email Address">
-              <i class="bi bi-envelope-fill"></i>
+              <i data-lucide="mail"></i>
             </div>
             <div class="contact-input-wrapper">
               <input type="text" id="emailConfigSenderName" required placeholder="Sender Name (e.g. PrimeNet Admin)">
-              <i class="bi bi-person-gear"></i>
+              <i data-lucide="user-check"></i>
             </div>
             <div class="d-grid mt-4">
               <button type="submit" class="btn btn-primary btn-lg" id="btnEmailConfigSave">
@@ -1334,7 +1343,7 @@
       <div class="modal-content glass-card text-start">
         <div class="modal-header border-0 pb-0">
           <h5 class="modal-title fs-4 fw-bold" id="screenshotViewModalLabel">
-            <i class="bi bi-receipt me-2 text-primary"></i>Payment Verification Proof
+            <i data-lucide="file-check" class="me-2 text-primary"></i>Payment Verification Proof
           </h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
@@ -1347,13 +1356,13 @@
           </div>
           <img id="screenshotViewImg" src="" alt="Payment Screenshot" class="img-fluid rounded border shadow-sm d-none" style="max-height: 550px; width: 100%; object-fit: contain;">
           <div id="screenshotError" class="d-none py-5 text-center text-danger">
-            <i class="bi bi-exclamation-triangle-fill display-4 mb-3 d-block"></i>
+            <i data-lucide="alert-triangle" class="mb-3 d-block mx-auto" style="width: 48px; height: 48px;"></i>
             <p class="mb-0 fw-bold">Failed to load payment screenshot.</p>
           </div>
         </div>
         <div class="modal-footer border-0 d-flex justify-content-center gap-3 pb-4">
           <a id="screenshotOpenNewTab" href="#" target="_blank" class="btn btn-outline-primary px-4">
-            <i class="bi bi-box-arrow-up-right me-2"></i> Open Full Size
+            <i data-lucide="external-link" class="me-2"></i> Open Full Size
           </a>
           <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Close</button>
         </div>
@@ -1379,19 +1388,19 @@
                 <option value="unpaid">Unpaid Payment Reminder</option>
                 <option value="partial">Partial Payment Reminder</option>
               </select>
-              <i class="bi bi-clipboard-check"></i>
+              <i data-lucide="file-check"></i>
             </div>
             <div class="contact-input-wrapper">
               <input type="text" id="messageSubject" required placeholder="Subject">
-              <i class="bi bi-type-h1"></i>
+              <i data-lucide="edit"></i>
             </div>
             <div class="contact-input-wrapper">
               <textarea id="messageBody" required placeholder="Type message body..."></textarea>
-              <i class="bi bi-chat-dots-fill"></i>
+              <i data-lucide="message-square"></i>
             </div>
             <div class="d-grid mt-4">
               <button type="submit" class="btn btn-primary btn-lg" id="btnSendMessage">
-                <i class="bi bi-send-fill me-2"></i> Send Message
+                <i data-lucide="send" class="me-2"></i> Send Message
               </button>
             </div>
           </form>
@@ -1402,6 +1411,12 @@
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="script.js?v=7.0.0"></script>
+  <script src="script.js?v=8.0.0"></script>
+  <script>
+    // Initialize Lucide Pure SVG Vector Icons across the document
+    if (window.lucide) {
+      lucide.createIcons();
+    }
+  </script>
 </body>
 </html>

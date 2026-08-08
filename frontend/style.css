@@ -1,5 +1,5 @@
 /* ==========================================================================
-   PRIMENET 2026 — COMPREHENSIVE LIGHT & DARK DESIGN SYSTEM (BOOTSTRAP ICONS)
+   PRIMENET 2026 — COMPREHENSIVE LIGHT & DARK DESIGN SYSTEM (LUCIDE PURE SVG)
    ========================================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
@@ -264,16 +264,25 @@ body {
 }
 
 /* ==========================================================================
-   Universal Icon & Bootstrap Icons Engine
+   Universal Pure SVG Vector Icon Engine (Lucide & Inline SVGs)
    ========================================================================== */
-.bi,
-[class*="bi-"] {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+svg.lucide,
+[data-lucide],
+svg.social-svg {
+  display: inline-block;
   vertical-align: -0.125em;
-  font-style: normal;
-  line-height: 1;
+  stroke: currentColor;
+  stroke-width: 2px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  width: 1.15em;
+  height: 1.15em;
+  fill: none;
+}
+
+svg.social-svg {
+  stroke-width: 0;
+  fill: currentColor;
 }
 
 .bento-icon,
@@ -285,13 +294,14 @@ body {
   color: var(--primary) !important;
   display: inline-flex !important;
   align-items: center; justify-content: center;
-  font-size: 1.5rem !important;
   margin-bottom: 1.2rem;
   box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.15);
 }
 
-.bento-icon .bi {
-  font-size: 1.5rem !important;
+.bento-icon svg.lucide,
+.bento-icon [data-lucide] {
+  width: 28px !important;
+  height: 28px !important;
   color: var(--primary) !important;
 }
 
@@ -306,13 +316,13 @@ body {
   align-items: center; justify-content: center;
   transition: var(--transition-fast);
   text-decoration: none;
-  font-size: 1.15rem !important;
 }
 
-.footer-social-pill .bi,
-.founder-social-pill .bi {
+.footer-social-pill svg,
+.founder-social-pill svg {
   color: var(--text-color) !important;
-  font-size: 1.15rem !important;
+  width: 18px !important;
+  height: 18px !important;
 }
 
 .footer-social-pill:hover,
@@ -322,8 +332,8 @@ body {
   transform: translateY(-2px);
 }
 
-.footer-social-pill:hover .bi,
-.founder-social-pill:hover .bi {
+.footer-social-pill:hover svg,
+.founder-social-pill:hover svg {
   color: #FFFFFF !important;
 }
 
@@ -574,8 +584,9 @@ p {
   transition: var(--transition-smooth);
 }
 
-.theme-switch-btn .bi {
-  font-size: 1.25rem !important;
+.theme-switch-btn svg {
+  width: 20px !important;
+  height: 20px !important;
 }
 
 .theme-switch-btn:hover {
@@ -637,6 +648,10 @@ p {
   line-height: 1;
   margin-bottom: 0.3rem;
   color: var(--text-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
 }
 
 /* ==========================================================================
@@ -755,6 +770,8 @@ p {
   border-radius: var(--radius-full);
   font-size: 0.8rem; font-weight: 700;
   box-shadow: 0 6px 16px var(--btn-shadow);
+  display: inline-flex;
+  align-items: center;
 }
 
 .plan-price {
@@ -778,7 +795,7 @@ p {
   font-size: 0.95rem; color: var(--text-muted);
 }
 
-.plan-features-list li .bi { color: var(--success); }
+.plan-features-list li svg { color: var(--success); }
 
 /* Control Hub Cards */
 .control-card {
@@ -837,11 +854,12 @@ p {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  font-size: 1.5rem !important;
 }
 
-.stats-icon .bi {
-  font-size: 1.5rem !important;
+.stats-icon svg.lucide,
+.stats-icon [data-lucide] {
+  width: 26px !important;
+  height: 26px !important;
 }
 
 [data-theme="dark"] .admin-stats-panel .stats-icon.text-primary {
@@ -1035,16 +1053,19 @@ textarea.form-control:focus {
   box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.2) !important;
 }
 
-.contact-input-wrapper .bi {
+.contact-input-wrapper svg.lucide,
+.contact-input-wrapper [data-lucide] {
   position: absolute;
   left: 1rem; top: 50%;
   transform: translateY(-50%);
   color: var(--text-light);
-  font-size: 1.1rem;
+  width: 18px !important;
+  height: 18px !important;
   pointer-events: none;
 }
 
-.contact-input-wrapper textarea + .bi { top: 1.2rem; transform: none; }
+.contact-input-wrapper textarea + svg.lucide,
+.contact-input-wrapper textarea + [data-lucide] { top: 1.2rem; transform: none; }
 
 /* ==========================================================================
    Modals & Popups
@@ -1086,6 +1107,8 @@ textarea.form-control:focus {
   border-radius: var(--radius-xs);
   padding: 0.5rem 0.9rem;
   transition: var(--transition-fast);
+  display: flex;
+  align-items: center;
 }
 
 .dropdown-item:hover,
