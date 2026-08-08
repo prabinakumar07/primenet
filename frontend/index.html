@@ -47,13 +47,10 @@
   <!-- Theme Flash Overlay -->
   <div class="theme-flash-overlay" id="themeFlashOverlay"></div>
 
-  <!-- Global Loading Overlay -->
+  <!-- Global Loading Overlay (Hidden by default, fixed position only during active async requests) -->
   <div class="loading-overlay" id="loadingOverlay">
-    <div class="d-flex flex-column align-items-center">
-      <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem;" role="status">
-        <span class="visually-hidden">Connecting to PrimeNet...</span>
-      </div>
-      <span class="fw-semibold text-primary">Connecting to PrimeNet Network...</span>
+    <div class="spinner-border text-primary" style="width: 2.5rem; height: 2.5rem;" role="status">
+      <span class="visually-hidden">Loading...</span>
     </div>
   </div>
 

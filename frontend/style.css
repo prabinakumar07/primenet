@@ -199,6 +199,25 @@ body {
 }
 .theme-flash-overlay.active { opacity: 1; }
 
+/* Global Loading Spinner Overlay */
+.loading-overlay {
+  position: fixed; inset: 0;
+  background: rgba(11, 15, 25, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 99998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+.loading-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
 /* Ambient Background Blobs & Grid Overlay */
 .background-decor {
   position: fixed; inset: 0;
@@ -606,7 +625,7 @@ p {
    Hero Section
    ========================================================================== */
 .hero-section-centered {
-  padding: 8.5rem 0 5.5rem 0;
+  padding: 6.2rem 0 4.5rem 0;
   position: relative;
   text-align: center;
 }
@@ -1168,29 +1187,32 @@ textarea.form-control:focus {
   .navbar-nav .nav-link {
     padding: 0.75rem 1rem !important;
   }
+
+  .hero-section-centered {
+    padding: 5.8rem 0 3rem 0 !important;
+  }
 }
 
 @media (max-width: 768px) {
   html {
-    scroll-padding-top: 105px;
+    scroll-padding-top: 80px;
   }
 
-  /* Generous top clearance so hero badge and title never get hidden under fixed header */
   .hero-section-centered {
-    padding: 9.5rem 0 3.5rem 0 !important;
+    padding: 5.5rem 0 2.5rem 0 !important;
   }
 
   .hero-title-centered {
-    font-size: clamp(2rem, 6.5vw, 2.6rem);
+    font-size: clamp(1.9rem, 6.2vw, 2.5rem);
     line-height: 1.2;
-    margin-top: 0.75rem;
-    margin-bottom: 1.2rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
   }
 
   .hero-subtitle-centered {
-    font-size: 1.05rem;
+    font-size: 1.02rem;
     padding: 0 0.5rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1.8rem;
   }
 
   .section-header h2 {
@@ -1214,10 +1236,10 @@ textarea.form-control:focus {
 
 @media (max-width: 480px) {
   .hero-section-centered {
-    padding: 10rem 0 3rem 0 !important;
+    padding: 5.2rem 0 2rem 0 !important;
   }
 
   .hero-title-centered {
-    font-size: 1.95rem;
+    font-size: 1.85rem;
   }
 }
