@@ -104,16 +104,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggleBtns = document.querySelectorAll('.theme-switch-btn');
     toggleBtns.forEach(btn => {
       if (theme === 'dark') {
-        btn.innerHTML = '<i class="fa-solid fa-sun fs-5 text-warning"></i>';
+        btn.innerHTML = '<i class="bi bi-sun-fill fs-5 text-warning"></i>';
         btn.setAttribute('title', 'Switch to Light Mode');
         btn.setAttribute('aria-label', 'Switch to Light Mode');
       } else {
-        btn.innerHTML = '<i class="fa-solid fa-moon fs-5 text-primary"></i>';
+        btn.innerHTML = '<i class="bi bi-moon-stars-fill fs-5 text-primary"></i>';
         btn.setAttribute('title', 'Switch to Dark Mode');
         btn.setAttribute('aria-label', 'Switch to Dark Mode');
-      }
-      if (window.FontAwesome && window.FontAwesome.dom) {
-        window.FontAwesome.dom.i2svg({ node: btn });
       }
     });
   }
@@ -429,14 +426,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnStartSpeedtest) {
       if (speedTestEnabled) {
         btnStartSpeedtest.disabled = false;
-        btnStartSpeedtest.innerHTML = '<i class="fa-solid fa-circle-nodes me-2"></i>Run Speed Check';
+        btnStartSpeedtest.innerHTML = '<i class="bi bi-play-fill me-2"></i>Start Speed Test';
         if (speedtestStatus) {
           speedtestStatus.className = 'badge bg-secondary';
           speedtestStatus.textContent = 'Ready';
         }
       } else {
         btnStartSpeedtest.disabled = true;
-        btnStartSpeedtest.innerHTML = '<i class="fa-solid fa-ban me-2"></i>Speed Check Disabled';
+        btnStartSpeedtest.innerHTML = '<i class="bi bi-slash-circle me-2"></i>Speed Check Disabled';
         if (speedtestStatus) {
           speedtestStatus.className = 'badge bg-danger';
           speedtestStatus.textContent = 'Disabled';
@@ -447,11 +444,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (btnToggleSpeedtest) {
       if (speedTestEnabled) {
-        btnToggleSpeedtest.innerHTML = '<i class="fa-solid fa-eye-slash me-2"></i>Hide Speed Test';
-        btnToggleSpeedtest.className = 'btn btn-outline-danger';
+        btnToggleSpeedtest.innerHTML = '<i class="bi bi-eye-slash-fill me-1"></i> Toggle Speed Test';
+        btnToggleSpeedtest.className = 'btn btn-outline-danger btn-sm';
       } else {
-        btnToggleSpeedtest.innerHTML = '<i class="fa-solid fa-eye me-2"></i>Show Speed Test';
-        btnToggleSpeedtest.className = 'btn btn-outline-success';
+        btnToggleSpeedtest.innerHTML = '<i class="bi bi-eye-fill me-1"></i> Toggle Speed Test';
+        btnToggleSpeedtest.className = 'btn btn-outline-success btn-sm';
       }
     }
   }
@@ -766,7 +763,7 @@ document.addEventListener('DOMContentLoaded', () => {
       studentTableBody.innerHTML = `
         <tr>
           <td colspan="7" class="text-center text-muted py-5">
-            <i class="fa-solid fa-folder-open fa-2x mb-3 d-block"></i>
+            <i class="bi bi-folder2-open display-6 mb-3 d-block text-primary"></i>
             No matching student records found.
           </td>
         </tr>
@@ -777,11 +774,11 @@ document.addEventListener('DOMContentLoaded', () => {
     students.forEach(student => {
       let statusBadge = '';
       if (student.status === 'Pending') {
-        statusBadge = `<span class="badge-pending"><i class="fa-solid fa-clock me-1"></i>Pending</span>`;
+        statusBadge = `<span class="badge-pending"><i class="bi bi-clock-fill me-1"></i>Pending</span>`;
       } else if (student.status === 'Accepted') {
-        statusBadge = `<span class="badge-accepted"><i class="fa-solid fa-circle-check me-1"></i>Accepted</span>`;
+        statusBadge = `<span class="badge-accepted"><i class="bi bi-check-circle-fill me-1"></i>Accepted</span>`;
       } else if (student.status === 'Rejected') {
-        statusBadge = `<span class="badge-rejected"><i class="fa-solid fa-circle-xmark me-1"></i>Rejected</span>`;
+        statusBadge = `<span class="badge-rejected"><i class="bi bi-x-circle-fill me-1"></i>Rejected</span>`;
       }
 
       let payLaterBadge = '';
@@ -792,7 +789,7 @@ document.addEventListener('DOMContentLoaded', () => {
         dueDate.setHours(0,0,0,0);
         const isOverdue = dueDate < today;
         const badgeClass = isOverdue ? 'bg-danger-subtle text-danger border border-danger-subtle' : 'bg-warning-subtle text-warning-emphasis border border-warning-subtle';
-        const iconClass = isOverdue ? 'fa-solid fa-triangle-exclamation' : 'fa-solid fa-clock';
+        const iconClass = isOverdue ? 'bi bi-exclamation-triangle-fill' : 'bi bi-clock-fill';
         payLaterBadge = `
           <div class="mt-1">
             <span class="badge ${badgeClass}" style="font-size: 0.7rem; padding: 0.2rem 0.5rem;" title="${isOverdue ? 'Overdue!' : 'Pay Later Deadline'}">
@@ -810,8 +807,8 @@ document.addEventListener('DOMContentLoaded', () => {
           ${payLaterBadge}
         </td>
         <td>
-          <div class="text-light-contrast"><i class="fa-solid fa-phone me-2 text-primary" style="width: 14px;"></i>${student.mobile}</div>
-          <div class="small text-muted"><i class="fa-solid fa-envelope me-2 text-primary" style="width: 14px;"></i>${student.email}</div>
+          <div class="text-light-contrast"><i class="bi bi-telephone-fill me-2 text-primary" style="font-size: 0.85rem;"></i>${student.mobile}</div>
+          <div class="small text-muted"><i class="bi bi-envelope-fill me-2 text-primary" style="font-size: 0.85rem;"></i>${student.email}</div>
         </td>
         <td>
           <div class="text-light-contrast">Room <strong>${student.room_number}</strong></div>
@@ -826,29 +823,29 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="d-flex flex-column gap-1.5">
             <div class="d-flex align-items-center justify-content-between gap-1">
               <code class="mac-pill-primary">${student.mac_address}</code>
-              <button class="btn btn-link p-0 text-primary action-copy-mac" data-mac="${student.mac_address}" title="Copy MAC Address" style="font-size: 0.85rem; line-height: 1; border: none; background: none;">
-                <i class="fa-regular fa-copy"></i>
+              <button class="btn btn-link p-0 text-primary action-copy-mac" data-mac="${student.mac_address}" title="Copy MAC Address" style="font-size: 0.95rem; line-height: 1; border: none; background: none;">
+                <i class="bi bi-copy"></i>
               </button>
             </div>
             ${student.mac_address_2 ? `
               <div class="d-flex align-items-center justify-content-between gap-1">
                 <code class="mac-pill-secondary">${student.mac_address_2}</code>
-                <button class="btn btn-link p-0 text-primary action-copy-mac" data-mac="${student.mac_address_2}" title="Copy MAC Address" style="font-size: 0.8rem; line-height: 1; border: none; background: none;">
-                  <i class="fa-regular fa-copy"></i>
+                <button class="btn btn-link p-0 text-primary action-copy-mac" data-mac="${student.mac_address_2}" title="Copy MAC Address" style="font-size: 0.9rem; line-height: 1; border: none; background: none;">
+                  <i class="bi bi-copy"></i>
                 </button>
               </div>` : ''}
             ${student.mac_address_3 ? `
               <div class="d-flex align-items-center justify-content-between gap-1">
                 <code class="mac-pill-secondary">${student.mac_address_3}</code>
-                <button class="btn btn-link p-0 text-primary action-copy-mac" data-mac="${student.mac_address_3}" title="Copy MAC Address" style="font-size: 0.8rem; line-height: 1; border: none; background: none;">
-                  <i class="fa-regular fa-copy"></i>
+                <button class="btn btn-link p-0 text-primary action-copy-mac" data-mac="${student.mac_address_3}" title="Copy MAC Address" style="font-size: 0.9rem; line-height: 1; border: none; background: none;">
+                  <i class="bi bi-copy"></i>
                 </button>
               </div>` : ''}
             ${student.mac_address_4 ? `
               <div class="d-flex align-items-center justify-content-between gap-1">
                 <code class="mac-pill-secondary">${student.mac_address_4}</code>
-                <button class="btn btn-link p-0 text-primary action-copy-mac" data-mac="${student.mac_address_4}" title="Copy MAC Address" style="font-size: 0.8rem; line-height: 1; border: none; background: none;">
-                  <i class="fa-regular fa-copy"></i>
+                <button class="btn btn-link p-0 text-primary action-copy-mac" data-mac="${student.mac_address_4}" title="Copy MAC Address" style="font-size: 0.9rem; line-height: 1; border: none; background: none;">
+                  <i class="bi bi-copy"></i>
                 </button>
               </div>` : ''}
           </div>
@@ -858,38 +855,38 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="d-flex justify-content-center align-items-center gap-1">
             ${student.status === 'Pending' ? `
               <button class="btn btn-sm btn-success action-accept" data-id="${student.id}" title="Accept Connection">
-                <i class="fa-solid fa-check"></i>
+                <i class="bi bi-check-lg"></i>
               </button>
               <button class="btn btn-sm btn-warning action-reject" data-id="${student.id}" title="Reject Connection">
-                <i class="fa-solid fa-xmark"></i>
+                <i class="bi bi-x-lg"></i>
               </button>
             ` : ''}
             ${student.screenshot_url ? `
               <a href="${student.screenshot_url}" target="_blank" class="btn btn-sm btn-outline-info" title="View Payment Screenshot">
-                <i class="fa-solid fa-eye"></i>
+                <i class="bi bi-eye-fill"></i>
               </a>
             ` : ''}
             <button class="btn btn-sm btn-outline-primary action-edit" data-id="${student.id}" title="Edit Registration">
-              <i class="fa-solid fa-pen-to-square"></i>
+              <i class="bi bi-pencil-square"></i>
             </button>
             <button class="btn btn-sm btn-outline-info action-message" data-id="${student.id}" title="Send Message / Payment Reminder">
-              <i class="fa-solid fa-envelope"></i>
+              <i class="bi bi-envelope-fill"></i>
             </button>
             ${student.payment_status === 'Paid' ? `
               <button class="btn btn-sm btn-success action-toggle-payment" data-id="${student.id}" title="Payment Status: Paid. Click to cycle to Unpaid.">
-                <i class="fa-solid fa-circle-check"></i> Paid
+                <i class="bi bi-check-circle-fill"></i> Paid
               </button>
             ` : student.payment_status === 'Partially Paid' ? `
               <button class="btn btn-sm btn-info text-white action-toggle-payment" data-id="${student.id}" title="Payment Status: Partially Paid. Click to cycle to Paid.">
-                <i class="fa-solid fa-circle-exclamation"></i> Partial
+                <i class="bi bi-exclamation-circle-fill"></i> Partial
               </button>
             ` : `
               <button class="btn btn-sm btn-outline-warning action-toggle-payment" data-id="${student.id}" title="Payment Status: Unpaid. Click to cycle to Partially Paid.">
-                <i class="fa-solid fa-circle-minus"></i> Unpaid
+                <i class="bi bi-dash-circle-fill"></i> Unpaid
               </button>
             `}
             <button class="btn btn-sm btn-outline-danger action-delete" data-id="${student.id}" title="Delete Registration">
-              <i class="fa-solid fa-trash-can"></i>
+              <i class="bi bi-trash3-fill"></i>
             </button>
           </div>
         </td>
@@ -945,9 +942,9 @@ document.addEventListener('DOMContentLoaded', () => {
             showToast('MAC address copied to clipboard!');
             const icon = btn.querySelector('i');
             if (icon) {
-              icon.className = 'fa-solid fa-check text-success';
+              icon.className = 'bi bi-check-lg text-success';
               setTimeout(() => {
-                icon.className = 'fa-regular fa-copy';
+                icon.className = 'bi bi-copy';
               }, 1500);
             }
           })
@@ -957,10 +954,6 @@ document.addEventListener('DOMContentLoaded', () => {
           });
       });
     });
-
-    if (window.FontAwesome && window.FontAwesome.dom) {
-      window.FontAwesome.dom.i2svg({ node: studentTableBody });
-    }
   }
 
   /* ==========================================
@@ -1555,7 +1548,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     btnStartSpeedtest.addEventListener('click', async () => {
       btnStartSpeedtest.disabled = true;
-      btnStartSpeedtest.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i>Testing Speed...';
+      btnStartSpeedtest.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Testing Speed...';
       
       if (speedtestStatus) {
         speedtestStatus.className = 'badge bg-warning text-dark';
@@ -1714,7 +1707,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateGaugeUI(finalSpeed);
 
         btnStartSpeedtest.disabled = false;
-        btnStartSpeedtest.innerHTML = '<i class="fa-solid fa-play me-2"></i>Start Speed Test';
+        btnStartSpeedtest.innerHTML = '<i class="bi bi-play-fill me-2"></i>Start Speed Test';
         
         if (speedtestStatus) {
           speedtestStatus.className = 'badge bg-success';

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   PRIMENET 2026 — COMPREHENSIVE LIGHT & DARK DESIGN SYSTEM
+   PRIMENET 2026 — COMPREHENSIVE LIGHT & DARK DESIGN SYSTEM (BOOTSTRAP ICONS)
    ========================================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
@@ -264,15 +264,16 @@ body {
 }
 
 /* ==========================================================================
-   Universal Icon & SVG System
+   Universal Icon & Bootstrap Icons Engine
    ========================================================================== */
-i[class*="fa-"],
-svg.svg-inline--fa {
-  display: inline-block;
+.bi,
+[class*="bi-"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   vertical-align: -0.125em;
   font-style: normal;
-  text-rendering: auto;
-  -webkit-font-smoothing: antialiased;
+  line-height: 1;
 }
 
 .bento-icon,
@@ -282,17 +283,16 @@ svg.svg-inline--fa {
   background: rgba(var(--primary-rgb), 0.15) !important;
   border: 1px solid rgba(var(--primary-rgb), 0.3) !important;
   color: var(--primary) !important;
-  display: flex !important;
+  display: inline-flex !important;
   align-items: center; justify-content: center;
-  font-size: 1.45rem;
+  font-size: 1.5rem !important;
   margin-bottom: 1.2rem;
   box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.15);
 }
 
-.bento-icon i,
-.bento-icon svg {
+.bento-icon .bi {
+  font-size: 1.5rem !important;
   color: var(--primary) !important;
-  font-size: 1.45rem;
 }
 
 .footer-social-pill,
@@ -306,15 +306,13 @@ svg.svg-inline--fa {
   align-items: center; justify-content: center;
   transition: var(--transition-fast);
   text-decoration: none;
-  font-size: 1.1rem;
+  font-size: 1.15rem !important;
 }
 
-.footer-social-pill i,
-.footer-social-pill svg,
-.founder-social-pill i,
-.founder-social-pill svg {
+.footer-social-pill .bi,
+.founder-social-pill .bi {
   color: var(--text-color) !important;
-  font-size: 1.1rem;
+  font-size: 1.15rem !important;
 }
 
 .footer-social-pill:hover,
@@ -324,10 +322,8 @@ svg.svg-inline--fa {
   transform: translateY(-2px);
 }
 
-.footer-social-pill:hover i,
-.footer-social-pill:hover svg,
-.founder-social-pill:hover i,
-.founder-social-pill:hover svg {
+.footer-social-pill:hover .bi,
+.founder-social-pill:hover .bi {
   color: #FFFFFF !important;
 }
 
@@ -578,9 +574,8 @@ p {
   transition: var(--transition-smooth);
 }
 
-.theme-switch-btn i,
-.theme-switch-btn svg {
-  font-size: 1.15rem;
+.theme-switch-btn .bi {
+  font-size: 1.25rem !important;
 }
 
 .theme-switch-btn:hover {
@@ -783,8 +778,7 @@ p {
   font-size: 0.95rem; color: var(--text-muted);
 }
 
-.plan-features-list li i,
-.plan-features-list li svg { color: var(--success); }
+.plan-features-list li .bi { color: var(--success); }
 
 /* Control Hub Cards */
 .control-card {
@@ -840,8 +834,38 @@ p {
   border-radius: var(--radius-md);
   background: var(--surface-2);
   border: 1px solid var(--card-border);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.4rem;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 1.5rem !important;
+}
+
+.stats-icon .bi {
+  font-size: 1.5rem !important;
+}
+
+[data-theme="dark"] .admin-stats-panel .stats-icon.text-primary {
+  background: rgba(56, 189, 248, 0.15) !important;
+  color: #38BDF8 !important;
+  border-color: rgba(56, 189, 248, 0.3) !important;
+}
+
+[data-theme="dark"] .admin-stats-panel .stats-icon.text-warning {
+  background: rgba(251, 191, 36, 0.15) !important;
+  color: #FBBF24 !important;
+  border-color: rgba(251, 191, 36, 0.3) !important;
+}
+
+[data-theme="dark"] .admin-stats-panel .stats-icon.text-success {
+  background: rgba(52, 211, 153, 0.15) !important;
+  color: #34D399 !important;
+  border-color: rgba(52, 211, 153, 0.3) !important;
+}
+
+[data-theme="dark"] .admin-stats-panel .stats-icon.text-danger {
+  background: rgba(248, 113, 113, 0.15) !important;
+  color: #F87171 !important;
+  border-color: rgba(248, 113, 113, 0.3) !important;
 }
 
 .admin-table-card { border-radius: var(--radius-lg); overflow: hidden; }
@@ -1011,18 +1035,16 @@ textarea.form-control:focus {
   box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.2) !important;
 }
 
-.contact-input-wrapper i,
-.contact-input-wrapper svg {
+.contact-input-wrapper .bi {
   position: absolute;
   left: 1rem; top: 50%;
   transform: translateY(-50%);
   color: var(--text-light);
-  font-size: 1rem;
+  font-size: 1.1rem;
   pointer-events: none;
 }
 
-.contact-input-wrapper textarea + i,
-.contact-input-wrapper textarea + svg { top: 1.2rem; transform: none; }
+.contact-input-wrapper textarea + .bi { top: 1.2rem; transform: none; }
 
 /* ==========================================================================
    Modals & Popups
