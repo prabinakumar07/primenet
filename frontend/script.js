@@ -112,6 +112,9 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.setAttribute('title', 'Switch to Dark Mode');
         btn.setAttribute('aria-label', 'Switch to Dark Mode');
       }
+      if (window.FontAwesome && window.FontAwesome.dom) {
+        window.FontAwesome.dom.i2svg({ node: btn });
+      }
     });
   }
 
@@ -685,6 +688,10 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
       recentActivityList.appendChild(item);
     });
+
+    if (window.FontAwesome && window.FontAwesome.dom) {
+      window.FontAwesome.dom.i2svg({ node: recentActivityList });
+    }
   }
    function applyFilters() {
     const searchVal = searchBar.value.toLowerCase().trim();
@@ -951,7 +958,9 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
 
-    // Opened directly via href link target="_blank"
+    if (window.FontAwesome && window.FontAwesome.dom) {
+      window.FontAwesome.dom.i2svg({ node: studentTableBody });
+    }
   }
 
   /* ==========================================
