@@ -95,30 +95,59 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ==========================================
      THEME / DARK MODE MANAGEMENT
      ========================================== */
-  const savedTheme = localStorage.getItem('theme') || 'light';
-  body.setAttribute('data-theme', savedTheme);
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    document.body.setAttribute('data-theme', theme);
+    document.documentElement.style.colorScheme = theme;
+    localStorage.setItem('theme', theme);
 
-  if (themeToggleBtn) {
-    themeToggleBtn.addEventListener('click', () => {
-      const currentTheme = body.getAttribute('data-theme');
-      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-      
-      const flashOverlay = document.getElementById('themeFlashOverlay');
-      if (flashOverlay) {
-        flashOverlay.classList.add('active');
-        setTimeout(() => {
-          body.setAttribute('data-theme', newTheme);
-          localStorage.setItem('theme', newTheme);
-          setTimeout(() => {
-            flashOverlay.classList.remove('active');
-          }, 150);
-        }, 150);
+    const toggleBtns = document.querySelectorAll('.theme-switch-btn');
+    toggleBtns.forEach(btn => {
+      if (theme === 'dark') {
+        btn.innerHTML = '<i class="fa-solid fa-sun fs-5 text-warning"></i>';
+        btn.setAttribute('title', 'Switch to Light Mode');
+        btn.setAttribute('aria-label', 'Switch to Light Mode');
       } else {
-        body.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
+        btn.innerHTML = '<i class="fa-solid fa-moon fs-5 text-primary"></i>';
+        btn.setAttribute('title', 'Switch to Dark Mode');
+        btn.setAttribute('aria-label', 'Switch to Dark Mode');
       }
     });
   }
+
+  const savedTheme = localStorage.getItem('theme') || 
+    (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  applyTheme(savedTheme);
+
+  if (window.matchMedia) {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+      if (!localStorage.getItem('theme')) {
+        applyTheme(e.matches ? 'dark' : 'light');
+      }
+    });
+  }
+
+  function toggleThemeHandler() {
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    
+    const flashOverlay = document.getElementById('themeFlashOverlay');
+    if (flashOverlay) {
+      flashOverlay.classList.add('active');
+      setTimeout(() => {
+        applyTheme(newTheme);
+        setTimeout(() => {
+          flashOverlay.classList.remove('active');
+        }, 150);
+      }, 150);
+    } else {
+      applyTheme(newTheme);
+    }
+  }
+
+  document.querySelectorAll('.theme-switch-btn').forEach(btn => {
+    btn.addEventListener('click', toggleThemeHandler);
+  });
 
   /* ==========================================
      UTILITY FUNCTIONS: TOASTS & SPINNER & AUTH HEADERS
@@ -1723,6 +1752,7 @@ document.addEventListener('DOMContentLoaded', () => {
           
           if (physicalLayerSpeed > 0) {
             speedValue.textContent = physicalLayerSpeed.toFixed(1);
+            updateGaugeUI(physicalLayerSpeed);
           }
         }
 
@@ -2250,36 +2280,38 @@ PrimeNet Team`;
      ========================================== */
 
   // 1. Speedometer Dial & Needle updates
-  function updateSpeedometerDial(speed) {
+  function updateGaugeUI(speedMb) {
     const needle = document.getElementById('speedometerNeedle');
     const arc = document.getElementById('speedometerArc');
-    if (!needle || !arc) return;
-    
-    const maxSpeed = 150; // Cap speedometer dial at 150 Mbps
-    const clampedSpeed = Math.min(Math.max(parseFloat(speed) || 0, 0), maxSpeed);
+    if (!needle && !arc) return;
+
+    const maxSpeed = 150; // Cap speedometer dial at 150 Mbps for realistic hostel broadband representation
+    const clampedSpeed = Math.min(maxSpeed, Math.max(0, parseFloat(speedMb) || 0));
     const percentage = clampedSpeed / maxSpeed;
-    
-    // Dashoffset: 534 is empty, 0 is full
-    const dashoffset = 534 * (1 - percentage);
-    arc.style.strokeDashoffset = dashoffset;
-    
-    // Rotation: -135deg to +135deg (total range of 270deg)
-    const rotation = -135 + (270 * percentage);
-    needle.style.transform = `rotate(${rotation}deg)`;
+
+    // Dashoffset: 377 is empty (0 Mbps), 0 is full (150 Mbps)
+    if (arc) {
+      const dashoffset = 377 * (1 - percentage);
+      arc.style.strokeDashoffset = dashoffset;
+    }
+
+    // Rotation: -135deg (0 Mbps) to +135deg (150 Mbps) - total 270deg sweep
+    const angle = -135 + (270 * percentage);
+    if (needle) {
+      needle.style.transform = `translate(-50%, -100%) rotate(${angle}deg)`;
+    }
   }
 
   // Monitor #speedValue for changes to animate dial in real-time
   const speedValueEl = document.getElementById('speedValue');
   if (speedValueEl) {
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        const speed = parseFloat(speedValueEl.textContent) || 0;
-        updateSpeedometerDial(speed);
-      });
+    const observer = new MutationObserver(() => {
+      const speed = parseFloat(speedValueEl.textContent) || 0;
+      updateGaugeUI(speed);
     });
     observer.observe(speedValueEl, { childList: true, characterData: true, subtree: true });
     // Initial display
-    updateSpeedometerDial(0);
+    updateGaugeUI(0);
   }
 
   // 2. Animated statistics counters
@@ -2470,9 +2502,6 @@ PrimeNet Team`;
         
         button.appendChild(ripple);
         
-        // Force reflow
-        ripple.offsetWidth;
-        
         ripple.style.transform = 'scale(3)';
         ripple.style.opacity = '0';
         
@@ -2483,4 +2512,231 @@ PrimeNet Team`;
     });
   }
   initButtonRipples();
+
+  // 8. 3D Spatial Canvas Network Core Engine ("Primenet: The Internet, Visualized")
+  function init3DNetworkEngine() {
+    const canvas = document.getElementById('hero3DCanvas');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    let width = canvas.width = canvas.parentElement.clientWidth;
+    let height = canvas.height = canvas.parentElement.clientHeight;
+
+    window.addEventListener('resize', () => {
+      if (!canvas.parentElement) return;
+      width = canvas.width = canvas.parentElement.clientWidth;
+      height = canvas.height = canvas.parentElement.clientHeight;
+    });
+
+    const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const numNodes = window.innerWidth < 768 ? 24 : 45;
+    const nodes = [];
+    const focalLength = 350;
+
+    let mouseX = 0;
+    let mouseY = 0;
+    let targetRotX = 0;
+    let targetRotY = 0;
+    let currentRotX = 0;
+    let currentRotY = 0;
+
+    canvas.parentElement.addEventListener('mousemove', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      mouseX = (e.clientX - rect.left - width / 2) / (width / 2);
+      mouseY = (e.clientY - rect.top - height / 2) / (height / 2);
+      targetRotY = mouseX * 0.4;
+      targetRotX = -mouseY * 0.4;
+    });
+
+    for (let i = 0; i < numNodes; i++) {
+      nodes.push({
+        x: (Math.random() - 0.5) * 350,
+        y: (Math.random() - 0.5) * 350,
+        z: (Math.random() - 0.5) * 350,
+        vx: (Math.random() - 0.5) * 0.6,
+        vy: (Math.random() - 0.5) * 0.6,
+        vz: (Math.random() - 0.5) * 0.6,
+        radius: Math.random() * 3 + 2,
+        pulse: Math.random() * Math.PI * 2
+      });
+    }
+
+    function render3D() {
+      ctx.clearRect(0, 0, width, height);
+
+      currentRotX += (targetRotX - currentRotX) * 0.05;
+      currentRotY += (targetRotY - currentRotY) * 0.05;
+
+      const cosX = Math.cos(currentRotX + (isReducedMotion ? 0 : Date.now() * 0.0003));
+      const sinX = Math.sin(currentRotX + (isReducedMotion ? 0 : Date.now() * 0.0003));
+      const cosY = Math.cos(currentRotY + (isReducedMotion ? 0 : Date.now() * 0.0005));
+      const sinY = Math.sin(currentRotY + (isReducedMotion ? 0 : Date.now() * 0.0005));
+
+      const projected = [];
+
+      nodes.forEach((node) => {
+        if (!isReducedMotion) {
+          node.x += node.vx;
+          node.y += node.vy;
+          node.z += node.vz;
+
+          if (Math.abs(node.x) > 180) node.vx *= -1;
+          if (Math.abs(node.y) > 180) node.vy *= -1;
+          if (Math.abs(node.z) > 180) node.vz *= -1;
+          node.pulse += 0.03;
+        }
+
+        // 3D Matrix Rotation (Y then X)
+        let x1 = node.x * cosY - node.z * sinY;
+        let z1 = node.z * cosY + node.x * sinY;
+        let y1 = node.y * cosX - z1 * sinX;
+        let z2 = z1 * cosX + node.y * sinX;
+
+        // Perspective Projection
+        const scale = focalLength / (focalLength + z2 + 250);
+        const px = x1 * scale + width / 2;
+        const py = y1 * scale + height / 2;
+
+        projected.push({
+          px, py, scale, z: z2, radius: node.radius * scale, pulse: node.pulse
+        });
+      });
+
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      const lineColor = isDark ? 'rgba(56, 189, 248, ' : 'rgba(2, 132, 199, ';
+      const nodeColor = isDark ? '#38BDF8' : '#0284C7';
+      const accentColor = isDark ? '#A855F7' : '#7F00FF';
+
+      // Draw 3D Connection Lines
+      for (let i = 0; i < projected.length; i++) {
+        for (let j = i + 1; j < projected.length; j++) {
+          const p1 = projected[i];
+          const p2 = projected[j];
+          const dx = p1.px - p2.px;
+          const dy = p1.py - p2.py;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < 120) {
+            const alpha = (1 - dist / 120) * 0.45 * Math.min(p1.scale, p2.scale);
+            ctx.beginPath();
+            ctx.moveTo(p1.px, p1.py);
+            ctx.lineTo(p2.px, p2.py);
+            ctx.strokeStyle = `${lineColor}${alpha})`;
+            ctx.lineWidth = 1.2 * Math.min(p1.scale, p2.scale);
+            ctx.stroke();
+          }
+        }
+      }
+
+      // Draw 3D Spatial Nodes
+      projected.sort((a, b) => b.z - a.z);
+      projected.forEach((p) => {
+        const glowRadius = Math.max(1, p.radius * (1.2 + Math.sin(p.pulse) * 0.3));
+
+        ctx.beginPath();
+        ctx.arc(p.px, p.py, glowRadius, 0, Math.PI * 2);
+        ctx.fillStyle = (p.pulse % 2 > 1) ? accentColor : nodeColor;
+        ctx.globalAlpha = Math.min(1, Math.max(0.2, p.scale));
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(p.px, p.py, glowRadius * 2.2, 0, Math.PI * 2);
+        ctx.fillStyle = isDark ? 'rgba(56, 189, 248, 0.15)' : 'rgba(2, 132, 199, 0.12)';
+        ctx.fill();
+        ctx.globalAlpha = 1.0;
+      });
+
+      requestAnimationFrame(render3D);
+    }
+
+    render3D();
+  }
+  init3DNetworkEngine();
+
+  // Navigation Active Link ScrollSpy
+  function initNavScrollSpy() {
+    const navLinks = document.querySelectorAll('#mainNavLinks .nav-link');
+    const sections = document.querySelectorAll('header[id], section[id]');
+
+    function getActiveSectionId() {
+      const scrollPosition = window.scrollY + 180;
+      let activeId = 'home';
+
+      sections.forEach(section => {
+        const top = section.getBoundingClientRect().top + window.scrollY;
+        const height = section.offsetHeight;
+        if (scrollPosition >= top && scrollPosition < top + height) {
+          activeId = section.getAttribute('id');
+        }
+      });
+
+      // Special handling for bottom of the page (Support / Contact)
+      if ((window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 80)) {
+        activeId = 'contact';
+      }
+
+      return activeId;
+    }
+
+    function setActiveNav(activeId) {
+      if (!activeId) return;
+
+      // Normalize section aliases
+      if (activeId === 'control-center' || activeId === 'faq') {
+        activeId = 'why-primenet';
+      }
+      if (activeId === 'services') {
+        activeId = 'plans';
+      }
+
+      let matched = false;
+      navLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        if (href === `#${activeId}`) {
+          link.classList.add('active');
+          matched = true;
+        } else if (href && href.startsWith('#')) {
+          link.classList.remove('active');
+        }
+      });
+
+      if (!matched && window.scrollY < 250) {
+        const homeLink = document.getElementById('navHome');
+        if (homeLink) homeLink.classList.add('active');
+      }
+    }
+
+    function onScroll() {
+      const activeId = getActiveSectionId();
+      setActiveNav(activeId);
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    
+    // Hash change / direct load support
+    window.addEventListener('hashchange', () => {
+      const hash = window.location.hash.replace('#', '');
+      if (hash) {
+        setActiveNav(hash);
+      }
+    });
+
+    const currentHash = window.location.hash.replace('#', '');
+    if (currentHash) {
+      setActiveNav(currentHash);
+    } else {
+      onScroll();
+    }
+
+    navLinks.forEach(link => {
+      link.addEventListener('click', function() {
+        const href = this.getAttribute('href');
+        if (href && href.startsWith('#')) {
+          navLinks.forEach(l => l.classList.remove('active'));
+          this.classList.add('active');
+        }
+      });
+    });
+  }
+  initNavScrollSpy();
 });

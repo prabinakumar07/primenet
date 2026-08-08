@@ -713,18 +713,19 @@ exports.updateSpeedtestConfig = async (req, res) => {
 
 // 11. Get Contact Configuration (Public)
 exports.getContactConfig = async (req, res) => {
+  const defaultContact = {
+    phone: '+91 98765 43210',
+    email: 'support@primenet.local',
+    address_line1: 'Hostel Block-C, Server Room 10',
+    address_line2: 'Campus Ground, Pin 751024',
+    instagram: 'https://instagram.com/primenet',
+    facebook: 'https://facebook.com/primenet',
+    youtube: 'https://youtube.com/primenet',
+    qr_code_url: 'assets/payment_qr.png'
+  };
+
   try {
     const setting = await Setting.findOne({ key: 'contact_info' });
-    const defaultContact = {
-      phone: '+91 98765 43210',
-      email: 'support@primenet.local',
-      address_line1: 'Hostel Block-C, Server Room 10',
-      address_line2: 'Campus Ground, Pin 751024',
-      instagram: 'https://instagram.com/primenet',
-      facebook: 'https://facebook.com/primenet',
-      youtube: 'https://youtube.com/primenet',
-      qr_code_url: '/favicon.png'
-    };
     let contact = setting ? JSON.parse(JSON.stringify(setting.value)) : defaultContact;
     if (contact) {
       // Decode escaped HTML slashes
@@ -738,12 +739,12 @@ exports.getContactConfig = async (req, res) => {
       if (!contact.instagram) contact.instagram = 'https://instagram.com/primenet';
       if (!contact.facebook) contact.facebook = 'https://facebook.com/primenet';
       if (!contact.youtube) contact.youtube = 'https://youtube.com/primenet';
-      if (!contact.qr_code_url) contact.qr_code_url = '/favicon.png';
+      if (!contact.qr_code_url) contact.qr_code_url = 'assets/payment_qr.png';
     }
     return res.status(200).json(contact);
   } catch (err) {
     console.error('Error fetching contact config:', err.message);
-    return res.status(500).json({ message: 'Failed to retrieve contact configuration.' });
+    return res.status(200).json(defaultContact);
   }
 };
 

@@ -105,7 +105,7 @@ async function seedDefaultSettings() {
           instagram: 'https://instagram.com/primenet',
           facebook: 'https://facebook.com/primenet',
           youtube: 'https://youtube.com/primenet',
-          qr_code_url: '/favicon.png'
+          qr_code_url: 'assets/payment_qr.png'
         }
       });
       await newContact.save();

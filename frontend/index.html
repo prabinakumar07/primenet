@@ -1,754 +1,529 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PrimeNet | Hostel Broadband Management System</title>
-  <!-- SEO Meta Tags -->
-  <meta name="description" content="Get high-speed, unlimited broadband internet for hostel students at PrimeNet. Safe, fast, and affordable internet starting at just ₹180 for 6 months.">
-  <meta name="keywords" content="Hostel internet, broadband management, high speed internet, student wifi, PrimeNet">
-  
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="/favicon.png">
+  <title>PrimeNet — Internet, Without The Waiting | Campus Fiber Broadband</title>
+  <meta name="description" content="PrimeNet Broadband — High-speed, reliable hostel fiber broadband with instant hardware MAC address auto-connection and dedicated campus support.">
+  <meta name="keywords" content="PrimeNet, Hostel Broadband, Campus Fiber, High-speed Internet, MAC Authentication">
 
-  <!-- CSS Stylesheets -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://use.fontawesome.com/releases/v6.4.0/css/all.css" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=1.0.2">
+  <!-- Open Graph / Social Media -->
+  <meta property="og:title" content="PrimeNet — Campus Fiber Broadband">
+  <meta property="og:description" content="Ultra-fast, reliable hostel broadband with seamless device authentication and instant speed.">
+  <meta property="og:type" content="website">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png">
+
+  <!-- FontAwesome Icons & Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+  <!-- Early Theme Detection Script (Prevents FOUT) -->
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('theme');
+      const theme = savedTheme || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
+
+  <!-- 2026 Custom Design System Stylesheet -->
+  <link rel="stylesheet" href="style.css?v=6.0.0">
 </head>
 <body>
 
-  <!-- Animated background system -->
+  <!-- Dynamic Background Ambient Light & Grid Overlay -->
   <div class="background-decor">
     <div class="decor-blob decor-blob-1"></div>
     <div class="decor-blob decor-blob-2"></div>
     <div class="decor-blob decor-blob-3"></div>
   </div>
-  <div class="stars-overlay"></div>
   <div class="grid-lines-overlay"></div>
+
+  <!-- Theme Flash Overlay -->
   <div class="theme-flash-overlay" id="themeFlashOverlay"></div>
 
-  <!-- Loading Spinner Overlay -->
+  <!-- Global Loading Overlay -->
   <div class="loading-overlay" id="loadingOverlay">
-    <div class="spinner-custom"></div>
+    <div class="d-flex flex-column align-items-center">
+      <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem;" role="status">
+        <span class="visually-hidden">Connecting to PrimeNet...</span>
+      </div>
+      <span class="fw-semibold text-primary">Connecting to PrimeNet Network...</span>
+    </div>
   </div>
 
-  <!-- Navigation Bar -->
-  <nav class="navbar navbar-expand-lg navbar-custom fixed-top py-3">
+  <!-- Navigation Header (Desktop, Tablet, & Mobile Compatible) -->
+  <nav class="navbar navbar-expand-lg fixed-top">
     <div class="container">
       <a class="navbar-brand" href="#home" id="navLogo">
-        <i class="fa-solid fa-wifi me-2"></i>PrimeNet
+        <i class="fa-solid fa-wifi text-primary"></i>
+        <span>PrimeNet</span>
       </a>
-      <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="toggler-bar"></span>
+
+      <div class="d-flex align-items-center gap-2 d-lg-none ms-auto me-2">
+        <button class="theme-switch-btn" id="mobileThemeToggleBtn" aria-label="Toggle Dark/Light Mode" title="Switch Theme">
+          <i class="fa-solid fa-sun fs-5 text-warning"></i>
+        </button>
+      </div>
+
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars-staggered fs-4" style="color: var(--text-color);"></i>
       </button>
+
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto align-items-center" id="mainNavLinks">
           <li class="nav-item">
             <a class="nav-link active" href="#home" id="navHome">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#features" id="navFeaturesLink">Features</a>
+            <a class="nav-link" href="#about" id="navAbout">Diagnostics</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#plans" id="navPlans">Plans</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#why-primenet" id="navWhyLink">Why Us</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#about" id="navAbout">About</a>
+            <a class="nav-link" href="#founders">Team</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#services" id="navServices">Services</a>
+            <a class="nav-link" href="#contact" id="navContact">Support</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#contact" id="navContact">Contact</a>
-          </li>
-          <!-- Admin Dashboard Switcher (Hidden initially) -->
           <li class="nav-item d-none" id="adminPortalLinkItem">
             <a class="nav-link text-primary fw-bold" href="#dashboard" id="navAdminPortal"><i class="fa-solid fa-gauge me-1"></i>Dashboard</a>
           </li>
         </ul>
-        <div class="d-flex align-items-center ms-lg-4 mt-3 mt-lg-0 gap-3">
-          <!-- Theme Switcher -->
-          <div class="theme-switch-wrapper" title="Toggle Dark/Light Mode">
-            <button class="theme-switch-btn" id="themeToggleBtn" aria-label="Toggle Theme">
-              <span class="theme-switch-icon sun-icon"><i class="fa-solid fa-sun"></i></span>
-              <span class="theme-switch-icon moon-icon"><i class="fa-solid fa-moon"></i></span>
-              <span class="theme-switch-slider"></span>
-            </button>
-          </div>
 
-          <!-- Get Connection Button (Navbar) -->
-          <button class="btn btn-accent btn-nav-connect pulse-glow" id="getConnectionNavBtn" data-bs-toggle="modal" data-bs-target="#registerModal">
-            <i class="fa-solid fa-circle-plus me-2"></i>Get Connection
+        <div class="d-flex align-items-center gap-2 gap-lg-3 ms-lg-4 mt-3 mt-lg-0">
+          <button class="theme-switch-btn" id="themeToggleBtn" aria-label="Toggle Dark/Light Mode" title="Switch Theme (Day/Night)">
+            <i class="fa-solid fa-sun fs-5 text-warning"></i>
           </button>
-          
-          <!-- Admin Login button -->
+          <button class="btn btn-accent pulse-glow" id="getConnectionNavBtn" data-bs-toggle="modal" data-bs-target="#registerModal">
+            <i class="fa-solid fa-bolt me-1"></i> Get Connection
+          </button>
           <button class="btn btn-outline-primary" id="adminLoginBtn">
-            <i class="fa-solid fa-lock me-2"></i>Admin Portal
+            <i class="fa-solid fa-user-shield me-1"></i> Admin Portal
           </button>
         </div>
       </div>
     </div>
   </nav>
 
-  <!-- Toast Notification Container -->
-  <div class="toast-container position-fixed bottom-0 end-0 p-3">
-    <div id="liveToast" class="toast align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true">
-      <div class="d-flex">
-        <div class="toast-body" id="toastMessage">
-          Notification message goes here.
+  <!-- Live Toast Notification System -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 9999;">
+    <div id="liveToast" class="toast glass-card border-0 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex align-items-center">
+        <div class="toast-body fs-6" id="toastMessage">
+          Notification message
         </div>
-        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
       </div>
     </div>
   </div>
 
-  <!-- Landing Page Wrapper (Hidden when Admin Dashboard is active) -->
+  <!-- PUBLIC WEBSITE CONTAINER -->
   <div id="landingPageWrapper">
-
-    <!-- Hero Section -->
-    <header class="hero-section" id="home">
+    
+    <!-- REDESIGNED CENTERED HERO SECTION -->
+    <header class="hero-section-centered" id="home">
       <div class="container">
-        <div class="row align-items-center gy-5">
-          <div class="col-lg-6 text-start reveal active">
-            <span class="hero-price-badge">
-              <i class="fa-solid fa-fire me-2"></i>₹180 for 6 Months Unlimited
-            </span>
-            <h1 class="hero-title fw-extrabold mb-3">
-              Unlimited Internet <br>Built for <span class="gradient-text-blue-cyan">Hostel Students</span>
+        <div class="row justify-content-center">
+          <div class="col-lg-10 text-center">
+            
+            <div class="d-inline-flex align-items-center gap-2 px-3.5 py-1.5 rounded-pill bg-success-subtle border border-success-subtle mb-4">
+              <span class="spinner-grow spinner-grow-sm text-success" role="status" aria-hidden="true"></span>
+              <span class="badge bg-transparent text-success p-0 fw-bold"><i class="fa-solid fa-wifi me-1"></i> ONLINE · 4ms Server Room 10 Fiber Backbone</span>
+            </div>
+
+            <h1 class="hero-title-centered">
+              Primenet: <span class="gradient-text-blue-cyan">Campus Fiber Broadband,</span> Without The Waiting
             </h1>
-            <p class="hero-subtitle">
-              Reliable, high-bandwidth campus broadband. Tailored for study, gaming, and buffer-free streaming without data caps.
+
+            <p class="hero-subtitle-centered">
+              Ultra-fast, reliable hostel broadband with seamless device MAC address auto-connection, zero captive portal logins, and dedicated on-campus Server Room 10 support.
             </p>
-            <div class="d-flex flex-wrap gap-3">
+
+            <div class="d-flex flex-wrap justify-content-center gap-3 mb-5">
               <button class="btn btn-accent btn-lg pulse-glow px-4 py-3" id="getConnectionHeroBtn" data-bs-toggle="modal" data-bs-target="#registerModal">
-                <i class="fa-solid fa-circle-plus me-2"></i>Get Connected
+                <i class="fa-solid fa-rocket me-2"></i> Get Connected
               </button>
-              <a href="#plans" class="btn btn-outline-primary btn-lg px-4 py-3">
-                <i class="fa-solid fa-circle-info me-2"></i>View Plans
+              <a href="#about" class="btn btn-outline-primary btn-lg px-4 py-3" id="btnSpeedtestHero">
+                <i class="fa-solid fa-gauge-high me-2"></i> Check Speed
               </a>
             </div>
-          </div>
-          
-          <div class="col-lg-6 reveal active">
-            <!-- Animated Dashboard widget -->
-            <div class="hero-dashboard glass-card p-4">
-              <!-- Floating network connection lines or background loop -->
-              <div class="d-flex justify-content-between align-items-center mb-4">
-                <div class="d-flex align-items-center gap-2">
-                  <span class="position-relative d-flex h-3 w-3" style="width: 10px; height: 10px;">
-                    <span class="animate-ping position-absolute inline-flex h-full w-full rounded-full bg-success opacity-75" style="border-radius: 50%; width: 100%; height: 100%; background: #10B981; display: inline-block;"></span>
-                    <span class="relative inline-flex rounded-full h-3 w-3 bg-success" style="border-radius: 50%; width: 100%; height: 100%; background: #10B981; display: inline-block;"></span>
-                  </span>
-                  <span class="fw-bold small text-muted">Network Status: Live</span>
+
+            <!-- Real-Time Hero Metrics Bar -->
+            <div class="row g-3 justify-content-center text-start">
+              <div class="col-6 col-md-3">
+                <div class="hero-stat-card">
+                  <span class="hero-stat-number text-primary"><i class="fa-solid fa-microchip me-1"></i> MAC</span>
+                  <span class="text-muted small d-block">Auto Hardware Binding</span>
                 </div>
-                <span class="badge bg-secondary-subtle text-secondary small px-3 py-2 border border-secondary-subtle">
-                  <i class="fa-solid fa-bolt me-1"></i> Gigabit Backbone
-                </span>
               </div>
-              
-              <!-- Animated 3D Isometric Network Illustration -->
-              <div class="network-illustration-wrapper mb-4" style="height: 240px; display: flex; align-items: center; justify-content: center; position: relative;">
-                <svg width="100%" height="100%" viewBox="0 0 400 240" xmlns="http://www.w3.org/2000/svg" style="max-width: 100%;">
-                  <defs>
-                    <linearGradient id="hostelLeftFace" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" stop-color="var(--primary)" stop-opacity="0.8" />
-                      <stop offset="100%" stop-color="var(--purple)" stop-opacity="0.3" />
-                    </linearGradient>
-                    <linearGradient id="hostelRightFace" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" stop-color="var(--secondary)" stop-opacity="0.8" />
-                      <stop offset="100%" stop-color="var(--primary)" stop-opacity="0.3" />
-                    </linearGradient>
-                    <linearGradient id="hostelRoof" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stop-color="var(--secondary)" />
-                      <stop offset="100%" stop-color="var(--primary)" />
-                    </linearGradient>
-                    <linearGradient id="orbitLineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stop-color="var(--primary)" stop-opacity="0.4" />
-                      <stop offset="100%" stop-color="var(--purple)" stop-opacity="0" />
-                    </linearGradient>
-                    <filter id="neonGlow" x="-50%" y="-50%" width="200%" height="200%">
-                      <feGaussianBlur stdDeviation="6" result="blur" />
-                      <feMerge>
-                        <feMergeNode in="blur" />
-                        <feMergeNode in="SourceGraphic" />
-                      </feMerge>
-                    </filter>
-                  </defs>
-
-                  <!-- Base Isometric Grid Platform -->
-                  <path d="M 200 210 L 330 145 L 200 80 L 70 145 Z" fill="rgba(var(--primary-rgb), 0.03)" stroke="rgba(var(--primary-rgb), 0.1)" stroke-width="1.5" />
-                  <path d="M 200 200 L 310 145 L 200 90 L 90 145 Z" fill="rgba(var(--primary-rgb), 0.02)" stroke="rgba(var(--primary-rgb), 0.05)" stroke-width="1" />
-
-                  <!-- Grid connection links crossing -->
-                  <line x1="90" y1="145" x2="310" y2="145" stroke="rgba(var(--primary-rgb), 0.12)" stroke-width="1" stroke-dasharray="3 3" />
-                  <line x1="200" y1="90" x2="200" y2="200" stroke="rgba(var(--primary-rgb), 0.12)" stroke-width="1" stroke-dasharray="3 3" />
-
-                  <!-- Building Stack - Floor 1 -->
-                  <path d="M 160 190 L 200 210 L 200 160 L 160 140 Z" fill="url(#hostelLeftFace)" />
-                  <path d="M 200 210 L 240 190 L 240 140 L 200 160 Z" fill="url(#hostelRightFace)" />
-                  <path d="M 160 140 L 200 160 L 240 140 L 200 120 Z" fill="url(#hostelRoof)" />
-
-                  <!-- Building Stack - Floor 2 -->
-                  <path d="M 165 130 L 200 148 L 200 108 L 165 90 Z" fill="url(#hostelLeftFace)" opacity="0.9" />
-                  <path d="M 200 148 L 235 130 L 235 90 L 200 108 Z" fill="url(#hostelRightFace)" opacity="0.9" />
-                  <path d="M 165 90 L 200 108 L 235 90 L 200 72 Z" fill="url(#hostelRoof)" />
-
-                  <!-- Lit Up Cyber Windows -->
-                  <path d="M 170 170 L 180 175 L 180 165 L 170 160 Z" fill="#00f0ff" filter="url(#neonGlow)" opacity="0.8">
-                    <animate attributeName="opacity" values="0.8;0.3;0.8" dur="4s" repeatCount="indefinite" />
-                  </path>
-                  <path d="M 185 178 L 195 183 L 195 173 L 185 168 Z" fill="#00f0ff" filter="url(#neonGlow)" opacity="0.8">
-                    <animate attributeName="opacity" values="0.3;0.8;0.3" dur="5s" repeatCount="indefinite" />
-                  </path>
-                  <path d="M 205 183 L 215 178 L 215 168 L 205 173 Z" fill="#8B5CF6" filter="url(#neonGlow)" opacity="0.8">
-                    <animate attributeName="opacity" values="0.8;0.2;0.8" dur="4.5s" repeatCount="indefinite" />
-                  </path>
-                  <path d="M 220 175 L 230 170 L 230 160 L 220 165 Z" fill="#8B5CF6" filter="url(#neonGlow)" opacity="0.8">
-                    <animate attributeName="opacity" values="0.2;0.8;0.2" dur="3.5s" repeatCount="indefinite" />
-                  </path>
-
-                  <!-- Floor 2 Windows -->
-                  <path d="M 175 115 L 182 119 L 182 111 L 175 107 Z" fill="#00f0ff" filter="url(#neonGlow)" opacity="0.8">
-                    <animate attributeName="opacity" values="0.8;0.4;0.8" dur="3s" repeatCount="indefinite" />
-                  </path>
-                  <path d="M 218 119 L 225 115 L 225 107 L 218 111 Z" fill="#8B5CF6" filter="url(#neonGlow)" opacity="0.8">
-                    <animate attributeName="opacity" values="0.4;0.8;0.4" dur="4s" repeatCount="indefinite" />
-                  </path>
-
-                  <!-- Server Beacons on top roof -->
-                  <circle cx="200" cy="90" r="2.5" fill="#10B981" filter="url(#neonGlow)">
-                    <animate attributeName="opacity" values="1;0.2;1" dur="2s" repeatCount="indefinite" />
-                  </circle>
-
-                  <!-- WiFi Signal Emitter -->
-                  <line x1="200" y1="90" x2="200" y2="60" stroke="var(--secondary)" stroke-width="2" />
-                  <circle cx="200" cy="58" r="3.5" fill="var(--secondary)" filter="url(#neonGlow)" />
-                  
-                  <path d="M 188 50 A 15 15 0 0 1 212 50" fill="none" stroke="var(--secondary)" stroke-width="2" stroke-linecap="round" opacity="0.8">
-                    <animate attributeName="opacity" values="0.8;0;0.8" dur="3s" repeatCount="indefinite" />
-                    <animate attributeName="stroke-width" values="2;3;2" dur="3s" repeatCount="indefinite" />
-                  </path>
-                  <path d="M 180 43 A 26 26 0 0 1 220 43" fill="none" stroke="var(--primary)" stroke-width="1.8" stroke-linecap="round" opacity="0.6">
-                    <animate attributeName="opacity" values="0;0.6;0" dur="3.5s" repeatCount="indefinite" />
-                  </path>
-                  <path d="M 172 36 A 38 38 0 0 1 228 36" fill="none" stroke="var(--purple)" stroke-width="1.5" stroke-linecap="round" opacity="0.4">
-                    <animate attributeName="opacity" values="0.4;0;0.4" dur="4s" repeatCount="indefinite" />
-                  </path>
-
-                  <!-- Floating Device Orbit lines -->
-                  <ellipse cx="200" cy="115" rx="140" ry="45" fill="none" stroke="url(#orbitLineGrad)" stroke-width="1" transform="rotate(-10, 200, 115)" />
-                  <ellipse cx="200" cy="115" rx="100" ry="32" fill="none" stroke="url(#orbitLineGrad)" stroke-width="1" stroke-dasharray="5 5" transform="rotate(15, 200, 115)" />
-
-                  <!-- Floating Device 1 -->
-                  <g filter="url(#neonGlow)">
-                    <animateTransform attributeName="transform" type="translate" values="0,0; 0,-8; 0,0" dur="4s" repeatCount="indefinite" />
-                    <circle cx="80" cy="95" r="14" fill="rgba(var(--primary-rgb), 0.15)" stroke="var(--primary)" stroke-width="1.5" />
-                    <path d="M 75 95 h 10 M 80 90 v 10" stroke="var(--primary)" stroke-width="1.5" />
-                  </g>
-
-                  <!-- Floating Device 2 -->
-                  <g filter="url(#neonGlow)">
-                    <animateTransform attributeName="transform" type="translate" values="0,0; 0,8; 0,0" dur="5s" repeatCount="indefinite" />
-                    <circle cx="310" cy="80" r="14" fill="rgba(var(--secondary-rgb), 0.15)" stroke="var(--secondary)" stroke-width="1.5" />
-                    <polygon points="307,75 307,85 316,80" fill="var(--secondary)" />
-                  </g>
-
-                  <!-- Floating Device 3 -->
-                  <g filter="url(#neonGlow)">
-                    <animateTransform attributeName="transform" type="translate" values="0,0; 0,-6; 0,0" dur="4.5s" repeatCount="indefinite" />
-                    <circle cx="105" cy="160" r="14" fill="rgba(var(--purple-rgb), 0.15)" stroke="var(--purple)" stroke-width="1.5" />
-                    <rect x="99" y="156" width="12" height="8" rx="1" fill="none" stroke="var(--purple)" stroke-width="1.2" />
-                  </g>
-
-                  <!-- Floating Device 4 -->
-                  <g filter="url(#neonGlow)">
-                    <animateTransform attributeName="transform" type="translate" values="0,0; 0,6; 0,0" dur="3.8s" repeatCount="indefinite" />
-                    <circle cx="305" cy="165" r="14" fill="rgba(var(--accent-rgb), 0.15)" stroke="var(--accent)" stroke-width="1.5" />
-                    <path d="M 301 161 h 8 v 5 a 4 4 0 0 1 -8 0 Z" fill="none" stroke="var(--accent)" stroke-width="1.2" />
-                  </g>
-
-                </svg>
-              </div>
-              
-              <!-- Video card / interactive overlay inside dashboard -->
-              <div class="video-wrapper glass-card overflow-hidden position-relative mb-2" style="border-radius: var(--radius-md);">
-                <div class="video-overlay-details p-3 d-flex justify-content-between align-items-center position-absolute w-100 top-0 start-0 z-3" style="background: linear-gradient(to bottom, rgba(0,0,0,0.4), transparent);">
-                  <span class="badge bg-success"><i class="fa-solid fa-circle-play me-1"></i> Uptime Monitor</span>
-                  <span class="text-white small fw-bold" id="videoBandwidth"><i class="fa-solid fa-chart-simple me-1"></i> Live Stream</span>
+              <div class="col-6 col-md-3">
+                <div class="hero-stat-card">
+                  <span class="hero-stat-number text-success"><i class="fa-solid fa-bolt me-1"></i> 1 Gbps</span>
+                  <span class="text-muted small d-block">Gigabit Backhaul</span>
                 </div>
-                <video id="heroVideo" autoplay loop muted playsinline width="100%" style="height: 150px; object-fit: cover;">
-                  <source src="assets/hero.mp4" type="video/mp4">
-                </video>
-                <div class="video-controls p-2 d-flex justify-content-between align-items-center position-absolute bottom-0 start-0 w-100 z-3" style="background: linear-gradient(to top, rgba(0,0,0,0.4), transparent);">
-                  <button class="btn btn-sm btn-link text-white text-decoration-none border-0 p-1" id="btnPlayPauseVideo" aria-label="Play/Pause Video">
-                    <i class="fa-solid fa-pause"></i>
-                  </button>
-                  <button class="btn btn-sm btn-link text-white text-decoration-none border-0 p-1" id="btnMuteVideo" aria-label="Mute/Unmute Video">
-                    <i class="fa-solid fa-volume-xmark"></i>
-                  </button>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="hero-stat-card">
+                  <span class="hero-stat-number text-accent"><i class="fa-solid fa-laptop me-1"></i> 4</span>
+                  <span class="text-muted small d-block">Devices Per Student</span>
+                </div>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="hero-stat-card">
+                  <span class="hero-stat-number text-warning"><i class="fa-solid fa-indian-rupee-sign me-1"></i> 180</span>
+                  <span class="text-muted small d-block">Semester Package</span>
                 </div>
               </div>
             </div>
+
           </div>
         </div>
       </div>
     </header>
 
-    <!-- Features Section -->
-    <section class="features-section" id="features">
-      <div class="container">
-        <div class="section-header reveal">
-          <span class="badge bg-primary-subtle text-primary mb-2 px-3 py-2 border border-primary-subtle">High-Performance Connection</span>
-          <h2>Key Network Features</h2>
-          <p>Why hostel students trust PrimeNet for lag-free academic and leisure browsing.</p>
-        </div>
-        <div class="row g-4">
-          <!-- Feature 1 -->
-          <div class="col-md-6 col-lg-3 reveal">
-            <div class="glass-card feature-card">
-              <div class="feature-icon-box">
-                <i class="fa-solid fa-infinity"></i>
-              </div>
-              <h4>Unlimited Internet</h4>
-              <p class="text-muted mb-0">No FUP caps or throttling. Enjoy true unlimited bandwidth for heavy downloads and streaming.</p>
-            </div>
-          </div>
-          <!-- Feature 2 -->
-          <div class="col-md-6 col-lg-3 reveal">
-            <div class="glass-card feature-card">
-              <div class="feature-icon-box">
-                <i class="fa-solid fa-bolt"></i>
-              </div>
-              <h4>High Speed Network</h4>
-              <p class="text-muted mb-0">Low latency routing specifically configured to prioritize study resources and multiplayer gaming.</p>
-            </div>
-          </div>
-          <!-- Feature 3 -->
-          <div class="col-md-6 col-lg-3 reveal">
-            <div class="glass-card feature-card">
-              <div class="feature-icon-box">
-                <i class="fa-solid fa-shield-halved"></i>
-              </div>
-              <h4>MAC Authentication</h4>
-              <p class="text-muted mb-0">No browser logins. We link your device's MAC directly to our router for instant passwordless connection.</p>
-            </div>
-          </div>
-          <!-- Feature 4 -->
-          <div class="col-md-6 col-lg-3 reveal">
-            <div class="glass-card feature-card">
-              <div class="feature-icon-box">
-                <i class="fa-solid fa-headset"></i>
-              </div>
-              <h4>24/7 Support</h4>
-              <p class="text-muted mb-0">Our support coordinators reside on campus to resolve issues within minutes of notice.</p>
-            </div>
-          </div>
-          <!-- Feature 5 -->
-          <div class="col-md-6 col-lg-3 reveal">
-            <div class="glass-card feature-card">
-              <div class="feature-icon-box">
-                <i class="fa-solid fa-signal"></i>
-              </div>
-              <h4>Zero Packet Loss</h4>
-              <p class="text-muted mb-0">Engineered with dual fiber ring backbones ensuring packet loss is minimized to 0.00%.</p>
-            </div>
-          </div>
-          <!-- Feature 6 -->
-          <div class="col-md-6 col-lg-3 reveal">
-            <div class="glass-card feature-card">
-              <div class="feature-icon-box">
-                <i class="fa-solid fa-network-wired"></i>
-              </div>
-              <h4>Room-to-Room connectivity</h4>
-              <p class="text-muted mb-0">Secure LAN infrastructure enables low ping intranet gaming and file sharing between rooms.</p>
-            </div>
-          </div>
-          <!-- Feature 7 -->
-          <div class="col-md-6 col-lg-3 reveal">
-            <div class="glass-card feature-card">
-              <div class="feature-icon-box">
-                <i class="fa-solid fa-indian-rupee-sign"></i>
-              </div>
-              <h4>Affordable Plans</h4>
-              <p class="text-muted mb-0">Optimized rate of just ₹30/month (billed semi-annually as ₹180) to suit student budgets.</p>
-            </div>
-          </div>
-          <!-- Feature 8 -->
-          <div class="col-md-6 col-lg-3 reveal">
-            <div class="glass-card feature-card">
-              <div class="feature-icon-box">
-                <i class="fa-solid fa-circle-check"></i>
-              </div>
-              <h4>Instant Activation</h4>
-              <p class="text-muted mb-0">Submit your registration and screenshots, and get activated on the router firewall in minutes.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Why PrimeNet (Timeline & Statistics) -->
-    <section class="why-section" id="why-primenet">
-      <div class="container">
-        <div class="row align-items-center gy-5">
-          <div class="col-lg-5 reveal">
-            <span class="badge bg-success-subtle text-success mb-2 px-3 py-2 border border-success-subtle">Proven Track Record</span>
-            <h2 class="mb-4">Designed Specifically for Hostel Ecosystems</h2>
-            <p class="text-muted mb-4">We don't provide general household internet. PrimeNet manages dense multi-hostel node layouts with load balancing to guarantee each hostel room gets its fair, high-speed chunk of fiber capacity.</p>
-            
-            <!-- Statistics Grid -->
-            <div class="row g-4 text-center mt-2">
-              <div class="col-6">
-                <div class="glass-card stats-counter-box">
-                  <div class="stats-counter-num" data-target="99.9">0</div>
-                  <span class="text-muted small fw-semibold">Uptime Uptime</span>
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="glass-card stats-counter-box">
-                  <div class="stats-counter-num" data-target="1000">0</div>
-                  <span class="text-muted small fw-semibold">Student Nodes</span>
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="glass-card stats-counter-box">
-                  <div class="stats-counter-num" data-target="50">0</div>
-                  <span class="text-muted small fw-semibold">Hostels Covered</span>
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="glass-card stats-counter-box">
-                  <div class="stats-counter-num" data-target="24">0</div>
-                  <span class="text-muted small fw-semibold">Hour Response</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div class="col-lg-7 reveal">
-            <div class="premium-timeline ms-lg-5">
-              <div class="timeline-step">
-                <div class="timeline-dot"></div>
-                <div class="timeline-content glass-card">
-                  <h5 class="text-primary mb-2">Step 1: Router Database Registration</h5>
-                  <p class="text-muted mb-0 small">Device MAC address is whitelisted onto the campus core router, bypassing tedious portal passwords.</p>
-                </div>
-              </div>
-              <div class="timeline-step">
-                <div class="timeline-dot"></div>
-                <div class="timeline-content glass-card">
-                  <h5 class="text-primary mb-2">Step 2: Dual Fiber Ring Redundancy</h5>
-                  <p class="text-muted mb-0 small">Integrated failovers automatically route packets to alternative fiber rings, preventing disconnects during exams.</p>
-                </div>
-              </div>
-              <div class="timeline-step">
-                <div class="timeline-dot"></div>
-                <div class="timeline-content glass-card">
-                  <h5 class="text-primary mb-2">Step 3: Doorstep Support Coordinators</h5>
-                  <p class="text-muted mb-0 small">Assigned hostel technical heads reside in server rooms on the ground floor to fix port issues instantly.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- About Section & Speed Check Redesign -->
+    <!-- LIVE NETWORK SPEED & DIAGNOSTICS LAB -->
     <section class="about-section" id="about">
       <div class="container">
-        <div class="row align-items-center gy-5">
-          <!-- Speed Test Preview -->
-          <div class="col-lg-6 order-lg-2 reveal">
-            <div class="speedtest-card glass-card p-4 text-center">
-              <div class="d-flex justify-content-between align-items-center mb-4">
-                <h5 class="mb-0 text-start"><i class="fa-solid fa-gauge-high text-accent me-2"></i>SpeedCheck Dial</h5>
-                <span class="badge bg-secondary" id="speedtestStatus">Ready</span>
-              </div>
+        <div class="section-header">
+          <span class="badge bg-primary-subtle text-primary mb-2" id="speedtestStatus">Ready</span>
+          <h2>Live Network Speed & Diagnostics Lab</h2>
+          <p>Test your connection throughput, latency, and detect your current IP details in real time.</p>
+        </div>
+
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <div class="glass-card p-4 p-md-5 text-center">
               
-              <!-- Dial circular graphic -->
-              <div class="speedometer-container mb-4">
-                <div class="speedometer-dial">
-                  <svg class="speedometer-ring-svg" viewBox="0 0 200 200">
-                    <defs>
-                      <linearGradient id="speedometer-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#2563EB" />
-                        <stop offset="50%" stop-color="#06B6D4" />
-                        <stop offset="100%" stop-color="#10B981" />
-                      </linearGradient>
-                    </defs>
-                    <path class="speedometer-bg-arc" d="M35 165 A 80 80 0 1 1 165 165" />
-                    <path class="speedometer-fill-arc" id="speedometerArc" d="M35 165 A 80 80 0 1 1 165 165" />
-                  </svg>
-                  <div class="speedometer-needle" id="speedometerNeedle"></div>
-                  <div class="speedometer-center">
-                    <span class="text-muted small text-uppercase">Download</span>
-                    <span class="fs-1 fw-bold gradient-text-blue-cyan" id="speedValue">0.0</span>
-                    <span class="text-muted small fw-semibold">Mbps</span>
+              <!-- Speedometer Gauge SVG -->
+              <div class="speedometer-container">
+                <svg class="speedometer-svg" viewBox="0 0 200 200">
+                  <defs>
+                    <linearGradient id="speedometer-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="var(--primary)" />
+                      <stop offset="50%" stop-color="var(--secondary)" />
+                      <stop offset="100%" stop-color="var(--accent)" />
+                    </linearGradient>
+                  </defs>
+                  <path class="speedometer-bg-arc" d="M35 165 A 80 80 0 1 1 165 165" />
+                  <path class="speedometer-fill-arc" id="speedometerArc" d="M35 165 A 80 80 0 1 1 165 165" />
+                </svg>
+                <div class="speedometer-needle" id="speedometerNeedle"></div>
+              </div>
+
+              <!-- Speed Digital Readout -->
+              <div class="speed-readout mb-4">
+                <span class="fs-1 fw-bold gradient-text-blue-cyan" id="speedValue">0.0</span>
+                <span class="fs-5 text-muted fw-semibold">Mbps</span>
+              </div>
+
+              <!-- Metrics Row (Ping, Intranet, IP) -->
+              <div class="row g-3 mb-4 text-center">
+                <div class="col-6 col-md-3">
+                  <div class="p-3 glass-card">
+                    <span class="text-muted small fw-semibold d-block"><i class="fa-solid fa-earth-americas text-accent me-1"></i> Public Latency</span>
+                    <span class="fs-4 fw-bold text-accent"><span id="pingValue">--</span> <small class="text-muted fs-6">ms</small></span>
+                  </div>
+                </div>
+                <div class="col-6 col-md-3">
+                  <div class="p-3 glass-card">
+                    <span class="text-muted small fw-semibold d-block"><i class="fa-solid fa-network-wired text-primary me-1"></i> Hostel Ping</span>
+                    <span class="fs-4 fw-bold text-primary"><span id="intranetPing">4</span> <small class="text-muted fs-6">ms</small></span>
+                  </div>
+                </div>
+                <div class="col-6 col-md-3">
+                  <div class="p-3 glass-card">
+                    <span class="text-muted small fw-semibold d-block"><i class="fa-solid fa-location-dot text-info me-1"></i> IPv4 Address</span>
+                    <span id="ipv4Status" class="fw-semibold small text-truncate d-block">Detecting...</span>
+                  </div>
+                </div>
+                <div class="col-6 col-md-3">
+                  <div class="p-3 glass-card">
+                    <span class="text-muted small fw-semibold d-block"><i class="fa-solid fa-server text-success me-1"></i> ISP Provider</span>
+                    <span id="ispStatus" class="fw-semibold small text-truncate d-block">Detecting...</span>
                   </div>
                 </div>
               </div>
-              
-              <!-- Latency & Ping statistics -->
-              <div class="row text-center mb-3">
-                <div class="col-6">
-                  <div class="small text-muted mb-1">Ping Latency</div>
-                  <div class="fs-4 fw-bold text-accent"><span id="pingValue">--</span> <small style="font-size: 0.8rem;" class="text-muted">ms</small></div>
-                </div>
-                <div class="col-6">
-                  <div class="small text-muted mb-1">Intranet Ping</div>
-                  <div class="fs-4 fw-bold text-primary"><span id="intranetPing">4</span> <small style="font-size: 0.8rem;" class="text-muted">ms</small></div>
-                </div>
-              </div>
 
-              <!-- IP & Network status information -->
-              <div class="p-3 bg-secondary-subtle border rounded-3 mb-4 text-start" style="font-size: 0.85rem;">
-                <div class="d-flex justify-content-between mb-2">
-                  <span class="text-muted">IPv4 Address:</span>
-                  <span id="ipv4Status" class="fw-semibold text-truncate">Click check to detect</span>
-                </div>
-                <div class="d-flex justify-content-between mb-2">
-                  <span class="text-muted">IPv6 Address:</span>
-                  <span id="ipv6Status" class="fw-semibold text-truncate text-accent">Click check to detect</span>
-                </div>
-                <div class="d-flex justify-content-between">
-                  <span class="text-muted">Gateway ISP:</span>
-                  <span id="ispStatus" class="fw-semibold text-truncate" style="max-width: 200px;">Click check to detect</span>
-                </div>
-              </div>
+              <span id="ipv6Status" class="d-none">Detecting...</span>
 
-              <div class="d-grid">
-                <button class="btn btn-accent btn-lg" id="btnStartSpeedtest">
-                  <i class="fa-solid fa-circle-nodes me-2"></i>Run Speed Check
-                </button>
-              </div>
+              <button class="btn btn-accent btn-lg px-5 py-3 pulse-glow" id="btnStartSpeedtest">
+                <i class="fa-solid fa-play me-2"></i> Start Speed Test
+              </button>
             </div>
           </div>
-
-          <!-- About Text Content -->
-          <div class="col-lg-6 order-lg-1 reveal">
-            <span class="badge bg-primary-subtle text-primary mb-2 px-3 py-2 border border-primary-subtle">About PrimeNet</span>
-            <h2 class="mb-4">Connecting Students to a Faster Future</h2>
-            <p class="text-muted mb-4">PrimeNet Hostel Broadband Management System is custom-designed for educational campus environments. We specialize in managing dense network loads while ensuring each individual room receives high-speed, secure, and low-latency bandwidth.</p>
-            <ul class="about-list mb-4 p-0">
-              <li class="position-relative ps-4 mb-3">
-                <i class="fa-solid fa-circle-check text-accent position-absolute start-0 top-1"></i>
-                <strong>MAC-Authenticated Security:</strong> We register your device's MAC address directly to our router database for password-free, secure logins.
-              </li>
-              <li class="position-relative ps-4 mb-3">
-                <i class="fa-solid fa-circle-check text-accent position-absolute start-0 top-1"></i>
-                <strong>Room-to-Room Mapping:</strong> Enables structured troubleshooting and network health checks across hostel buildings.
-              </li>
-              <li class="position-relative ps-4 mb-3">
-                <i class="fa-solid fa-circle-check text-accent position-absolute start-0 top-1"></i>
-                <strong>Student Budget-Friendly:</strong> Optimized rate structuring at just ₹30/month (billed semi-annually as ₹180 for 6 months).
-              </li>
-              <li class="position-relative ps-4 mb-3">
-                <i class="fa-solid fa-circle-check text-accent position-absolute start-0 top-1"></i>
-                <strong>High Availability:</strong> Secondary backup links ensure 99.9% uptime during crucial exam and class times.
-              </li>
-            </ul>
-            <button class="btn btn-accent btn-lg" data-bs-toggle="modal" data-bs-target="#registerModal">
-              <i class="fa-solid fa-circle-plus me-2"></i>Apply for Connection
-            </button>
-          </div>
         </div>
       </div>
     </section>
 
-    <!-- Network map interactive visualization -->
-    <section class="network-map-section" id="network-map">
-      <div class="container text-center">
-        <div class="section-header reveal">
-          <span class="badge bg-primary-subtle text-primary mb-2 px-3 py-2 border border-primary-subtle">Network Topology</span>
-          <h2>Campus Coverage Map</h2>
-          <p>Real-time health status of primary fiber switches and hostel distribution distribution nodes.</p>
-        </div>
-        <div class="row justify-content-center reveal">
-          <div class="col-lg-10">
-            <!-- Animated SVG Network Coverage Map -->
-            <svg class="network-map-svg" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#2563EB" stop-opacity="0.8"/>
-                  <stop offset="100%" stop-color="#06B6D4" stop-opacity="0.8"/>
-                </linearGradient>
-              </defs>
-              <!-- Server Hub node -->
-              <g transform="translate(400, 200)">
-                <circle r="35" fill="#2563EB" opacity="0.1"/>
-                <circle r="25" fill="#2563EB" opacity="0.2"/>
-                <circle class="node-pulse" r="18" fill="#2563EB" opacity="0.4"/>
-                <circle r="10" fill="#2563EB"/>
-                <text y="-40" text-anchor="middle" fill="currentColor" font-weight="bold" font-size="12">Core Fiber Server Hub</text>
-              </g>
-
-              <!-- Hostel Distribution Node A -->
-              <g transform="translate(150, 100)">
-                <circle r="22" fill="#06B6D4" opacity="0.1"/>
-                <circle class="node-pulse" r="14" fill="#06B6D4" opacity="0.3"/>
-                <circle r="7" fill="#06B6D4"/>
-                <text y="-25" text-anchor="middle" fill="currentColor" font-size="11">Hostel Block-A (Active)</text>
-              </g>
-
-              <!-- Hostel Distribution Node B -->
-              <g transform="translate(650, 100)">
-                <circle r="22" fill="#06B6D4" opacity="0.1"/>
-                <circle class="node-pulse" r="14" fill="#06B6D4" opacity="0.3"/>
-                <circle r="7" fill="#06B6D4"/>
-                <text y="-25" text-anchor="middle" fill="currentColor" font-size="11">Hostel Block-B (Active)</text>
-              </g>
-
-              <!-- Hostel Distribution Node C -->
-              <g transform="translate(150, 300)">
-                <circle r="22" fill="#06B6D4" opacity="0.1"/>
-                <circle class="node-pulse" r="14" fill="#06B6D4" opacity="0.3"/>
-                <circle r="7" fill="#06B6D4"/>
-                <text y="25" text-anchor="middle" fill="currentColor" font-size="11">Hostel Block-C (Active)</text>
-              </g>
-
-              <!-- Hostel Distribution Node D -->
-              <g transform="translate(650, 300)">
-                <circle r="22" fill="#06B6D4" opacity="0.1"/>
-                <circle class="node-pulse" r="14" fill="#06B6D4" opacity="0.3"/>
-                <circle r="7" fill="#06B6D4"/>
-                <text y="25" text-anchor="middle" fill="currentColor" font-size="11">Hostel Block-D (Active)</text>
-              </g>
-
-              <!-- Connections -->
-              <path d="M 400 200 L 150 100" stroke="url(#lineGrad)" stroke-width="2" fill="none" class="line-flow"/>
-              <path d="M 400 200 L 650 100" stroke="url(#lineGrad)" stroke-width="2" fill="none" class="line-flow"/>
-              <path d="M 400 200 L 150 300" stroke="url(#lineGrad)" stroke-width="2" fill="none" class="line-flow"/>
-              <path d="M 400 200 L 650 300" stroke="url(#lineGrad)" stroke-width="2" fill="none" class="line-flow"/>
-            </svg>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Plans/Services section -->
-    <section class="services-section" id="services">
+    <!-- BROADBAND CONNECTION PLANS -->
+    <section class="services-section plans-section" id="plans">
       <div class="container">
-        <div class="section-header reveal">
-          <span class="badge bg-primary-subtle text-primary mb-2 px-3 py-2 border border-primary-subtle">Our Core Services</span>
-          <h2>Campus Services</h2>
-          <p>Complete network allocation, support, and router configuration services.</p>
+        <div class="section-header">
+          <span class="badge bg-primary-subtle text-primary mb-2"><i class="fa-solid fa-layer-group me-1"></i> High-Speed Packages</span>
+          <h2>Hostel Broadband Connection Plans</h2>
+          <p>Choose your plan and register your MAC address instantly.</p>
         </div>
-        <div class="row g-4" id="plans">
-          <!-- Service 1 -->
-          <div class="col-md-6 col-lg-3 reveal">
-            <div class="glass-card feature-card d-flex flex-column justify-content-between">
+
+        <div class="row g-4 justify-content-center text-start" id="plansRow">
+          <!-- Plan 1 -->
+          <div class="col-md-6 col-lg-4">
+            <div class="glass-card plan-card">
               <div>
-                <div class="feature-icon-box" style="background: rgba(var(--accent-rgb), 0.08); color: var(--accent);">
-                  <i class="fa-solid fa-plug"></i>
-                </div>
-                <h4 class="mb-3">New Connection</h4>
-                <p class="text-muted mb-4 small">Instant registration and activation of internet ports or WiFi mappings for your specific hostel room.</p>
+                <span class="badge bg-primary-subtle text-primary mb-3"><i class="fa-solid fa-graduation-cap me-1"></i> Standard Hostel</span>
+                <h4 class="fw-bold"><i class="fa-solid fa-wifi text-primary me-2"></i>Prime Basic</h4>
+                <p class="small text-muted">Ideal for study, browsing & video lectures.</p>
+                <div class="plan-price"><i class="fa-solid fa-indian-rupee-sign fs-5"></i>180 <span>/ semester</span></div>
+                
+                <ul class="plan-features-list">
+                  <li><i class="fa-solid fa-gauge text-primary"></i> Up to 50 Mbps Speed</li>
+                  <li><i class="fa-solid fa-laptop text-primary"></i> 1 Primary MAC Address</li>
+                  <li><i class="fa-solid fa-infinity text-primary"></i> Unlimited Data Download</li>
+                  <li><i class="fa-solid fa-headset text-primary"></i> Campus Support Access</li>
+                </ul>
               </div>
-              <button class="btn btn-outline-primary btn-sm align-self-start" data-bs-toggle="modal" data-bs-target="#registerModal">Get Started</button>
+
+              <button class="btn btn-outline-primary w-100 mt-4" data-bs-toggle="modal" data-bs-target="#registerModal">
+                <i class="fa-solid fa-arrow-right me-1"></i> Select Plan
+              </button>
             </div>
           </div>
-          <!-- Service 2 -->
-          <div class="col-md-6 col-lg-3 reveal">
-            <div class="glass-card feature-card d-flex flex-column justify-content-between">
+
+          <!-- Plan 2 (Featured) -->
+          <div class="col-md-6 col-lg-4">
+            <div class="glass-card plan-card featured">
+              <div class="plan-badge"><i class="fa-solid fa-star me-1"></i> MOST POPULAR</div>
               <div>
-                <div class="feature-icon-box" style="background: rgba(var(--secondary-rgb), 0.08); color: var(--secondary);">
-                  <i class="fa-solid fa-screwdriver-wrench"></i>
-                </div>
-                <h4 class="mb-3">Technical Support</h4>
-                <p class="text-muted mb-4 small">Hardware replacement, router configurations, and LAN line troubleshooting available right at your doorstep.</p>
+                <span class="badge bg-accent-subtle text-accent mb-3"><i class="fa-solid fa-fire me-1"></i> Pro Student</span>
+                <h4 class="fw-bold"><i class="fa-solid fa-bolt text-accent me-2"></i>Prime Turbo</h4>
+                <p class="small text-muted">Designed for heavy streaming, gaming & coding.</p>
+                <div class="plan-price"><i class="fa-solid fa-indian-rupee-sign fs-5"></i>180 <span>/ semester</span></div>
+                
+                <ul class="plan-features-list">
+                  <li><i class="fa-solid fa-gauge-high text-accent"></i> Up to 100 Mbps Speed</li>
+                  <li><i class="fa-solid fa-network-wired text-accent"></i> Up to 4 MAC Addresses</li>
+                  <li><i class="fa-solid fa-shield-halved text-accent"></i> Zero Throttling Guarantee</li>
+                  <li><i class="fa-solid fa-server text-accent"></i> Priority Server Room Support</li>
+                </ul>
               </div>
-              <a href="#contact" class="btn btn-outline-primary btn-sm align-self-start">Request Help</a>
+
+              <button class="btn btn-accent w-100 mt-4 pulse-glow" data-bs-toggle="modal" data-bs-target="#registerModal">
+                <i class="fa-solid fa-bolt me-1"></i> Get Connected Now
+              </button>
             </div>
           </div>
-          <!-- Service 3 -->
-          <div class="col-md-6 col-lg-3 reveal">
-            <div class="glass-card feature-card d-flex flex-column justify-content-between">
+
+          <!-- Plan 3 -->
+          <div class="col-md-6 col-lg-4">
+            <div class="glass-card plan-card">
               <div>
-                <div class="feature-icon-box">
-                  <i class="fa-solid fa-chart-line"></i>
-                </div>
-                <h4 class="mb-3">Network Monitoring</h4>
-                <p class="text-muted mb-4 small">Continuous monitoring of signal quality, latency, and router load to ensure consistent packet flows.</p>
+                <span class="badge bg-primary-subtle text-primary mb-3"><i class="fa-solid fa-crown me-1"></i> Ultra Speed</span>
+                <h4 class="fw-bold"><i class="fa-solid fa-rocket text-primary me-2"></i>Prime Ultra</h4>
+                <p class="small text-muted">Maximum throughput for power users.</p>
+                <div class="plan-price"><i class="fa-solid fa-indian-rupee-sign fs-5"></i>180 <span>/ semester</span></div>
+                
+                <ul class="plan-features-list">
+                  <li><i class="fa-solid fa-bolt-lightning text-primary"></i> Gigabit Fiber Access</li>
+                  <li><i class="fa-solid fa-laptop-code text-primary"></i> Multi-Device Auto-Link</li>
+                  <li><i class="fa-solid fa-gamepad text-primary"></i> Low Ping Gaming Mode</li>
+                  <li><i class="fa-solid fa-phone-volume text-primary"></i> 24/7 Priority Tech Line</li>
+                </ul>
               </div>
-              <a href="#about" class="btn btn-outline-primary btn-sm align-self-start">Run Check</a>
-            </div>
-          </div>
-          <!-- Service 4 -->
-          <div class="col-md-6 col-lg-3 reveal">
-            <div class="glass-card feature-card d-flex flex-column justify-content-between">
-              <div>
-                <div class="feature-icon-box" style="background: rgba(var(--purple-rgb), 0.08); color: var(--purple);">
-                  <i class="fa-solid fa-gears"></i>
-                </div>
-                <h4 class="mb-3">Internet Management</h4>
-                <p class="text-muted mb-4 small">Administrative tools for quick bandwidth allocation, MAC approvals, and status tracking.</p>
-              </div>
-              <button class="btn btn-outline-primary btn-sm align-self-start" data-bs-toggle="modal" data-bs-target="#loginModal">Admin Portal</button>
+
+              <button class="btn btn-outline-primary w-100 mt-4" data-bs-toggle="modal" data-bs-target="#registerModal">
+                <i class="fa-solid fa-arrow-right me-1"></i> Select Plan
+              </button>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Founders Section -->
+    <!-- BENTO WHY PRIMENET GRID -->
+    <section class="why-section" id="why-primenet">
+      <div class="container">
+        <div class="section-header">
+          <span class="badge bg-accent-subtle text-accent mb-2">Superior Technology</span>
+          <h2>Why PrimeNet is the #1 Hostel Choice</h2>
+          <p>Unmatched speed, effortless access, and transparent semester pricing.</p>
+        </div>
+
+        <div class="bento-grid text-start">
+          <!-- Card 1: Fiber Speed (Large) -->
+          <div class="glass-card bento-card bento-card-lg">
+            <div>
+              <div class="d-flex align-items-center gap-2 mb-3">
+                <div class="bento-icon m-0" style="width: 44px; height: 44px;"><i class="fa-solid fa-tower-broadcast"></i></div>
+                <div class="badge bg-primary-subtle text-primary">Pure Fiber Backbone</div>
+              </div>
+              <h3 class="fw-bold mb-3">Ultra-Reliable Dual Band Coverage</h3>
+              <p>Our hostel infrastructure deploys high-density dual-band access points ensuring full coverage across all floors, study halls, and common rooms without packet dropouts.</p>
+            </div>
+            <div class="mt-4 pt-3 border-top border-secondary-subtle d-flex justify-content-between align-items-center">
+              <span class="fw-bold text-primary"><i class="fa-solid fa-bolt me-1"></i> 5GHz & 2.4GHz Auto-Switching</span>
+              <span class="badge bg-success-subtle text-success"><i class="fa-solid fa-shield-check me-1"></i> 99.9% Uptime SLA</span>
+            </div>
+          </div>
+
+          <!-- Card 2: Passwordless (Medium) -->
+          <div class="glass-card bento-card bento-card-md">
+            <div>
+              <div class="bento-icon"><i class="fa-solid fa-key"></i></div>
+              <h4 class="fw-bold mb-2">Zero Portal Logins</h4>
+              <p class="small">No annoying web portals asking for passwords every morning. Direct hardware router authentication.</p>
+            </div>
+            <div class="mt-3">
+              <span class="text-success small fw-semibold"><i class="fa-solid fa-check-circle me-1"></i> Instant Connection</span>
+            </div>
+          </div>
+
+          <!-- Card 3: Semester Pricing (Small) -->
+          <div class="glass-card bento-card bento-card-sm">
+            <div>
+              <div class="bento-icon"><i class="fa-solid fa-wallet"></i></div>
+              <h4 class="fw-bold mb-2">Students First Pricing</h4>
+              <p class="small">Affordable flat fee of ₹180 for full 6-month semester coverage with zero hidden fees.</p>
+            </div>
+          </div>
+
+          <!-- Card 4: On-Site Support (Large) -->
+          <div class="glass-card bento-card bento-card-lg">
+            <div>
+              <div class="d-flex align-items-center gap-2 mb-3">
+                <div class="bento-icon m-0" style="width: 44px; height: 44px;"><i class="fa-solid fa-headset"></i></div>
+                <div class="badge bg-accent-subtle text-accent">On-Campus Network Team</div>
+              </div>
+              <h3 class="fw-bold mb-3">Direct Server Room 10 Support</h3>
+              <p>Experiencing a loose wall jack or line query? Visit our Server Room 10 in Hostel Block-C for immediate hardware inspection or raise a ticket instantly.</p>
+            </div>
+            <div class="mt-3">
+              <a href="#contact" class="btn btn-sm btn-outline-primary"><i class="fa-solid fa-phone me-1"></i> Contact Server Room</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CUSTOMER CONTROL CENTER SECTION -->
+    <section class="control-center-section" id="control-center">
+      <div class="container">
+        <div class="section-header">
+          <span class="badge bg-primary-subtle text-primary mb-2">Customer Hub</span>
+          <h2>Customer Control Center</h2>
+          <p>Quick access to essential services, payments, MAC management, and line support.</p>
+        </div>
+
+        <div class="row g-4 text-start">
+          <div class="col-md-4">
+            <div class="glass-card control-card">
+              <div>
+                <div class="bento-icon"><i class="fa-solid fa-wallet"></i></div>
+                <h5 class="fw-bold mb-2">Pay Semester Bill</h5>
+                <p class="small">Scan UPI QR code and submit your ₹180 payment receipt directly online.</p>
+              </div>
+              <button class="btn btn-outline-primary btn-sm mt-3 w-100" data-bs-toggle="modal" data-bs-target="#registerModal">
+                <i class="fa-solid fa-qrcode me-1"></i> Pay Now
+              </button>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="glass-card control-card">
+              <div>
+                <div class="bento-icon"><i class="fa-solid fa-microchip"></i></div>
+                <h5 class="fw-bold mb-2">Manage MAC Addresses</h5>
+                <p class="small">Register up to 4 device MAC addresses for instant passwordless connection.</p>
+              </div>
+              <button class="btn btn-outline-primary btn-sm mt-3 w-100" data-bs-toggle="modal" data-bs-target="#registerModal">
+                <i class="fa-solid fa-plus me-1"></i> Register MACs
+              </button>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="glass-card control-card">
+              <div>
+                <div class="bento-icon"><i class="fa-solid fa-headset"></i></div>
+                <h5 class="fw-bold mb-2">Server Room Support</h5>
+                <p class="small">Contact network engineers at Server Room 10 for physical line inspections.</p>
+              </div>
+              <a href="#contact" class="btn btn-outline-primary btn-sm mt-3 w-100">
+                <i class="fa-solid fa-phone me-1"></i> Contact Support
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ALL THREE PRIMENET FOUNDERS / LEADERSHIP SECTION -->
     <section class="founders-section" id="founders">
       <div class="container">
-        <div class="section-header reveal">
-          <span class="badge bg-primary-subtle text-primary mb-2 px-3 py-2 border border-primary-subtle">Leadership Team</span>
+        <div class="section-header">
+          <span class="badge bg-primary-subtle text-primary mb-2">Leadership Team</span>
           <h2>Meet Our Founders</h2>
           <p>The visionaries behind PrimeNet Hostel Broadband, striving to deliver seamless campus connectivity.</p>
         </div>
-        <div class="row g-4 justify-content-center">
-          <!-- Founder 1 -->
-          <div class="col-md-4 reveal">
-            <div class="glass-card founder-card text-center">
-              <div class="founder-img-container">
-                <img src="assets/admin1.JPG" alt="Shakti Prasad Hota" loading="lazy">
+
+        <div class="row g-4 justify-content-center text-start">
+          <!-- Founder 1: Shakti Prasad Hota -->
+          <div class="col-md-4">
+            <div class="glass-card p-4 text-center h-100 d-flex flex-column justify-content-between">
+              <div>
+                <div class="mb-3 mx-auto rounded-circle overflow-hidden border border-2 border-primary" style="width: 100px; height: 100px;">
+                  <img src="assets/admin1.JPG" alt="Shakti Prasad Hota" class="img-fluid w-100 h-100 object-fit-cover">
+                </div>
+                <h4 class="fw-bold mb-1">Shakti Prasad Hota</h4>
+                <span class="text-primary small fw-semibold d-block mb-2">Co-Founder & CEO</span>
+                <p class="small text-muted mb-3">Leading operations and strategic growth to power hostel communities.</p>
               </div>
-              <h4>Shakti Prasad Hota</h4>
-              <p class="text-primary small mb-2 fw-semibold">Co-Founder & CEO</p>
-              <p class="text-muted small px-2">Leading operations and strategic growth to power hostel communities.</p>
-              <div class="founder-socials">
-                <a href="https://shakti69.github.io/" target="_blank" title="Portfolio Website"><i class="fa-solid fa-globe"></i></a>
-                <a href="https://github.com/shakti69" target="_blank" title="GitHub"><i class="fa-brands fa-github"></i></a>
-                <a href="#" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
-                <a href="mailto:support@primenet.local" title="Email"><i class="fa-solid fa-envelope"></i></a>
-              </div>
-            </div>
-          </div>
-          <!-- Founder 2 -->
-          <div class="col-md-4 reveal">
-            <div class="glass-card founder-card text-center">
-              <div class="founder-img-container">
-                <img src="assets/admin2.JPG" alt="Prabina Kumar Sahoo" loading="lazy">
-              </div>
-              <h4>Prabina Kumar Sahoo</h4>
-              <p class="text-primary small mb-2 fw-semibold">Co-Founder & CTO</p>
-              <p class="text-muted small px-2">Driving technical innovation and maintaining high-speed network reliability.</p>
-              <div class="founder-socials">
-                <a href="https://github.com/prabinakumar07" target="_blank" title="Portfolio Website"><i class="fa-solid fa-globe"></i></a>
-                <a href="https://github.com/prabinakumar07" target="_blank" title="GitHub"><i class="fa-brands fa-github"></i></a>
-                <a href="#" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
-                <a href="mailto:support@primenet.local" title="Email"><i class="fa-solid fa-envelope"></i></a>
+              <div class="d-flex justify-content-center gap-3 pt-2 border-top border-secondary-subtle">
+                <a href="https://shakti69.github.io/" target="_blank" rel="noopener" class="footer-social-pill" title="Portfolio Website"><i class="fa-solid fa-globe"></i></a>
+                <a href="https://github.com/shakti69" target="_blank" rel="noopener" class="footer-social-pill" title="GitHub"><i class="fa-brands fa-github"></i></a>
+                <a href="mailto:support@primenet.local" class="footer-social-pill" title="Email"><i class="fa-solid fa-envelope"></i></a>
               </div>
             </div>
           </div>
-          <!-- Founder 3 -->
-          <div class="col-md-4 reveal">
-            <div class="glass-card founder-card text-center">
-              <div class="founder-img-container">
-                <img src="assets/admin3.JPG" alt="Biswa Bhushana Satpathy" loading="lazy">
+
+          <!-- Founder 2: Prabina Kumar Sahoo -->
+          <div class="col-md-4">
+            <div class="glass-card p-4 text-center h-100 d-flex flex-column justify-content-between">
+              <div>
+                <div class="mb-3 mx-auto rounded-circle overflow-hidden border border-2 border-primary" style="width: 100px; height: 100px;">
+                  <img src="assets/admin2.JPG" alt="Prabina Kumar Sahoo" class="img-fluid w-100 h-100 object-fit-cover">
+                </div>
+                <h4 class="fw-bold mb-1">Prabina Kumar Sahoo</h4>
+                <span class="text-primary small fw-semibold d-block mb-2">Co-Founder & CTO</span>
+                <p class="small text-muted mb-3">Driving technical innovation and maintaining high-speed network reliability.</p>
               </div>
-              <h4>Biswa Bhushana Satpathy</h4>
-              <p class="text-primary small mb-2 fw-semibold">Co-Founder & Lead Architect</p>
-              <p class="text-muted small px-2">Designing robust network backbones and structural hardware routing.</p>
-              <div class="founder-socials">
-                <a href="https://universeluxury.vercel.app/" target="_blank" title="Portfolio Website"><i class="fa-solid fa-globe"></i></a>
-                <a href="#" target="_blank" title="GitHub"><i class="fa-brands fa-github"></i></a>
-                <a href="#" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
-                <a href="mailto:support@primenet.local" title="Email"><i class="fa-solid fa-envelope"></i></a>
+              <div class="d-flex justify-content-center gap-3 pt-2 border-top border-secondary-subtle">
+                <a href="https://github.com/prabinakumar07" target="_blank" rel="noopener" class="footer-social-pill" title="Portfolio Website"><i class="fa-solid fa-globe"></i></a>
+                <a href="https://github.com/prabinakumar07" target="_blank" rel="noopener" class="footer-social-pill" title="GitHub"><i class="fa-brands fa-github"></i></a>
+                <a href="mailto:support@primenet.local" class="footer-social-pill" title="Email"><i class="fa-solid fa-envelope"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Founder 3: Biswa Bhushana Satpathy -->
+          <div class="col-md-4">
+            <div class="glass-card p-4 text-center h-100 d-flex flex-column justify-content-between">
+              <div>
+                <div class="mb-3 mx-auto rounded-circle overflow-hidden border border-2 border-primary" style="width: 100px; height: 100px;">
+                  <img src="assets/admin3.JPG" alt="Biswa Bhushana Satpathy" class="img-fluid w-100 h-100 object-fit-cover">
+                </div>
+                <h4 class="fw-bold mb-1">Biswa Bhushana Satpathy</h4>
+                <span class="text-primary small fw-semibold d-block mb-2">Co-Founder & Lead Architect</span>
+                <p class="small text-muted mb-3">Designing robust network backbones and structural hardware routing.</p>
+              </div>
+              <div class="d-flex justify-content-center gap-3 pt-2 border-top border-secondary-subtle">
+                <a href="https://universeluxury.vercel.app/" target="_blank" rel="noopener" class="footer-social-pill" title="Portfolio Website"><i class="fa-solid fa-globe"></i></a>
+                <a href="mailto:support@primenet.local" class="footer-social-pill" title="Email"><i class="fa-solid fa-envelope"></i></a>
               </div>
             </div>
           </div>
@@ -756,102 +531,18 @@
       </div>
     </section>
 
-    <!-- Testimonials Section with custom sliding track -->
-    <section class="testimonials-section" id="testimonials">
-      <div class="container">
-        <div class="section-header reveal">
-          <span class="badge bg-primary-subtle text-primary mb-2 px-3 py-2 border border-primary-subtle">Student Success</span>
-          <h2>What Hostel Students Say</h2>
-          <p>See reviews from verified hostel students who rely on PrimeNet daily.</p>
-        </div>
-        <div class="testimonial-marquee reveal">
-          <div class="marquee-track">
-            <!-- Review 1 -->
-            <div class="glass-card testimonial-card-premium">
-              <div class="d-flex align-items-center gap-3 mb-3">
-                <div style="width: 48px; height: 48px; border-radius: 50%; overflow: hidden; border: 2px solid var(--primary);">
-                  <img src="assets/profile.jpg" alt="Student avatar" class="img-fluid">
-                </div>
-                <div>
-                  <h6 class="mb-0 fw-bold">Rahul Sharma</h6>
-                  <span class="text-success small fw-semibold"><i class="fa-solid fa-circle-check"></i> Verified Room 304</span>
-                </div>
-              </div>
-              <p class="text-muted mb-2 small">"The MAC login is a life saver. I just walk into my hostel room and my laptop and phone link instantly. 80Mbps avg is perfect for gaming!"</p>
-              <div class="text-warning small"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-            </div>
-            <!-- Review 2 -->
-            <div class="glass-card testimonial-card-premium">
-              <div class="d-flex align-items-center gap-3 mb-3">
-                <div style="width: 48px; height: 48px; border-radius: 50%; overflow: hidden; border: 2px solid var(--primary); background: #64748B; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold;">
-                  AP
-                </div>
-                <div>
-                  <h6 class="mb-0 fw-bold">Ananya Patel</h6>
-                  <span class="text-success small fw-semibold"><i class="fa-solid fa-circle-check"></i> Verified Room 102</span>
-                </div>
-              </div>
-              <p class="text-muted mb-2 small">"Super cheap! Paying ₹180 for a full six months is basically free. Uptime is great, especially during exam weeks when we study late."</p>
-              <div class="text-warning small"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-            </div>
-            <!-- Review 3 -->
-            <div class="glass-card testimonial-card-premium">
-              <div class="d-flex align-items-center gap-3 mb-3">
-                <div style="width: 48px; height: 48px; border-radius: 50%; overflow: hidden; border: 2px solid var(--primary); background: #3B82F6; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold;">
-                  VJ
-                </div>
-                <div>
-                  <h6 class="mb-0 fw-bold">Vikram Jha</h6>
-                  <span class="text-success small fw-semibold"><i class="fa-solid fa-circle-check"></i> Verified Room 408</span>
-                </div>
-              </div>
-              <p class="text-muted mb-2 small">"Zero buffer streams on YouTube. When I had a port breakdown on my wall, the Support Head fixed it within 1 hour."</p>
-              <div class="text-warning small"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i></div>
-            </div>
-            <!-- Duplicate reviews for loop -->
-            <div class="glass-card testimonial-card-premium">
-              <div class="d-flex align-items-center gap-3 mb-3">
-                <div style="width: 48px; height: 48px; border-radius: 50%; overflow: hidden; border: 2px solid var(--primary);">
-                  <img src="assets/profile.jpg" alt="Student avatar" class="img-fluid">
-                </div>
-                <div>
-                  <h6 class="mb-0 fw-bold">Rahul Sharma</h6>
-                  <span class="text-success small fw-semibold"><i class="fa-solid fa-circle-check"></i> Verified Room 304</span>
-                </div>
-              </div>
-              <p class="text-muted mb-2 small">"The MAC login is a life saver. I just walk into my hostel room and my laptop and phone link instantly. 80Mbps avg is perfect for gaming!"</p>
-              <div class="text-warning small"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-            </div>
-            <div class="glass-card testimonial-card-premium">
-              <div class="d-flex align-items-center gap-3 mb-3">
-                <div style="width: 48px; height: 48px; border-radius: 50%; overflow: hidden; border: 2px solid var(--primary); background: #64748B; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold;">
-                  AP
-                </div>
-                <div>
-                  <h6 class="mb-0 fw-bold">Ananya Patel</h6>
-                  <span class="text-success small fw-semibold"><i class="fa-solid fa-circle-check"></i> Verified Room 102</span>
-                </div>
-              </div>
-              <p class="text-muted mb-2 small">"Super cheap! Paying ₹180 for a full six months is basically free. Uptime is great, especially during exam weeks when we study late."</p>
-              <div class="text-warning small"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- FAQ Accordion section -->
+    <!-- FAQ ACCORDION -->
     <section class="faq-section" id="faq">
       <div class="container">
-        <div class="section-header reveal">
-          <span class="badge bg-primary-subtle text-primary mb-2 px-3 py-2 border border-primary-subtle">Common Queries</span>
+        <div class="section-header">
+          <span class="badge bg-primary-subtle text-primary mb-2">Common Queries</span>
           <h2>Frequently Asked Questions</h2>
-          <p>Get answers to common queries about registration, MAC addresses, and support.</p>
+          <p>Clear answers regarding registration, MAC addresses, and payment details.</p>
         </div>
-        <div class="row justify-content-center reveal">
+
+        <div class="row justify-content-center text-start">
           <div class="col-lg-8">
             <div class="accordion" id="faqAccordion">
-              <!-- Item 1 -->
               <div class="accordion-item accordion-item-glass">
                 <h2 class="accordion-header">
                   <button class="accordion-button accordion-button-glass collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
@@ -861,11 +552,11 @@
                 </h2>
                 <div id="collapseOne" class="accordion-collapse accordion-collapse-glass collapse" data-bs-parent="#faqAccordion">
                   <div class="accordion-body-glass">
-                    A Media Access Control (MAC) address is a unique identifier assigned to your device's network card. For Android/iOS: Go to Settings -> About Phone/Status -> Device WiFi MAC address. We map this address directly to our router database so you don't have to enter passwords every time you connect.
+                    A Media Access Control (MAC) address is a unique 12-character identifier assigned to your device's network card. On Android/iOS: Go to Settings -> About Phone/Status -> Device WiFi MAC address. We map this address directly to our router database.
                   </div>
                 </div>
               </div>
-              <!-- Item 2 -->
+
               <div class="accordion-item accordion-item-glass">
                 <h2 class="accordion-header">
                   <button class="accordion-button accordion-button-glass collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
@@ -875,21 +566,21 @@
                 </h2>
                 <div id="collapseTwo" class="accordion-collapse accordion-collapse-glass collapse" data-bs-parent="#faqAccordion">
                   <div class="accordion-body-glass">
-                    Yes. Under the student dashboard portal, administrators can register up to 4 distinct MAC addresses (phone, laptop, tablet, Smart TV) for a single student record without additional billing.
+                    Yes! Up to 4 distinct MAC addresses (phone, laptop, tablet, Smart TV) can be linked per student record.
                   </div>
                 </div>
               </div>
-              <!-- Item 3 -->
+
               <div class="accordion-item accordion-item-glass">
                 <h2 class="accordion-header">
                   <button class="accordion-button accordion-button-glass collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                    <span>How do I pay the ₹180 fee?</span>
+                    <span>How do I pay the ₹180 semester fee?</span>
                     <i class="fa-solid fa-plus ms-auto text-primary"></i>
                   </button>
                 </h2>
                 <div id="collapseThree" class="accordion-collapse accordion-collapse-glass collapse" data-bs-parent="#faqAccordion">
                   <div class="accordion-body-glass">
-                    When you click "Get Connection", a registration form opens showing the administrator's payment UPI QR code. Scan the QR code with any UPI application (GPay, PhonePe, Paytm), pay ₹180, take a screenshot of the payment receipt, and upload it in the form.
+                    When you click "Get Connection", the form displays our admin UPI QR code. Scan with any UPI app (GPay, PhonePe, Paytm), pay ₹180, take a screenshot of the payment receipt, and upload it in the form.
                   </div>
                 </div>
               </div>
@@ -899,48 +590,43 @@
       </div>
     </section>
 
-    <!-- Contact & Map Section -->
+    <!-- CONTACT & SUPPORT -->
     <section class="contact-section" id="contact">
       <div class="container">
-        <div class="section-header reveal">
-          <span class="badge bg-primary-subtle text-primary mb-2 px-3 py-2 border border-primary-subtle">Get In Touch</span>
-          <h2>Contact Campus Support</h2>
-          <p>Reach out to hostel broadband network heads for line repairs or support.</p>
+        <div class="section-header">
+          <span class="badge bg-primary-subtle text-primary mb-2">Get In Touch</span>
+          <h2>Campus Server Room Support</h2>
+          <p>Reach out to hostel network heads for line repairs or account queries.</p>
         </div>
-        <div class="row g-4 justify-content-center reveal">
+
+        <div class="row g-4 justify-content-center text-start">
           <div class="col-md-4">
-            <div class="glass-card contact-info-card h-100 flex-column text-start">
-              <div class="d-flex align-items-center mb-3">
-                <div class="contact-info-icon">
-                  <i class="fa-solid fa-phone"></i>
-                </div>
-                <h5 class="mb-0">Call Support</h5>
+            <div class="glass-card p-4 h-100">
+              <div class="d-flex align-items-center mb-3 gap-3">
+                <div class="bento-icon m-0" style="width: 44px; height: 44px;"><i class="fa-solid fa-phone"></i></div>
+                <h5 class="mb-0 fw-bold">Call Support</h5>
               </div>
               <p class="text-muted mb-1 small" id="displayContactPhone">+91 98765 43210</p>
               <span class="text-muted small">Hours: Mon - Sat (9am - 8pm)</span>
             </div>
           </div>
-          
+
           <div class="col-md-4">
-            <div class="glass-card contact-info-card h-100 flex-column text-start">
-              <div class="d-flex align-items-center mb-3">
-                <div class="contact-info-icon">
-                  <i class="fa-solid fa-envelope"></i>
-                </div>
-                <h5 class="mb-0">Email Support</h5>
+            <div class="glass-card p-4 h-100">
+              <div class="d-flex align-items-center mb-3 gap-3">
+                <div class="bento-icon m-0" style="width: 44px; height: 44px;"><i class="fa-solid fa-envelope"></i></div>
+                <h5 class="mb-0 fw-bold">Email Support</h5>
               </div>
               <p class="text-muted mb-1 small" id="displayContactEmail">support@primenet.local</p>
-              <span class="text-muted small">Avg Response: within 2 hours</span>
+              <span class="text-muted small">Response time: within 2 hours</span>
             </div>
           </div>
-          
+
           <div class="col-md-4">
-            <div class="glass-card contact-info-card h-100 flex-column text-start">
-              <div class="d-flex align-items-center mb-3">
-                <div class="contact-info-icon">
-                  <i class="fa-solid fa-location-dot"></i>
-                </div>
-                <h5 class="mb-0">Server Room</h5>
+            <div class="glass-card p-4 h-100">
+              <div class="d-flex align-items-center mb-3 gap-3">
+                <div class="bento-icon m-0" style="width: 44px; height: 44px;"><i class="fa-solid fa-location-dot"></i></div>
+                <h5 class="mb-0 fw-bold">Server Room</h5>
               </div>
               <p class="text-muted mb-0 small" id="displayContactAddress1">Hostel Block-C, Server Room 10</p>
               <p class="text-muted mb-0 small" id="displayContactAddress2">Campus Ground, Pin 751024</p>
@@ -952,50 +638,50 @@
 
   </div>
 
-  <!-- Admin Dashboard Container (Hidden initially, visible to logged-in admins) -->
+  <!-- ADMIN DASHBOARD CONTAINER (Visible to authorized logged-in admin) -->
   <div id="adminDashboardWrapper" class="dashboard-container">
     <div class="container-fluid px-xl-5 px-lg-4 px-3">
       
       <!-- Dashboard Header -->
       <div class="d-flex flex-wrap justify-content-between align-items-center mb-5 gap-3">
         <div>
-          <span class="badge bg-primary-subtle text-primary mb-2 px-3 py-1 border border-primary-subtle">Admin Management Portal</span>
-          <h2 class="mb-0">Broadband Control Panel</h2>
-          <p class="text-muted small">Review pending connection requests, manage registered MACs, and broadcast announcements.</p>
+          <span class="badge bg-primary-subtle text-primary mb-2">Admin Portal</span>
+          <h2 class="mb-0 fw-bold">Broadband Management Panel</h2>
+          <p class="text-muted small">Manage student registrations, verify payment screenshots, and broadcast emails.</p>
         </div>
         <div class="d-flex flex-wrap gap-2">
           <button class="btn btn-outline-primary btn-sm" id="btnOpenContactModal" data-bs-toggle="modal" data-bs-target="#contactModal">
-            <i class="fa-solid fa-address-book me-2"></i>Contact Details
+            <i class="fa-solid fa-address-book me-1"></i> Contact Details
           </button>
           <button class="btn btn-outline-primary btn-sm" id="btnOpenEmailConfigModal" data-bs-toggle="modal" data-bs-target="#emailConfigModal">
-            <i class="fa-solid fa-envelope me-2"></i>Brevo Config
+            <i class="fa-solid fa-envelope me-1"></i> Brevo Config
           </button>
           <button class="btn btn-outline-danger btn-sm" id="btnToggleSpeedtest">
-            <i class="fa-solid fa-eye-slash me-2"></i>Hide Speed Test
+            <i class="fa-solid fa-eye-slash me-1"></i> Toggle Speed Test
           </button>
           <button class="btn btn-outline-primary btn-sm" id="btnExportMac">
-            <i class="fa-solid fa-download me-2"></i>Export Accepted MACs
+            <i class="fa-solid fa-download me-1"></i> Export MACs
           </button>
           <div class="dropdown d-inline-block">
             <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" id="btnCopyAllMacDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="fa-solid fa-copy me-2"></i>Copy MACs
+              <i class="fa-solid fa-copy me-1"></i> Copy MACs
             </button>
-            <ul class="dropdown-menu dropdown-menu-glass dropdown-menu-end shadow" aria-labelledby="btnCopyAllMacDropdown">
-              <li><a class="dropdown-item" href="#" id="optCopyStudents"><i class="fa-solid fa-graduation-cap me-2 text-primary"></i>Accepted Student MACs</a></li>
+            <ul class="dropdown-menu dropdown-menu-glass shadow" aria-labelledby="btnCopyAllMacDropdown">
+              <li><a class="dropdown-item" href="#" id="optCopyStudents"><i class="fa-solid fa-graduation-cap me-2 text-primary"></i>Student MACs</a></li>
               <li><a class="dropdown-item" href="#" id="optCopyNecessary"><i class="fa-solid fa-server me-2 text-info"></i>Necessary MACs</a></li>
               <li><a class="dropdown-item" href="#" id="optCopyGuest"><i class="fa-solid fa-users-line me-2 text-success"></i>Guest MACs</a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="#" id="optCopyCombined"><i class="fa-solid fa-layer-group me-2 text-warning"></i>All MACs Combined</a></li>
+              <li><a class="dropdown-item" href="#" id="optCopyCombined"><i class="fa-solid fa-layer-group me-2 text-warning"></i>All Combined</a></li>
             </ul>
           </div>
           <button class="btn btn-accent btn-sm" id="btnExportCsv">
-            <i class="fa-solid fa-file-csv me-2"></i>Export CSV
+            <i class="fa-solid fa-file-csv me-1"></i> Export CSV
           </button>
         </div>
       </div>
 
       <!-- Stats Cards -->
-      <div class="row g-4 mb-5">
+      <div class="row g-4 mb-5 text-start">
         <div class="col-sm-6 col-lg-3">
           <div class="admin-stats-panel glass-card">
             <div>
@@ -1006,7 +692,7 @@
           </div>
         </div>
         <div class="col-sm-6 col-lg-3">
-          <div class="admin-stats-panel pending glass-card">
+          <div class="admin-stats-panel glass-card">
             <div>
               <span class="text-muted fw-semibold small">Pending Requests</span>
               <div class="stats-number text-warning" id="statPending">0</div>
@@ -1015,7 +701,7 @@
           </div>
         </div>
         <div class="col-sm-6 col-lg-3">
-          <div class="admin-stats-panel accepted glass-card">
+          <div class="admin-stats-panel glass-card">
             <div>
               <span class="text-muted fw-semibold small">Accepted Users</span>
               <div class="stats-number text-success" id="statAccepted">0</div>
@@ -1024,7 +710,7 @@
           </div>
         </div>
         <div class="col-sm-6 col-lg-3">
-          <div class="admin-stats-panel rejected glass-card">
+          <div class="admin-stats-panel glass-card">
             <div>
               <span class="text-muted fw-semibold small">Rejected Users</span>
               <div class="stats-number text-danger" id="statRejected">0</div>
@@ -1034,11 +720,11 @@
         </div>
       </div>
 
-      <!-- Recent Activity Row -->
-      <div class="row g-4 mb-5">
+      <!-- Recent Activity Log -->
+      <div class="row g-4 mb-5 text-start">
         <div class="col-12">
           <div class="glass-card p-4">
-            <h5 class="mb-4 text-primary"><i class="fa-solid fa-clock-rotate-left me-2"></i>Recent Activity</h5>
+            <h5 class="mb-4 text-primary"><i class="fa-solid fa-clock-rotate-left me-2"></i>Recent Signups</h5>
             <div id="recentActivityList" class="list-group list-group-flush" style="max-height: 250px; overflow-y: auto;">
               <div class="text-center text-muted py-3">No recent signups</div>
             </div>
@@ -1046,15 +732,12 @@
         </div>
       </div>
 
-      <!-- Filters & Search Toolbar -->
-      <div class="glass-card p-4 mb-4">
+      <!-- Search & Filters Toolbar -->
+      <div class="glass-card p-4 mb-4 text-start">
         <div class="row g-3 align-items-end">
           <div class="col-md-3">
-            <label class="form-label small text-muted">Search User</label>
-            <div class="input-group">
-              <span class="input-group-text bg-transparent border-end-0 text-muted" style="border: 1px solid var(--card-border); border-radius: var(--radius-md) 0 0 var(--radius-md);"><i class="fa-solid fa-magnifying-glass"></i></span>
-              <input type="text" class="form-control border-start-0" id="searchBar" placeholder="Search by name, room, MAC..." style="border-radius: 0 var(--radius-md) var(--radius-md) 0 !important;">
-            </div>
+            <label class="form-label small text-muted">Search Records</label>
+            <input type="text" class="form-control" id="searchBar" placeholder="Search by name, room, MAC...">
           </div>
           <div class="col-sm-6 col-md-2">
             <label class="form-label small text-muted">Sort By</label>
@@ -1068,9 +751,9 @@
             </select>
           </div>
           <div class="col-sm-6 col-md-2">
-            <label class="form-label small text-muted">Filter by Status</label>
+            <label class="form-label small text-muted">Filter Status</label>
             <select class="form-select" id="filterStatus">
-              <option value="All">All Registrations</option>
+              <option value="All">All Statuses</option>
               <option value="Pending">Pending</option>
               <option value="Accepted">Accepted</option>
               <option value="Rejected">Rejected</option>
@@ -1079,7 +762,7 @@
           <div class="col-sm-6 col-md-2">
             <label class="form-label small text-muted">Payment Status</label>
             <select class="form-select" id="filterPaymentStatus">
-              <option value="All">All Statuses</option>
+              <option value="All">All Payments</option>
               <option value="Paid">Paid</option>
               <option value="Unpaid">Unpaid</option>
               <option value="Partially Paid">Partially Paid</option>
@@ -1093,39 +776,39 @@
               <option value="C">Cash (C)</option>
             </select>
           </div>
-          <div class="col-md-1 d-grid mt-auto">
-            <button class="btn btn-outline-primary w-100" id="btnClearFilters" title="Clear Filters" style="height: 38px;">
+          <div class="col-md-1 d-grid">
+            <button class="btn btn-outline-primary" id="btnClearFilters" title="Clear Filters">
               <i class="fa-solid fa-rotate-left"></i>
             </button>
           </div>
         </div>
       </div>
 
-      <!-- Results Count & Title Header -->
-      <div class="d-flex justify-content-between align-items-center mb-3 px-1">
-        <h5 class="mb-0 text-secondary" style="font-size: 1.1rem; font-weight: 600;"><i class="fa-solid fa-list me-2"></i>Registrations</h5>
-        <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-3 py-2" id="filterResultsCount" style="font-size: 0.85rem; font-weight: 600;">0 results found</span>
+      <!-- Results Count Bar -->
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="mb-0 text-secondary fw-semibold"><i class="fa-solid fa-list me-2"></i>Student Records</h5>
+        <span class="badge bg-secondary-subtle text-secondary" id="filterResultsCount">0 results found</span>
       </div>
 
-      <!-- User Management Table -->
-      <div class="admin-table-card glass-card p-0 overflow-hidden shadow-sm mb-5">
+      <!-- Student Management Data Table -->
+      <div class="admin-table-card glass-card mb-5 text-start">
         <div class="table-responsive">
           <table class="table table-custom-premium align-middle">
             <thead>
               <tr>
-                <th scope="col">Student Name</th>
-                <th scope="col">Contact Info</th>
-                <th scope="col">Room Details</th>
-                <th scope="col">Pay Method</th>
-                <th scope="col">MAC Address</th>
-                <th scope="col">Status</th>
-                <th scope="col" class="text-center">Actions</th>
+                <th>Student Name</th>
+                <th>Contact Info</th>
+                <th>Room Details</th>
+                <th>Pay Method</th>
+                <th>MAC Address</th>
+                <th>Status</th>
+                <th class="text-center">Actions</th>
               </tr>
             </thead>
             <tbody id="studentTableBody">
               <tr>
                 <td colspan="7" class="text-center text-muted py-5">
-                  <i class="fa-solid fa-folder-open fa-2x mb-3 d-block text-light"></i>
+                  <i class="fa-solid fa-folder-open fa-2x mb-3 d-block"></i>
                   No student registrations found.
                 </td>
               </tr>
@@ -1134,90 +817,71 @@
         </div>
       </div>
 
-      <!-- Mail Broadcast Portal Card -->
-      <div class="glass-card p-4 mb-5">
-        <h4 class="mb-3 text-primary"><i class="fa-solid fa-paper-plane me-2"></i>Mail Broadcast Portal</h4>
-        <p class="text-muted small mb-4">Send an announcement or update email to all registered students or specific subgroups (Pending, Accepted, Rejected).</p>
+      <!-- Broadcast Email Portal Card -->
+      <div class="glass-card p-4 mb-5 text-start">
+        <h4 class="mb-3 text-primary"><i class="fa-solid fa-paper-plane me-2"></i>Broadcast Portal</h4>
+        <p class="text-muted small mb-4">Send email updates to registered students or targeted sub-groups.</p>
         
         <div class="alert alert-danger d-none" id="broadcastAlert" role="alert"></div>
         <div class="alert alert-success d-none" id="broadcastSuccessAlert" role="alert"></div>
         
-        <form id="broadcastForm" class="needs-validation" novalidate>
+        <form id="broadcastForm" novalidate>
           <div class="row g-3">
             <div class="col-md-4">
-              <label for="broadcastRecipients" class="form-label small fw-semibold">Target Group</label>
+              <label for="broadcastRecipients" class="form-label small fw-semibold">Target Audience</label>
               <select class="form-select" id="broadcastRecipients" required>
                 <option value="" disabled selected>Select group</option>
                 <option value="All">All Registered Students</option>
-                <option value="Pending">Pending Students Only</option>
-                <option value="Accepted">Accepted Students Only</option>
-                <option value="Rejected">Rejected Students Only</option>
+                <option value="Pending">Pending Only</option>
+                <option value="Accepted">Accepted Only</option>
+                <option value="Rejected">Rejected Only</option>
               </select>
-              <div class="invalid-feedback">Please select a target group.</div>
             </div>
             
             <div class="col-md-8">
-              <label for="broadcastSubject" class="form-label small fw-semibold">Email Subject</label>
-              <input type="text" class="form-control" id="broadcastSubject" required placeholder="e.g. Important Maintenance Notice - PrimeNet">
-              <div class="invalid-feedback">Please enter an email subject.</div>
+              <label for="broadcastSubject" class="form-label small fw-semibold">Subject</label>
+              <input type="text" class="form-control" id="broadcastSubject" required placeholder="Subject title...">
             </div>
             
             <div class="col-12">
-              <label for="broadcastMessage" class="form-label small fw-semibold">Email Message Body</label>
-              <textarea class="form-control" id="broadcastMessage" rows="5" required placeholder="Type your message here. HTML formatting is supported."></textarea>
-              <div class="invalid-feedback">Please enter the email message.</div>
+              <label for="broadcastMessage" class="form-label small fw-semibold">Message Body</label>
+              <textarea class="form-control" id="broadcastMessage" rows="5" required placeholder="Type broadcast message body..."></textarea>
             </div>
             
             <div class="col-12 d-flex justify-content-end mt-4">
               <button type="submit" class="btn btn-accent" id="btnBroadcastSubmit">
-                <i class="fa-solid fa-bullhorn me-2"></i>Send Broadcast Email
+                <i class="fa-solid fa-bullhorn me-2"></i> Send Broadcast Email
               </button>
             </div>
           </div>
         </form>
       </div>
 
-      <!-- Other MAC Addresses Portal (Necessary & Guest) -->
-      <div class="row g-4 mb-5">
-        <!-- Necessary MAC Addresses Card -->
+      <!-- MAC Address Managers -->
+      <div class="row g-4 mb-5 text-start">
         <div class="col-md-6">
           <div class="glass-card p-4 h-100">
             <div class="d-flex justify-content-between align-items-center mb-3">
               <h4 class="mb-0 text-primary"><i class="fa-solid fa-server me-2"></i>Necessary MACs</h4>
               <button class="btn btn-sm btn-outline-primary" id="btnCopyAllNecessary">
-                <i class="fa-solid fa-copy me-1"></i>Copy All
+                <i class="fa-solid fa-copy me-1"></i> Copy
               </button>
             </div>
-            <p class="text-muted small mb-3">Store internal admin devices, server components, or campus hardware MACs (one MAC per line).</p>
-            <div class="mb-3">
-              <textarea class="form-control" id="necessaryMacList" rows="6" placeholder="e.g. AA:BB:CC:DD:EE:01&#10;AA:BB:CC:DD:EE:02" style="font-family: monospace; font-size: 0.9rem;"></textarea>
-            </div>
-            <div class="d-flex justify-content-end">
-              <button class="btn btn-primary btn-sm" id="btnSaveNecessary">
-                <i class="fa-solid fa-floppy-disk me-1"></i>Save MACs
-              </button>
-            </div>
+            <textarea class="form-control mb-3" id="necessaryMacList" rows="6" placeholder="One MAC per line..."></textarea>
+            <button class="btn btn-primary btn-sm" id="btnSaveNecessary">Save MACs</button>
           </div>
         </div>
 
-        <!-- Guest MAC Addresses Card -->
         <div class="col-md-6">
           <div class="glass-card p-4 h-100">
             <div class="d-flex justify-content-between align-items-center mb-3">
               <h4 class="mb-0 text-primary"><i class="fa-solid fa-users-line me-2"></i>Guest MACs</h4>
               <button class="btn btn-sm btn-outline-primary" id="btnCopyAllGuest">
-                <i class="fa-solid fa-copy me-1"></i>Copy All
+                <i class="fa-solid fa-copy me-1"></i> Copy
               </button>
             </div>
-            <p class="text-muted small mb-3">Store temporary guest logins, visitors, event coordinators, or short-term device MAC addresses (one MAC per line).</p>
-            <div class="mb-3">
-              <textarea class="form-control" id="guestMacList" rows="6" placeholder="e.g. 11:22:33:44:55:66&#10;22:33:44:55:66:77" style="font-family: monospace; font-size: 0.9rem;"></textarea>
-            </div>
-            <div class="d-flex justify-content-end">
-              <button class="btn btn-primary btn-sm" id="btnSaveGuest">
-                <i class="fa-solid fa-floppy-disk me-1"></i>Save MACs
-              </button>
-            </div>
+            <textarea class="form-control mb-3" id="guestMacList" rows="6" placeholder="One MAC per line..."></textarea>
+            <button class="btn btn-primary btn-sm" id="btnSaveGuest">Save MACs</button>
           </div>
         </div>
       </div>
@@ -1225,47 +889,61 @@
     </div>
   </div>
 
-  <!-- FOOTER -->
-  <footer class="footer-premium">
+  <!-- FOOTER (INCLUDING REUSED PAYMENT QR CODE ASSET) -->
+  <footer class="footer-premium text-start">
     <div class="container">
-      <div class="row g-4 mb-4 text-start">
-        <!-- Column 1 -->
-        <div class="col-md-4">
-          <h5 class="text-white fw-bold mb-3"><i class="fa-solid fa-wifi me-2 text-primary"></i>PrimeNet</h5>
-          <p class="small text-muted" style="max-width: 280px;">High-speed, unlimited broadband internet custom-designed for educational campus environments.</p>
+      <div class="row g-4 mb-4">
+        <div class="col-md-3">
+          <h5 class="fw-bold mb-3" style="color: var(--text-color);"><i class="fa-solid fa-wifi text-primary me-2"></i>PrimeNet</h5>
+          <p class="small text-muted mb-3">High-speed, unlimited fiber broadband internet designed for campus hostel living.</p>
+          <span class="badge bg-success-subtle text-success"><i class="fa-solid fa-shield-halved me-1"></i> Official Campus ISP</span>
         </div>
-        <!-- Column 2 -->
-        <div class="col-md-4">
-          <h5 class="text-white fw-bold mb-3">Quick Links</h5>
+
+        <div class="col-md-3">
+          <h5 class="fw-bold mb-3" style="color: var(--text-color);">Quick Links</h5>
           <ul class="list-unstyled footer-links-list">
             <li><a href="#home">Home</a></li>
-            <li><a href="#features">Features</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#services">Services</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li><a href="#about">Diagnostics Lab</a></li>
+            <li><a href="#plans">Broadband Plans</a></li>
+            <li><a href="#why-primenet">Why PrimeNet</a></li>
+            <li><a href="#founders">Leadership Team</a></li>
+            <li><a href="#contact">Campus Support</a></li>
           </ul>
         </div>
-        <!-- Column 3 -->
-        <div class="col-md-4">
-          <h5 class="text-white fw-bold mb-3">Contact Details</h5>
-          <p class="small mb-2 text-muted">Email: <span id="footerDisplayEmail" class="text-white">support@primenet.local</span></p>
+
+        <div class="col-md-3">
+          <h5 class="fw-bold mb-3" style="color: var(--text-color);">Server Room 10</h5>
+          <p class="small mb-2 text-muted">Email: <span id="footerDisplayEmail" class="fw-semibold" style="color: var(--text-color);">support@primenet.local</span></p>
           <p class="small mb-3 text-muted">Location: Hostel Block-C, Server Room 10</p>
           <div class="d-flex gap-2">
-            <a href="#" id="footerInstagram" target="_blank" rel="noopener noreferrer" class="footer-social-pill"><i class="fa-brands fa-instagram"></i></a>
-            <a href="#" id="footerFacebook" target="_blank" rel="noopener noreferrer" class="footer-social-pill"><i class="fa-brands fa-facebook-f"></i></a>
-            <a href="#" id="footerYoutube" target="_blank" rel="noopener noreferrer" class="footer-social-pill"><i class="fa-brands fa-youtube"></i></a>
+            <a href="#" id="footerInstagram" target="_blank" rel="noopener noreferrer" class="footer-social-pill" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" id="footerFacebook" target="_blank" rel="noopener noreferrer" class="footer-social-pill" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" id="footerYoutube" target="_blank" rel="noopener noreferrer" class="footer-social-pill" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+          </div>
+        </div>
+
+        <!-- Reused Scannable Payment QR Code Card -->
+        <div class="col-md-3">
+          <div class="footer-qr-card">
+            <span class="text-primary small fw-bold mb-2"><i class="fa-solid fa-qrcode me-1"></i> Scan to Pay / Continue</span>
+            <img src="assets/payment_qr.png" alt="PrimeNet UPI Payment QR Code" class="footer-qr-img mb-2">
+            <span class="small text-muted text-center" style="font-size: 0.78rem;">UPI Payment QR · ₹180</span>
+            <a id="footerDownloadQrBtn" href="assets/payment_qr.png" download="payment_qr.png" class="btn btn-outline-primary btn-sm mt-2 px-3 py-1 text-nowrap">
+              <i class="fa-solid fa-download me-1"></i> Download QR
+            </a>
           </div>
         </div>
       </div>
-      <hr style="border-color: rgba(255,255,255,0.06); margin: 2rem 0;">
+
+      <hr style="border-color: var(--card-border); opacity: 0.8;">
       <div class="text-center text-muted small">
-        <p class="mb-0">&copy; 2026 PRIMENET | All rights reserved. Designed by PrimeNet.</p>
+        <p class="mb-0">&copy; 2026 PRIMENET | All Rights Reserved. Designed for Campus Excellence.</p>
       </div>
     </div>
   </footer>
 
-  <!-- BUTTON SCROLL TO TOP -->
-  <button class="scroll-top-btn" id="scrollTopBtn" aria-label="Scroll to top" title="Scroll to Top">
+  <!-- SCROLL TO TOP BUTTON -->
+  <button class="scroll-top-btn" id="scrollTopBtn" aria-label="Scroll to top">
     <i class="fa-solid fa-arrow-up"></i>
   </button>
 
@@ -1274,9 +952,9 @@
   <!-- 1. REGISTRATION MODAL -->
   <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content glass-card">
+      <div class="modal-content glass-card text-start">
         <div class="modal-header border-0 pb-0">
-          <h5 class="modal-title fs-4" id="registerModalLabel">Get Connection Request</h5>
+          <h5 class="modal-title fs-4 fw-bold" id="registerModalLabel">Get Connection Request</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body py-4">
@@ -1287,7 +965,6 @@
             <div class="contact-input-wrapper">
               <input type="text" id="regName" required placeholder="Student Full Name">
               <i class="fa-solid fa-user"></i>
-              <div class="invalid-feedback">Please enter your name.</div>
             </div>
 
             <div class="row g-2">
@@ -1295,14 +972,12 @@
                 <div class="contact-input-wrapper">
                   <input type="tel" id="regMobile" required placeholder="Mobile Number" pattern="\d{10}">
                   <i class="fa-solid fa-phone"></i>
-                  <div class="invalid-feedback">Enter a valid 10-digit mobile.</div>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="contact-input-wrapper">
                   <input type="email" id="regEmail" required placeholder="Email ID">
                   <i class="fa-solid fa-envelope"></i>
-                  <div class="invalid-feedback">Enter a valid email.</div>
                 </div>
               </div>
             </div>
@@ -1312,7 +987,6 @@
                 <div class="contact-input-wrapper">
                   <input type="text" id="regRoomNumber" required placeholder="Room Number">
                   <i class="fa-solid fa-door-closed"></i>
-                  <div class="invalid-feedback">Enter room number.</div>
                 </div>
               </div>
               <div class="col-md-6">
@@ -1323,7 +997,6 @@
                     <option value="B">B</option>
                   </select>
                   <i class="fa-solid fa-bed"></i>
-                  <div class="invalid-feedback">Select room type.</div>
                 </div>
               </div>
             </div>
@@ -1331,8 +1004,7 @@
             <div class="contact-input-wrapper">
               <input type="text" id="regMac" required placeholder="Device MAC Address (e.g. AA:BB:CC:DD:EE:01)">
               <i class="fa-solid fa-microchip"></i>
-              <div class="form-text text-muted small mt-1">How to get: Settings -> Search "MAC" -> Copy WiFi MAC address.</div>
-              <div class="invalid-feedback">Enter a valid MAC address (e.g. AA:BB:CC:DD:EE:01).</div>
+              <div class="form-text text-muted small mt-1">Found under Device Settings -> WiFi MAC Address.</div>
             </div>
 
             <div class="contact-input-wrapper mb-3">
@@ -1342,23 +1014,20 @@
                 <option value="C">Cash Payment</option>
               </select>
               <i class="fa-solid fa-wallet"></i>
-              <div class="invalid-feedback">Select payment method.</div>
             </div>
 
-            <!-- Payment Step -->
             <div id="paymentInstructionsBlock" class="mb-4 p-3 rounded-3 border" style="background: rgba(0, 0, 0, 0.02); border-color: var(--card-border) !important;">
               <h6 class="fw-bold mb-2 text-primary" id="paymentInstructionsTitle"><i class="fa-solid fa-qrcode me-2"></i>Pay ₹180 for Registration</h6>
-              <p class="small text-muted mb-3" id="paymentInstructionsText">Scan the QR code below using any UPI app to pay ₹180, then upload the payment screenshot.</p>
+              <p class="small text-muted mb-3" id="paymentInstructionsText">Scan the UPI QR code below using any UPI app (GPay, PhonePe, Paytm) to pay ₹180, then upload the payment screenshot.</p>
               <div class="text-center mb-3" id="qrCodeContainer">
-                <img id="registerQrCode" src="/favicon.png" alt="Payment QR Code" class="img-fluid rounded border shadow-sm p-1" style="max-height: 180px; display: block; margin: 0 auto 10px auto;">
-                <a id="downloadQrBtn" href="/favicon.png" download="payment_qr.png" class="btn btn-outline-primary btn-sm mt-1 px-3">
+                <img id="registerQrCode" src="assets/payment_qr.png" alt="Payment UPI QR Code" class="img-fluid rounded border shadow-sm p-1" style="max-height: 180px; display: block; margin: 0 auto 10px auto;">
+                <a id="downloadQrBtn" href="assets/payment_qr.png" download="payment_qr.png" class="btn btn-outline-primary btn-sm mt-1 px-3">
                   <i class="fa-solid fa-download me-1"></i> Download QR Code
                 </a>
               </div>
               <div id="screenshotContainer">
                 <label for="regScreenshot" class="form-label small fw-semibold text-muted">Upload Payment Screenshot *</label>
                 <input type="file" class="form-control" id="regScreenshot" accept="image/*" required>
-                <div class="invalid-feedback">Please upload your payment screenshot.</div>
               </div>
             </div>
 
@@ -1376,9 +1045,9 @@
   <!-- 2. ADMIN LOGIN MODAL -->
   <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-sm">
-      <div class="modal-content glass-card">
+      <div class="modal-content glass-card text-start">
         <div class="modal-header border-0 pb-0">
-          <h5 class="modal-title fs-4" id="loginModalLabel">Admin Portal</h5>
+          <h5 class="modal-title fs-4 fw-bold" id="loginModalLabel">Admin Portal</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body py-4">
@@ -1407,9 +1076,9 @@
   <!-- 3. EDIT REGISTRATION MODAL -->
   <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content glass-card">
+      <div class="modal-content glass-card text-start">
         <div class="modal-header border-0 pb-0">
-          <h5 class="modal-title fs-4" id="editModalLabel">Modify Registration Record</h5>
+          <h5 class="modal-title fs-4 fw-bold" id="editModalLabel">Modify Registration Record</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body py-4">
@@ -1503,9 +1172,6 @@
                   <i class="fa-solid fa-wallet"></i>
                 </div>
               </div>
-              <div class="col-md-6">
-                <!-- spacing -->
-              </div>
             </div>
 
             <div class="row g-2">
@@ -1548,7 +1214,7 @@
     <div class="modal-dialog modal-dialog-centered modal-sm">
       <div class="modal-content glass-card">
         <div class="modal-header border-0 pb-0">
-          <h5 class="modal-title fs-5" id="deleteConfirmModalLabel">Confirm Deletion</h5>
+          <h5 class="modal-title fs-5 fw-bold" id="deleteConfirmModalLabel">Confirm Deletion</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body text-center py-4">
@@ -1567,9 +1233,9 @@
   <!-- 5. CONTACT CONFIGURATION MODAL -->
   <div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content glass-card">
+      <div class="modal-content glass-card text-start">
         <div class="modal-header border-0 pb-0">
-          <h5 class="modal-title fs-4" id="contactModalLabel">Update Contact Information</h5>
+          <h5 class="modal-title fs-4 fw-bold" id="contactModalLabel">Update Contact Information</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body py-4">
@@ -1588,7 +1254,7 @@
               <i class="fa-solid fa-location-dot"></i>
             </div>
             <div class="contact-input-wrapper">
-              <input type="text" id="contactAddress2" required placeholder="Address Line 2 (City / ZIP)">
+              <input type="text" id="contactAddress2" required placeholder="Address Line 2">
               <i class="fa-solid fa-map-pin"></i>
             </div>
             <div class="contact-input-wrapper">
@@ -1607,7 +1273,7 @@
             <div class="mb-3 p-3 rounded-3 border" style="background: rgba(0,0,0,0.02); border-color: var(--card-border) !important;">
               <label class="form-label small fw-semibold text-muted">Payment QR Code Image</label>
               <div class="text-center mb-2">
-                <img id="contactQrCodePreview" src="/favicon.png" alt="QR Code Preview" class="img-fluid rounded border p-1" style="max-height: 120px;">
+                <img id="contactQrCodePreview" src="assets/payment_qr.png" alt="QR Code Preview" class="img-fluid rounded border p-1" style="max-height: 120px;">
               </div>
               <input type="file" class="form-control" id="contactQrCode" accept="image/*">
               <input type="hidden" id="contactQrCodeUrl">
@@ -1627,9 +1293,9 @@
   <!-- 5b. EMAIL CONFIGURATION MODAL -->
   <div class="modal fade" id="emailConfigModal" tabindex="-1" aria-labelledby="emailConfigModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content glass-card">
+      <div class="modal-content glass-card text-start">
         <div class="modal-header border-0 pb-0">
-          <h5 class="modal-title fs-4" id="emailConfigModalLabel">Configure Mail Settings</h5>
+          <h5 class="modal-title fs-4 fw-bold" id="emailConfigModalLabel">Configure Mail Settings</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body py-4">
@@ -1642,7 +1308,6 @@
             <div class="contact-input-wrapper">
               <input type="email" id="emailConfigSenderEmail" required placeholder="Sender Email Address">
               <i class="fa-solid fa-envelope"></i>
-              <div class="form-text text-muted small mt-1">Must be verified in your Brevo account.</div>
             </div>
             <div class="contact-input-wrapper">
               <input type="text" id="emailConfigSenderName" required placeholder="Sender Name (e.g. PrimeNet Admin)">
@@ -1662,33 +1327,29 @@
   <!-- 6. SCREENSHOT VIEW MODAL -->
   <div class="modal fade" id="screenshotViewModal" tabindex="-1" aria-labelledby="screenshotViewModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
-      <div class="modal-content glass-card">
+      <div class="modal-content glass-card text-start">
         <div class="modal-header border-0 pb-0">
-          <h5 class="modal-title fs-4" id="screenshotViewModalLabel">
-            <i class="fa-solid fa-receipt me-2 text-primary"></i>Payment Verification
+          <h5 class="modal-title fs-4 fw-bold" id="screenshotViewModalLabel">
+            <i class="fa-solid fa-receipt me-2 text-primary"></i>Payment Verification Proof
           </h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body text-center py-4 position-relative" style="min-height: 250px;">
-          <!-- Spinner overlay -->
           <div id="screenshotSpinner" class="position-absolute top-50 start-50 translate-middle d-flex flex-column align-items-center">
             <div class="spinner-border text-primary mb-2" role="status">
-              <span class="visually-hidden">Loading...</span>
+              <span class="visually-hidden">Loading screenshot...</span>
             </div>
-            <span class="text-muted small">Loading screenshot...</span>
+            <span class="text-muted small">Loading image...</span>
           </div>
-          <!-- Image -->
           <img id="screenshotViewImg" src="" alt="Payment Screenshot" class="img-fluid rounded border shadow-sm d-none" style="max-height: 550px; width: 100%; object-fit: contain;">
-          <!-- Error placeholder -->
           <div id="screenshotError" class="d-none py-5 text-center text-danger">
             <i class="fa-solid fa-triangle-exclamation fa-3x mb-3"></i>
             <p class="mb-0 fw-bold">Failed to load payment screenshot.</p>
-            <p class="small text-muted">The image could not be loaded from storage.</p>
           </div>
         </div>
         <div class="modal-footer border-0 d-flex justify-content-center gap-3 pb-4">
           <a id="screenshotOpenNewTab" href="#" target="_blank" class="btn btn-outline-primary px-4">
-            <i class="fa-solid fa-arrow-up-right-from-square me-2"></i>Open Full Size
+            <i class="fa-solid fa-arrow-up-right-from-square me-2"></i> Open Full Size
           </a>
           <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Close</button>
         </div>
@@ -1699,9 +1360,9 @@
   <!-- 7. MESSAGE STUDENT MODAL -->
   <div class="modal fade" id="messageStudentModal" tabindex="-1" aria-labelledby="messageStudentModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content glass-card">
+      <div class="modal-content glass-card text-start">
         <div class="modal-header border-0 pb-0">
-          <h5 class="modal-title fs-4" id="messageStudentModalLabel">Send Message / Reminder</h5>
+          <h5 class="modal-title fs-4 fw-bold" id="messageStudentModalLabel">Send Student Message</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body py-4">
@@ -1710,7 +1371,7 @@
             <input type="hidden" id="messageStudentId">
             <div class="contact-input-wrapper">
               <select id="messageTemplate">
-                <option value="custom" selected>Custom Message (No Template)</option>
+                <option value="custom" selected>Custom Message</option>
                 <option value="unpaid">Unpaid Payment Reminder</option>
                 <option value="partial">Partial Payment Reminder</option>
               </select>
@@ -1721,12 +1382,12 @@
               <i class="fa-solid fa-heading"></i>
             </div>
             <div class="contact-input-wrapper">
-              <textarea id="messageBody" required placeholder="Type your message here..."></textarea>
+              <textarea id="messageBody" required placeholder="Type message body..."></textarea>
               <i class="fa-solid fa-message"></i>
             </div>
             <div class="d-grid mt-4">
               <button type="submit" class="btn btn-primary btn-lg" id="btnSendMessage">
-                <i class="fa-solid fa-paper-plane me-2"></i>Send Message
+                <i class="fa-solid fa-paper-plane me-2"></i> Send Message
               </button>
             </div>
           </form>
@@ -1737,6 +1398,6 @@
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="script.js?v=1.0.2"></script>
+  <script src="script.js?v=6.0.0"></script>
 </body>
 </html>
