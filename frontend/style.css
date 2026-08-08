@@ -1152,11 +1152,72 @@ textarea.form-control:focus {
 .footer-links-list a { color: var(--text-muted); text-decoration: none; transition: var(--transition-fast); }
 .footer-links-list a:hover { color: var(--primary); }
 
-/* Responsive Adjustments */
+/* Responsive Adjustments & Mobile Header Clearance */
+@media (max-width: 991px) {
+  .navbar-collapse {
+    background: var(--glass-nav);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem 1.5rem;
+    margin-top: 0.85rem;
+    border: 1px solid var(--nav-border);
+    box-shadow: var(--card-shadow);
+  }
+
+  .navbar-nav .nav-link {
+    padding: 0.75rem 1rem !important;
+  }
+}
+
 @media (max-width: 768px) {
-  .hero-section-centered { padding: 6.5rem 0 3.5rem 0; }
-  .section-header h2 { font-size: 1.8rem; }
-  .plan-price { font-size: 2.2rem; }
-  .speedometer-container { width: 200px; height: 200px; }
-  .scroll-top-btn { bottom: 1.2rem; right: 1.2rem; }
+  html {
+    scroll-padding-top: 105px;
+  }
+
+  /* Generous top clearance so hero badge and title never get hidden under fixed header */
+  .hero-section-centered {
+    padding: 9.5rem 0 3.5rem 0 !important;
+  }
+
+  .hero-title-centered {
+    font-size: clamp(2rem, 6.5vw, 2.6rem);
+    line-height: 1.2;
+    margin-top: 0.75rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .hero-subtitle-centered {
+    font-size: 1.05rem;
+    padding: 0 0.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .section-header h2 {
+    font-size: 1.85rem;
+  }
+
+  .plan-price {
+    font-size: 2.2rem;
+  }
+
+  .speedometer-container {
+    width: 210px;
+    height: 210px;
+  }
+
+  .scroll-top-btn {
+    bottom: 1.2rem;
+    right: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-section-centered {
+    padding: 10rem 0 3rem 0 !important;
+  }
+
+  .hero-title-centered {
+    font-size: 1.95rem;
+  }
 }
