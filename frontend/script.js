@@ -2777,4 +2777,59 @@ PrimeNet Team`;
   }
 
   initHeroSloganAnimation();
+
+  // Interactive Fun Creative Click / Tap Reaction for 3D Models (No layout zooming)
+  function initDeviceClickFunAnimation() {
+    const laptop = document.querySelector('.device-mockup-laptop-wrapper');
+    const phone = document.querySelector('.device-mockup-phone-wrapper');
+
+    const triggerFunReaction = (el, message) => {
+      if (!el) return;
+      el.classList.remove('device-fun-clicked');
+      void el.offsetWidth; // Force CSS reflow
+      el.classList.add('device-fun-clicked');
+
+      // Show temporary floating playful toast pill
+      const existingToast = el.querySelector('.device-click-feedback-toast');
+      if (existingToast) existingToast.remove();
+
+      const toast = document.createElement('div');
+      toast.className = 'device-click-feedback-toast';
+      toast.innerHTML = message;
+      el.appendChild(toast);
+
+      setTimeout(() => {
+        if (toast.parentNode === el) toast.remove();
+        el.classList.remove('device-fun-clicked');
+      }, 1400);
+    };
+
+    if (laptop) {
+      laptop.addEventListener('click', () => {
+        const msgs = [
+          '⚡ 1000 Mbps Fiber Online!',
+          '🚀 4ms Backbone Ping!',
+          '💻 Gigabit Node Active!',
+          '🛡️ Zero Throttling Active!'
+        ];
+        const randomMsg = msgs[Math.floor(Math.random() * msgs.length)];
+        triggerFunReaction(laptop, randomMsg);
+      });
+    }
+
+    if (phone) {
+      phone.addEventListener('click', () => {
+        const msgs = [
+          '📶 5GHz Auto-Switch Linked!',
+          '✨ MAC Hardware Auto-Bound!',
+          '⚡ Instant Auto-Connect!',
+          '🔥 Zero Captive Login Needed!'
+        ];
+        const randomMsg = msgs[Math.floor(Math.random() * msgs.length)];
+        triggerFunReaction(phone, randomMsg);
+      });
+    }
+  }
+
+  initDeviceClickFunAnimation();
 });

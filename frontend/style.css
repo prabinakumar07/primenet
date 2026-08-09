@@ -744,36 +744,86 @@ p {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 1.6rem; /* Snug, elegant separation */
+  gap: 1.5rem; /* Closer together */
   margin: 2rem auto 3.5rem auto;
-  max-width: 1050px;
+  max-width: 1000px;
   position: relative;
   perspective: 1200px;
 }
 
-/* 1. Laptop Mockup (Tilted Right with Smooth Floating Animation) */
+@keyframes floatLaptop {
+  0%, 100% {
+    transform: rotate(var(--laptop-rot, 3deg)) scale(var(--device-scale, 1)) translateY(0);
+  }
+  50% {
+    transform: rotate(var(--laptop-rot, 3deg)) scale(var(--device-scale, 1)) translateY(-9px);
+  }
+}
+
+@keyframes floatPhone {
+  0%, 100% {
+    transform: rotate(var(--phone-rot, -4.5deg)) scale(var(--device-scale, 1)) translateY(0);
+  }
+  50% {
+    transform: rotate(var(--phone-rot, -4.5deg)) scale(var(--device-scale, 1)) translateY(-11px);
+  }
+}
+
+@keyframes funDeviceJiggle {
+  0% { transform: rotate(var(--device-rot, 0deg)) scale(var(--device-scale, 1)); }
+  25% { transform: rotate(calc(var(--device-rot, 0deg) - 5deg)) scale(calc(var(--device-scale, 1) * 1.02)) translateY(-4px); }
+  50% { transform: rotate(calc(var(--device-rot, 0deg) + 6deg)) scale(calc(var(--device-scale, 1) * 1.02)) translateY(-8px); }
+  75% { transform: rotate(calc(var(--device-rot, 0deg) - 2deg)) scale(var(--device-scale, 1)) translateY(-2px); }
+  100% { transform: rotate(var(--device-rot, 0deg)) scale(var(--device-scale, 1)) translateY(0); }
+}
+
+.device-fun-clicked {
+  animation: funDeviceJiggle 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+.device-click-feedback-toast {
+  position: absolute;
+  top: -26px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--surface-2);
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  box-shadow: 0 4px 20px rgba(var(--accent-rgb), 0.35);
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: 11.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 99;
+  animation: floatUpToast 1.4s ease-out forwards;
+}
+
+@keyframes floatUpToast {
+  0% { opacity: 0; transform: translateX(-50%) translateY(10px) scale(0.85); }
+  20% { opacity: 1; transform: translateX(-50%) translateY(-4px) scale(1.05); }
+  75% { opacity: 1; transform: translateX(-50%) translateY(-12px) scale(1); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-22px) scale(0.95); }
+}
+
+/* 1. Laptop Mockup (Tilted Right) */
 .device-mockup-laptop-wrapper {
+  --laptop-rot: 3deg;
+  --device-rot: 3deg;
+  --device-scale: 1;
   position: relative;
   flex: 0 0 auto;
   transform: rotate(3deg);
   transform-origin: center center;
+  transition: filter 0.4s;
   animation: floatLaptop 5s ease-in-out infinite;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s;
+  cursor: pointer;
   z-index: 1;
 }
 
 .device-mockup-laptop-wrapper:hover {
-  animation-play-state: paused;
-  transform: rotate(1.5deg) translateY(-10px) scale(1.02);
-}
-
-@keyframes floatLaptop {
-  0%, 100% {
-    transform: rotate(3deg) translateY(0px);
-  }
-  50% {
-    transform: rotate(2deg) translateY(-10px);
-  }
+  filter: drop-shadow(0 15px 35px rgba(var(--primary-rgb), 0.35));
 }
 
 .device-mockup-laptop {
@@ -934,29 +984,23 @@ p {
   margin: 0 auto;
 }
 
-/* 2. Phone Mockup (Tilted Left with Smooth Floating Animation) */
+/* 2. Phone Mockup (Tilted Left) */
 .device-mockup-phone-wrapper {
+  --phone-rot: -4.5deg;
+  --device-rot: -4.5deg;
+  --device-scale: 1;
   position: relative;
   flex: 0 0 auto;
   transform: rotate(-4.5deg);
   transform-origin: center center;
-  animation: floatPhone 5.6s ease-in-out infinite 0.7s;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s;
+  transition: filter 0.4s;
+  animation: floatPhone 5.4s ease-in-out -2.4s infinite;
+  cursor: pointer;
   z-index: 1;
 }
 
 .device-mockup-phone-wrapper:hover {
-  animation-play-state: paused;
-  transform: rotate(-2deg) translateY(-10px) scale(1.03);
-}
-
-@keyframes floatPhone {
-  0%, 100% {
-    transform: rotate(-4.5deg) translateY(0px);
-  }
-  50% {
-    transform: rotate(-3.5deg) translateY(-12px);
-  }
+  filter: drop-shadow(0 15px 35px rgba(var(--accent-rgb), 0.35));
 }
 
 .device-mockup-phone {
@@ -1118,15 +1162,15 @@ p {
   right: 10px;
 }
 
-/* Responsive Side-by-Side Dual Device Layout (Contained, Zero Overflow) */
+/* Responsive Side-by-Side Dual Device Layout */
 @media (max-width: 991px) and (min-width: 768px) {
   .hero-devices-showcase {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    gap: 1.4rem;
+    gap: 1.6rem;
     margin: 1.5rem auto 2.5rem auto;
-    transform: scale(0.86);
+    transform: scale(0.88);
   }
 }
 
@@ -1137,7 +1181,7 @@ p {
     flex-wrap: nowrap !important;
     justify-content: center !important;
     align-items: center !important;
-    gap: 0.35rem !important;
+    gap: 0.25rem !important;
     margin: 1rem auto 2rem auto !important;
     width: 100% !important;
     max-width: 100% !important;
@@ -1146,29 +1190,22 @@ p {
     overflow: hidden !important;
   }
 
-  .hero-devices-showcase button,
-  .hero-devices-showcase a {
-    pointer-events: none !important;
-  }
-
   .device-mockup-laptop-wrapper {
-    animation: floatLaptopMobile 4.8s ease-in-out infinite !important;
-    transform-origin: center center !important;
-    margin: 0 -22px 0 -15px !important;
-    flex-shrink: 0 !important;
+    --laptop-rot: 2deg;
+    --device-rot: 2deg;
+    --device-scale: 0.50;
+    transform-origin: center center;
+    margin: 0 -25px 0 -40px;
+    flex-shrink: 0;
   }
 
   .device-mockup-phone-wrapper {
-    animation: floatPhoneMobile 5.4s ease-in-out infinite 0.6s !important;
-    transform-origin: center center !important;
-    margin: 0 -10px 0 -10px !important;
-    flex-shrink: 0 !important;
-  }
-
-  .device-mockup-laptop-wrapper:active,
-  .device-mockup-phone-wrapper:active {
-    filter: brightness(1.12);
-    transition: filter 0.2s ease;
+    --phone-rot: -2.5deg;
+    --device-rot: -2.5deg;
+    --device-scale: 0.50;
+    transform-origin: center center;
+    margin: 0 -25px 0 -15px;
+    flex-shrink: 0;
   }
 
   .device-floating-badge {
@@ -1176,82 +1213,35 @@ p {
   }
 }
 
-@keyframes floatLaptopMobile {
-  0%, 100% {
-    transform: rotate(2deg) scale(0.50) translateY(0px);
-  }
-  50% {
-    transform: rotate(1.2deg) scale(0.50) translateY(-6px);
-  }
-}
-
-@keyframes floatPhoneMobile {
-  0%, 100% {
-    transform: rotate(-2.5deg) scale(0.50) translateY(0px);
-  }
-  50% {
-    transform: rotate(-1.5deg) scale(0.50) translateY(-7px);
-  }
-}
-
 @media (max-width: 480px) {
-  .hero-devices-showcase {
-    gap: 0.2rem !important;
-    padding: 6px 0 !important;
-  }
-
-  @keyframes floatLaptopMobile {
-    0%, 100% {
-      transform: rotate(1.8deg) scale(0.44) translateY(0px);
-    }
-    50% {
-      transform: rotate(1deg) scale(0.44) translateY(-5px);
-    }
-  }
-
-  @keyframes floatPhoneMobile {
-    0%, 100% {
-      transform: rotate(-2deg) scale(0.44) translateY(0px);
-    }
-    50% {
-      transform: rotate(-1.2deg) scale(0.44) translateY(-6px);
-    }
-  }
-
   .device-mockup-laptop-wrapper {
-    margin: 0 -28px 0 -20px !important;
+    --laptop-rot: 1.5deg;
+    --device-rot: 1.5deg;
+    --device-scale: 0.44;
+    margin: 0 -40px 0 -50px;
   }
 
   .device-mockup-phone-wrapper {
-    margin: 0 -15px 0 -10px !important;
+    --phone-rot: -2deg;
+    --device-rot: -2deg;
+    --device-scale: 0.44;
+    margin: 0 -25px 0 -20px;
   }
 }
 
-@media (max-width: 360px) {
-  @keyframes floatLaptopMobile {
-    0%, 100% {
-      transform: rotate(1.5deg) scale(0.38) translateY(0px);
-    }
-    50% {
-      transform: rotate(0.8deg) scale(0.38) translateY(-4px);
-    }
-  }
-
-  @keyframes floatPhoneMobile {
-    0%, 100% {
-      transform: rotate(-1.8deg) scale(0.38) translateY(0px);
-    }
-    50% {
-      transform: rotate(-1deg) scale(0.38) translateY(-5px);
-    }
-  }
-
+@media (max-width: 375px) {
   .device-mockup-laptop-wrapper {
-    margin: 0 -35px 0 -25px !important;
+    --laptop-rot: 1deg;
+    --device-rot: 1deg;
+    --device-scale: 0.38;
+    margin: 0 -50px 0 -60px;
   }
 
   .device-mockup-phone-wrapper {
-    margin: 0 -20px 0 -10px !important;
+    --phone-rot: -1.5deg;
+    --device-rot: -1.5deg;
+    --device-scale: 0.38;
+    margin: 0 -30px 0 -25px;
   }
 }
 
