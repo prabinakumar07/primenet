@@ -113,6 +113,13 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.setAttribute('aria-label', 'Switch to Dark Mode');
       }
     });
+
+    // Update all logo images to theme-adapted crisp version
+    const logoImgs = document.querySelectorAll('.navbar-brand-logo, .footer-brand-logo, .theme-logo-img');
+    logoImgs.forEach(img => {
+      img.src = theme === 'dark' ? 'assets/logo-dark.png' : 'assets/logo.png';
+    });
+
     if (window.lucide) {
       lucide.createIcons();
     }
@@ -2707,4 +2714,16 @@ PrimeNet Team`;
   
   // Auto-probe network diagnostics on page load
   probeNetworkDiagnostics();
+
+  // Dynamic Backbone Latency Jitter (4ms - 9ms realistic live link variation)
+  const backboneLatencyEl = document.getElementById('backboneLatency');
+  if (backboneLatencyEl) {
+    const latencies = [4, 5, 4, 6, 7, 5, 8, 4, 6, 9, 5, 4, 7, 5];
+    let latIdx = 0;
+    setInterval(() => {
+      latIdx = (latIdx + 1) % latencies.length;
+      const nextLat = latencies[latIdx];
+      backboneLatencyEl.textContent = nextLat;
+    }, 2400);
+  }
 });

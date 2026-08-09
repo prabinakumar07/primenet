@@ -581,7 +581,6 @@ p {
   height: 38px;
   width: auto;
   object-fit: contain;
-  filter: drop-shadow(0 2px 8px rgba(2, 132, 199, 0.25));
   transition: var(--transition-fast);
 }
 
@@ -593,19 +592,25 @@ p {
   height: 40px;
   width: auto;
   object-fit: contain;
-  filter: drop-shadow(0 2px 8px rgba(2, 132, 199, 0.25));
+  transition: var(--transition-fast);
 }
 
-/* Dark Mode Logo Luminescence (prevents dark text/shapes from camouflaging) */
+.theme-logo-img {
+  object-fit: contain;
+  transition: var(--transition-fast);
+}
+
+/* Zero container styling - 100% clean transparent logo */
 [data-theme="dark"] .navbar-brand-logo,
 [data-theme="dark"] .footer-brand-logo,
+[data-theme="dark"] .theme-logo-img,
 [data-theme="dark"] .dashboard-container img[alt*="PrimeNet"],
 [data-theme="dark"] .modal-content img[alt*="PrimeNet"] {
-  filter: drop-shadow(0 0 1px #FFFFFF) drop-shadow(0 0 12px rgba(56, 189, 248, 0.7)) drop-shadow(0 2px 14px rgba(56, 189, 248, 0.35));
-  background: rgba(255, 255, 255, 0.08);
-  padding: 4px 8px;
-  border-radius: var(--radius-sm);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  filter: none !important;
 }
 
 .nav-link {

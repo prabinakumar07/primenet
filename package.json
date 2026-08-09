@@ -14,5 +14,8 @@
   },
   "dependencies": {
     "lucide": "^1.30.0"
+  },
+  "devDependencies": {
+    "pngjs": "^7.0.0"
   }
 }

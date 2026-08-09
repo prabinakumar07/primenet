@@ -138,7 +138,7 @@
             
             <div class="d-inline-flex align-items-center gap-2 px-3.5 py-1.5 rounded-pill bg-success-subtle border border-success-subtle mb-4">
               <span class="spinner-grow spinner-grow-sm text-success" role="status" aria-hidden="true"></span>
-              <span class="badge bg-transparent text-success p-0 fw-bold"><i data-lucide="wifi" class="me-1" style="width: 15px; height: 15px;"></i> ONLINE · 4ms Server Room Fiber Backbone</span>
+              <span class="badge bg-transparent text-success p-0 fw-bold"><i data-lucide="wifi" class="me-1" style="width: 15px; height: 15px;"></i> ONLINE · <span id="backboneLatency">4</span>ms Server Room Fiber Backbone</span>
             </div>
 
             <h1 class="hero-title-centered">
@@ -771,7 +771,7 @@
       <!-- Dashboard Header -->
       <div class="d-flex flex-wrap justify-content-between align-items-center mb-5 gap-3">
         <div class="d-flex align-items-center gap-3">
-          <img src="assets/logo.png" alt="PrimeNet Logo" style="height: 52px; width: auto; object-fit: contain;">
+          <img src="assets/logo.png" alt="PrimeNet Logo" class="theme-logo-img" style="height: 52px; width: auto;">
           <div>
             <span class="badge bg-primary-subtle text-primary mb-1">Admin Portal</span>
             <h2 class="mb-0 fw-bold">Broadband Management Panel</h2>
@@ -1186,7 +1186,7 @@
       <div class="modal-content glass-card text-start">
         <div class="modal-header border-0 pb-0 flex-column align-items-center text-center position-relative">
           <button type="button" class="btn-close position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" aria-label="Close"></button>
-          <img src="assets/logo.png" alt="PrimeNet Logo" style="height: 52px; width: auto; object-fit: contain;" class="mb-2">
+          <img src="assets/logo.png" alt="PrimeNet Logo" class="theme-logo-img mb-2" style="height: 52px; width: auto;">
           <h5 class="modal-title fs-4 fw-bold" id="loginModalLabel">Admin Portal</h5>
         </div>
         <div class="modal-body py-4">
