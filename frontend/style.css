@@ -645,6 +645,405 @@ p {
   color: var(--text-muted);
 }
 
+/* ==========================================================================
+   Hero Dual-Device Showcase (Separated: Left-Tilted Laptop, Right-Tilted Phone)
+   ========================================================================== */
+.hero-devices-showcase {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4.5rem; /* Generous separation ensuring zero overlap */
+  margin: 2rem auto 3.5rem auto;
+  max-width: 1050px;
+  position: relative;
+  perspective: 1200px;
+}
+
+/* 1. Laptop Mockup (Tilted Left) */
+.device-mockup-laptop-wrapper {
+  position: relative;
+  flex: 0 0 auto;
+  transform: rotate(-4deg);
+  transform-origin: center center;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s;
+  z-index: 1;
+}
+
+.device-mockup-laptop-wrapper:hover {
+  transform: rotate(-1.5deg) translateY(-8px) scale(1.02);
+}
+
+.device-mockup-laptop {
+  width: 410px;
+  height: 250px;
+  background: #181d28;
+  border-radius: 14px 14px 0 0;
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 30px rgba(var(--primary-rgb), 0.18);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.laptop-screen {
+  flex: 1;
+  background: #080c14;
+  border-radius: 11px 11px 0 0;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+.laptop-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 8px;
+}
+
+.window-controls {
+  display: flex;
+  gap: 5px;
+}
+
+.ctrl-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.close-dot { background: #ff5f56; }
+.min-dot { background: #ffbd2e; }
+.max-dot { background: #27c93f; }
+
+.laptop-url-bar {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 2px 10px;
+  border-radius: 6px;
+  font-size: 10px;
+  color: var(--text-muted);
+  font-family: var(--font-body);
+}
+
+.laptop-status-pill {
+  font-size: 9.5px;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 600;
+}
+
+.live-indicator-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--accent);
+  animation: pulse-dot 2s infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(1.3); }
+}
+
+.laptop-screen-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.laptop-telemetry-hero {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  padding: 6px 10px;
+  text-align: left;
+}
+
+.laptop-speed-number {
+  line-height: 1;
+  margin: 2px 0 6px 0;
+}
+
+.laptop-waveform-graph {
+  height: 28px;
+  width: 100%;
+}
+
+.laptop-mini-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.mini-stat-box {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  padding: 4px 6px;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.mini-stat-box .stat-lbl {
+  font-size: 9px;
+  color: var(--text-muted);
+}
+
+.mini-stat-box .stat-val {
+  font-size: 10.5px;
+  font-weight: 700;
+}
+
+.laptop-hinge {
+  height: 4px;
+  background: #11141b;
+  width: 100%;
+}
+
+.laptop-base {
+  width: 460px;
+  height: 14px;
+  background: linear-gradient(180deg, #333842 0%, #1a1e26 100%);
+  border-radius: 0 0 14px 14px;
+  margin-left: -25px;
+  position: relative;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
+}
+
+.laptop-trackpad-notch {
+  width: 65px;
+  height: 4px;
+  background: #0f1217;
+  border-radius: 0 0 4px 4px;
+  margin: 0 auto;
+}
+
+/* 2. Phone Mockup (Tilted Right) */
+.device-mockup-phone-wrapper {
+  position: relative;
+  flex: 0 0 auto;
+  transform: rotate(5deg);
+  transform-origin: center center;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s;
+  z-index: 1;
+}
+
+.device-mockup-phone-wrapper:hover {
+  transform: rotate(2deg) translateY(-8px) scale(1.03);
+}
+
+.device-mockup-phone {
+  width: 195px;
+  height: 355px;
+  background: #181d28;
+  border-radius: 34px;
+  border: 3px solid rgba(255, 255, 255, 0.16);
+  padding: 6px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.55), 0 0 30px rgba(var(--accent-rgb), 0.2);
+  position: relative;
+}
+
+.phone-screen {
+  width: 100%;
+  height: 100%;
+  background: #080c14;
+  border-radius: 28px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.phone-speaker-notch {
+  position: absolute;
+  top: 11px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 58px;
+  height: 13px;
+  background: #000;
+  border-radius: 20px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 6px;
+}
+
+.phone-camera-lens {
+  width: 6px;
+  height: 6px;
+  background: #111a2e;
+  border: 1px solid #1e293b;
+  border-radius: 50%;
+}
+
+.phone-status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 9.5px;
+  color: #fff;
+  font-weight: 600;
+  margin-top: 2px;
+  margin-bottom: 8px;
+  padding: 0 4px;
+}
+
+.phone-status-icons {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.phone-battery-icon {
+  width: 14px;
+  height: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 2px;
+  padding: 1px;
+  display: inline-flex;
+}
+
+.battery-fill {
+  width: 80%;
+  height: 100%;
+  background: var(--accent);
+  border-radius: 1px;
+}
+
+.phone-app-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: left;
+}
+
+.phone-brand-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 5px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.phone-wifi-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.phone-radar-icon {
+  width: 28px;
+  height: 28px;
+  background: rgba(var(--accent-rgb), 0.15);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.phone-metric-pill {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  padding: 6px 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Floating Micro-Badges */
+.device-floating-badge {
+  position: absolute;
+  background: var(--surface-2);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--card-border);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-color);
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.laptop-badge {
+  bottom: -12px;
+  left: 20px;
+}
+
+.phone-badge {
+  bottom: -12px;
+  right: 10px;
+}
+
+/* Responsive Overlap-Free Layout */
+@media (max-width: 991px) {
+  .hero-devices-showcase {
+    flex-direction: column;
+    gap: 3.5rem;
+    margin: 2rem auto 3rem auto;
+  }
+  .device-mockup-laptop-wrapper {
+    transform: rotate(-2.5deg);
+  }
+  .device-mockup-phone-wrapper {
+    transform: rotate(3.5deg);
+  }
+}
+
+@media (max-width: 576px) {
+  .device-mockup-laptop {
+    width: 300px;
+    height: 185px;
+  }
+  .laptop-base {
+    width: 335px;
+    margin-left: -17px;
+  }
+  .device-mockup-phone {
+    width: 175px;
+    height: 315px;
+  }
+  .device-mockup-laptop-wrapper {
+    transform: rotate(-1.5deg);
+  }
+  .device-mockup-phone-wrapper {
+    transform: rotate(2deg);
+  }
+  .device-floating-badge {
+    font-size: 10px;
+    padding: 4px 10px;
+  }
+}
+
 .hero-stat-card {
   padding: 1.5rem 1.2rem;
   text-align: center;

@@ -146,13 +146,132 @@
               Ultra-fast, reliable hostel broadband with seamless device MAC address auto-connection, zero captive portal logins, and dedicated on-campus Server Room 10 support.
             </p>
 
-            <div class="d-flex flex-wrap justify-content-center gap-3 mb-5">
+            <div class="d-flex flex-wrap justify-content-center gap-3 mb-4">
               <button class="btn btn-accent btn-lg pulse-glow px-4 py-3" id="getConnectionHeroBtn" data-bs-toggle="modal" data-bs-target="#registerModal">
                 <i data-lucide="rocket" class="me-2"></i> Get Connected
               </button>
               <a href="#about" class="btn btn-outline-primary btn-lg px-4 py-3" id="btnSpeedtestHero">
                 <i data-lucide="gauge" class="me-2"></i> Check Speed
               </a>
+            </div>
+
+            <!-- Hero Dual-Device Showcase (Separated: Laptop tilted left, Phone tilted right) -->
+            <div class="hero-devices-showcase">
+              
+              <!-- Laptop Mockup (Tilted Left) -->
+              <div class="device-mockup-laptop-wrapper">
+                <div class="device-mockup-laptop">
+                  <div class="laptop-screen">
+                    <div class="laptop-header-bar">
+                      <div class="window-controls">
+                        <span class="ctrl-dot close-dot"></span>
+                        <span class="ctrl-dot min-dot"></span>
+                        <span class="ctrl-dot max-dot"></span>
+                      </div>
+                      <div class="laptop-url-bar">
+                        <i data-lucide="shield-check" class="text-success me-1" style="width: 12px; height: 12px;"></i>
+                        <span>primenet.local/dashboard</span>
+                      </div>
+                      <div class="laptop-status-pill">
+                        <span class="live-indicator-dot"></span> 1 Gbps
+                      </div>
+                    </div>
+                    <div class="laptop-screen-content">
+                      <div class="laptop-telemetry-hero">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                          <span class="text-muted small" style="font-size: 11px;"><i data-lucide="activity" class="me-1 text-primary" style="width: 12px; height: 12px;"></i> Backbone Status</span>
+                          <span class="badge bg-success-subtle text-success py-0.5 px-1.5" style="font-size: 9.5px;"><i data-lucide="zap" class="me-1" style="width: 10px; height: 10px;"></i> 0% Packet Loss</span>
+                        </div>
+                        <div class="laptop-speed-number">
+                          <span class="gradient-text-blue-cyan fw-extrabold fs-4">942.8</span> <span class="text-muted small">Mbps</span>
+                        </div>
+                        <div class="laptop-waveform-graph">
+                          <svg viewBox="0 0 280 35" class="w-100 h-100" preserveAspectRatio="none">
+                            <defs>
+                              <linearGradient id="waveGrad" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="var(--primary)" stop-opacity="0.4" />
+                                <stop offset="100%" stop-color="var(--primary)" stop-opacity="0.0" />
+                              </linearGradient>
+                            </defs>
+                            <path d="M0,22 Q35,5 70,18 T140,12 T210,22 T280,8 L280,35 L0,35 Z" fill="url(#waveGrad)" />
+                            <path d="M0,22 Q35,5 70,18 T140,12 T210,22 T280,8" fill="none" stroke="var(--primary)" stroke-width="2" />
+                          </svg>
+                        </div>
+                      </div>
+                      <div class="laptop-mini-grid">
+                        <div class="mini-stat-box">
+                          <span class="stat-lbl">Latency</span>
+                          <span class="stat-val text-success">3.8 ms</span>
+                        </div>
+                        <div class="mini-stat-box">
+                          <span class="stat-lbl">MAC Binding</span>
+                          <span class="stat-val text-primary">Active</span>
+                        </div>
+                        <div class="mini-stat-box">
+                          <span class="stat-lbl">Node</span>
+                          <span class="stat-val text-info">Block-C</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="laptop-hinge"></div>
+                  <div class="laptop-base">
+                    <div class="laptop-trackpad-notch"></div>
+                  </div>
+                </div>
+                <div class="device-floating-badge laptop-badge">
+                  <i data-lucide="cpu" class="text-primary me-1.5" style="width: 13px; height: 13px;"></i>
+                  <span>Zero-Login Hardware Auth</span>
+                </div>
+              </div>
+
+              <!-- Phone Mockup (Tilted Right) -->
+              <div class="device-mockup-phone-wrapper">
+                <div class="device-mockup-phone">
+                  <div class="phone-speaker-notch">
+                    <span class="phone-camera-lens"></span>
+                  </div>
+                  <div class="phone-screen">
+                    <div class="phone-status-bar">
+                      <span class="phone-time">09:41</span>
+                      <div class="phone-status-icons">
+                        <i data-lucide="wifi" class="text-white" style="width: 10px; height: 10px;"></i>
+                        <i data-lucide="zap" class="text-accent" style="width: 10px; height: 10px;"></i>
+                        <span class="phone-battery-icon"><span class="battery-fill"></span></span>
+                      </div>
+                    </div>
+                    <div class="phone-app-content">
+                      <div class="phone-brand-header">
+                        <span class="fw-bold" style="font-size: 11px;"><i data-lucide="wifi" class="text-primary me-1" style="width: 11px; height: 11px;"></i> PrimeNet</span>
+                        <span class="badge bg-success-subtle text-success py-0.5 px-1" style="font-size: 9px;">3ms</span>
+                      </div>
+                      <div class="phone-wifi-card">
+                        <div class="phone-radar-icon">
+                          <i data-lucide="radio" class="text-accent" style="width: 16px; height: 16px;"></i>
+                        </div>
+                        <div class="phone-wifi-text">
+                          <span class="fw-bold d-block text-white" style="font-size: 10.5px;">Hostel-5G_Node10</span>
+                          <span class="text-success small" style="font-size: 9px;"><i data-lucide="check-circle" style="width: 8px; height: 8px;"></i> MAC Linked</span>
+                        </div>
+                      </div>
+                      <div class="phone-metric-pill">
+                        <span class="text-muted" style="font-size: 9px;">Semester Plan</span>
+                        <span class="text-warning fw-bold" style="font-size: 10.5px;">₹180 / 6 Mo</span>
+                      </div>
+                      <div class="phone-quick-actions">
+                        <button class="btn btn-accent btn-sm py-1 px-2 w-100" style="font-size: 10px; border-radius: 6px;" data-bs-toggle="modal" data-bs-target="#registerModal">
+                          <i data-lucide="zap" class="me-1" style="width: 10px; height: 10px;"></i> Instant Connect
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="device-floating-badge phone-badge">
+                  <i data-lucide="smartphone" class="text-accent me-1.5" style="width: 13px; height: 13px;"></i>
+                  <span>5GHz Auto-Switch</span>
+                </div>
+              </div>
+
             </div>
 
             <!-- Real-Time Hero Metrics Bar -->
