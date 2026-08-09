@@ -569,11 +569,31 @@ p {
 
 .navbar-brand {
   font-family: var(--font-heading);
-  font-size: 1.5rem;
+  font-size: 1.45rem;
   font-weight: 800;
   color: var(--text-color) !important;
   letter-spacing: -0.03em;
-  display: flex; align-items: center; gap: 0.5rem;
+  display: flex; align-items: center; gap: 0.6rem;
+  text-decoration: none;
+}
+
+.navbar-brand-logo {
+  height: 38px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 8px rgba(2, 132, 199, 0.25));
+  transition: var(--transition-fast);
+}
+
+.navbar-brand:hover .navbar-brand-logo {
+  transform: scale(1.06);
+}
+
+.footer-brand-logo {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 8px rgba(2, 132, 199, 0.25));
 }
 
 .nav-link {
