@@ -2728,11 +2728,11 @@ PrimeNet Team`;
     if (intranetPingEl) intranetPingEl.textContent = currentJitter;
   }, 2200);
 
-  // 18 High-Impact Hero Slogans with Dynamic Typewriter Animation
+  // 18 High-Impact Sub-Slogans with Butter-Smooth Fade & Slide Transition
   const HERO_SLOGANS = [
-    "Campus Fiber Broadband, Without The Waiting",
+    "Without The Waiting",
     "Gigabit Hostel Internet, Zero Buffering",
-    "Lightning-Fast Gaming, Ultra-Low Ping",
+    "Lightning-Fast Gaming & Ultra-Low Ping",
     "Instant MAC Authentication, Zero Login Hassles",
     "Unlimited High-Speed Downloads, 24/7",
     "Unthrottled Bandwidth For Coding & Cloud Labs",
@@ -2755,40 +2755,26 @@ PrimeNet Team`;
     if (!sloganEl) return;
 
     let sloganIndex = 0;
-    let charIndex = sloganEl.textContent.length;
-    let isDeleting = true;
-    let typingSpeed = 35;
 
-    function typeStep() {
-      const currentFullText = HERO_SLOGANS[sloganIndex];
+    setInterval(() => {
+      // 1. Slide up & fade out smoothly
+      sloganEl.classList.add('fade-out');
 
-      if (isDeleting) {
-        charIndex--;
-        sloganEl.textContent = currentFullText.substring(0, charIndex);
-        typingSpeed = 18;
+      setTimeout(() => {
+        // 2. Change text while invisible and reset position below
+        sloganIndex = (sloganIndex + 1) % HERO_SLOGANS.length;
+        sloganEl.textContent = HERO_SLOGANS[sloganIndex];
+        sloganEl.classList.remove('fade-out');
+        sloganEl.classList.add('fade-in');
 
-        if (charIndex === 0) {
-          isDeleting = false;
-          sloganIndex = (sloganIndex + 1) % HERO_SLOGANS.length;
-          setTimeout(typeStep, 350);
-          return;
-        }
-      } else {
-        charIndex++;
-        sloganEl.textContent = currentFullText.substring(0, charIndex);
-        typingSpeed = 32;
-
-        if (charIndex === currentFullText.length) {
-          isDeleting = true;
-          setTimeout(typeStep, 2600); // Read time
-          return;
-        }
-      }
-
-      setTimeout(typeStep, typingSpeed);
-    }
-
-    setTimeout(typeStep, 2200);
+        // 3. Slide up into place & fade in
+        requestAnimationFrame(() => {
+          setTimeout(() => {
+            sloganEl.classList.remove('fade-in');
+          }, 30);
+        });
+      }, 350);
+    }, 3200);
   }
 
   initHeroSloganAnimation();

@@ -668,30 +668,41 @@ p {
 }
 
 .hero-title-centered {
-  font-size: clamp(2.6rem, 5.5vw, 4.5rem);
-  line-height: 1.15;
+  font-size: clamp(2.8rem, 6vw, 4.8rem);
+  line-height: 1.1;
   letter-spacing: -0.03em;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.85rem;
   font-weight: 900;
-  min-height: 2.3em;
 }
 
-.slogan-typewriter {
-  display: inline;
-  transition: opacity 0.25s ease;
+.hero-slogan-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.2rem;
+  overflow: hidden;
+  position: relative;
 }
 
-.slogan-cursor {
+.hero-slogan-text {
+  font-family: var(--font-heading);
+  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
   display: inline-block;
-  margin-left: 2px;
-  font-weight: 300;
-  color: var(--primary);
-  animation: blinkCursor 0.9s infinite;
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@keyframes blinkCursor {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+.hero-slogan-text.fade-out {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.hero-slogan-text.fade-in {
+  opacity: 0;
+  transform: translateY(10px);
 }
 
 .hero-subtitle-centered {
