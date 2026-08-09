@@ -2728,25 +2728,25 @@ PrimeNet Team`;
     if (intranetPingEl) intranetPingEl.textContent = currentJitter;
   }, 2200);
 
-  // 17 Rotating Feature Slogans under the Main Hero Title
+  // 17 Rotating Feature Slogans under the Main Hero Title (Mobile-Optimized)
   const HERO_SLOGANS = [
-    "Gigabit Hostel Internet, Zero Buffering",
-    "Lightning-Fast Gaming, Ultra-Low Ping",
-    "Instant MAC Authentication, Zero Login Hassles",
-    "Unlimited High-Speed Downloads, 24/7 Access",
-    "Unthrottled Bandwidth For Coding & Cloud Labs",
-    "Seamless Multi-Device Auto-Connection",
-    "Dedicated Server Room Fiber Backbone",
-    "Reliable 4K Streaming & Buffer-Free Lectures",
-    "Zero Captive Portal Drops, 100% Hostel Uptime",
-    "Next-Gen Campus Connectivity, Built For Engineers",
-    "Symmetric Gigabit Speeds & Ultra-Low Jitter",
-    "Hostel Block Access Points, High-Throughput Wi-Fi",
-    "Instant Hardware Registration, Direct MAC Binding",
-    "Blazing Fast Campus Wi-Fi 6 Experience",
-    "True Unlimited Data, Zero Hidden FUP Limits",
-    "Direct Server Room Tech Support, 24/7 On-Campus",
-    "Engineered For Peak Performance & Maximum Speed"
+    "Gigabit Internet · Zero Buffering",
+    "Ultra-Low Ping Gaming Mode",
+    "Instant MAC Auto-Connection",
+    "24/7 Unlimited High-Speed Data",
+    "Unthrottled Lab & Coding Bandwidth",
+    "Seamless Multi-Device Auto-Link",
+    "Dedicated Fiber Server Room Backbone",
+    "Buffer-Free 4K Streaming & Classes",
+    "Zero Captive Portal Drops · 100% Uptime",
+    "Engineered For Campus Tech Leaders",
+    "Symmetric Gigabit Speeds & Low Jitter",
+    "Hostel Wi-Fi 6 Access Points",
+    "Direct Hardware MAC Binding",
+    "Blazing Fast Campus Wi-Fi 6",
+    "True Unlimited · Zero FUP Limits",
+    "Direct Server Room Support 24/7",
+    "Peak Speed & Campus Reliability"
   ];
 
   function initHeroSloganAnimation() {

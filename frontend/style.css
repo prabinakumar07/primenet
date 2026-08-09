@@ -680,43 +680,50 @@ p {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 2.5rem;
-  margin: 0 auto 1.5rem auto;
+  height: 40px;
+  margin: 0 auto 1.35rem auto;
+  width: 100%;
 }
 
 .hero-slogan-pill {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.4rem 1.2rem;
+  padding: 0.35rem 1rem;
+  max-width: min(92vw, 440px);
+  height: 36px;
   border-radius: var(--radius-full);
   background: var(--surface-2);
   border: 1px solid var(--card-border);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  white-space: nowrap;
   overflow: hidden;
   position: relative;
 }
 
 .hero-slogan-text {
   font-family: var(--font-heading);
-  font-size: clamp(0.92rem, 1.8vw, 1.1rem);
+  font-size: clamp(0.78rem, 2.8vw, 0.98rem);
   font-weight: 600;
   color: var(--text-color);
   letter-spacing: -0.01em;
   display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   opacity: 1;
   transform: translateY(0);
-  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .hero-slogan-text.fade-out {
   opacity: 0;
-  transform: translateY(-8px);
+  transform: translateY(-6px);
 }
 
 .hero-slogan-text.fade-in {
   opacity: 0;
-  transform: translateY(8px);
+  transform: translateY(6px);
 }
 
 .hero-subtitle-centered {
@@ -1085,43 +1092,57 @@ p {
   right: 10px;
 }
 
-/* Responsive Overlap-Free Layout */
-@media (max-width: 991px) {
+/* Responsive Side-by-Side Dual Device Layout */
+@media (max-width: 991px) and (min-width: 768px) {
   .hero-devices-showcase {
-    flex-direction: column;
-    gap: 3.5rem;
-    margin: 2rem auto 3rem auto;
-  }
-  .device-mockup-laptop-wrapper {
-    transform: rotate(-2.5deg);
-  }
-  .device-mockup-phone-wrapper {
-    transform: rotate(3.5deg);
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    margin: 1.5rem auto 2.5rem auto;
+    transform: scale(0.85);
   }
 }
 
-@media (max-width: 576px) {
-  .device-mockup-laptop {
-    width: 300px;
-    height: 185px;
+@media (max-width: 767px) {
+  .hero-devices-showcase {
+    flex-direction: row !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+    margin: 1rem auto 2rem auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
   }
-  .laptop-base {
-    width: 335px;
-    margin-left: -17px;
-  }
-  .device-mockup-phone {
-    width: 175px;
-    height: 315px;
-  }
+
   .device-mockup-laptop-wrapper {
-    transform: rotate(-1.5deg);
+    transform: rotate(-2deg) scale(0.58);
+    transform-origin: center right;
+    margin-right: -45px;
+    margin-left: -20px;
   }
+
   .device-mockup-phone-wrapper {
-    transform: rotate(2deg);
+    transform: rotate(2deg) scale(0.58);
+    transform-origin: center left;
+    margin-left: -15px;
   }
+
   .device-floating-badge {
-    font-size: 10px;
-    padding: 4px 10px;
+    display: none !important;
+  }
+}
+
+@media (max-width: 440px) {
+  .device-mockup-laptop-wrapper {
+    transform: rotate(-1.5deg) scale(0.48);
+    margin-right: -60px;
+    margin-left: -25px;
+  }
+
+  .device-mockup-phone-wrapper {
+    transform: rotate(1.5deg) scale(0.48);
+    margin-left: -25px;
   }
 }
 
