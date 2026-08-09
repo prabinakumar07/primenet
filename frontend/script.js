@@ -2780,32 +2780,34 @@ PrimeNet Team`;
 
   // Interactive Fun Creative Click / Tap Reaction for 3D Models (No layout zooming)
   function initDeviceClickFunAnimation() {
-    const laptop = document.querySelector('.device-mockup-laptop-wrapper');
-    const phone = document.querySelector('.device-mockup-phone-wrapper');
+    const laptopWrapper = document.querySelector('.device-mockup-laptop-wrapper');
+    const phoneWrapper = document.querySelector('.device-mockup-phone-wrapper');
+    const laptopInner = document.querySelector('.device-mockup-laptop');
+    const phoneInner = document.querySelector('.device-mockup-phone');
 
-    const triggerFunReaction = (el, message) => {
-      if (!el) return;
-      el.classList.remove('device-fun-clicked');
-      void el.offsetWidth; // Force CSS reflow
-      el.classList.add('device-fun-clicked');
+    const triggerFunReaction = (wrapperEl, innerEl, message) => {
+      if (!innerEl || !wrapperEl) return;
+      innerEl.classList.remove('device-inner-fun-clicked');
+      void innerEl.offsetWidth; // Force CSS reflow
+      innerEl.classList.add('device-inner-fun-clicked');
 
       // Show temporary floating playful toast pill
-      const existingToast = el.querySelector('.device-click-feedback-toast');
+      const existingToast = wrapperEl.querySelector('.device-click-feedback-toast');
       if (existingToast) existingToast.remove();
 
       const toast = document.createElement('div');
       toast.className = 'device-click-feedback-toast';
       toast.innerHTML = message;
-      el.appendChild(toast);
+      wrapperEl.appendChild(toast);
 
       setTimeout(() => {
-        if (toast.parentNode === el) toast.remove();
-        el.classList.remove('device-fun-clicked');
+        if (toast.parentNode === wrapperEl) toast.remove();
+        innerEl.classList.remove('device-inner-fun-clicked');
       }, 1400);
     };
 
-    if (laptop) {
-      laptop.addEventListener('click', () => {
+    if (laptopWrapper && laptopInner) {
+      laptopWrapper.addEventListener('click', (e) => {
         const msgs = [
           '⚡ 1000 Mbps Fiber Online!',
           '🚀 4ms Backbone Ping!',
@@ -2813,12 +2815,12 @@ PrimeNet Team`;
           '🛡️ Zero Throttling Active!'
         ];
         const randomMsg = msgs[Math.floor(Math.random() * msgs.length)];
-        triggerFunReaction(laptop, randomMsg);
+        triggerFunReaction(laptopWrapper, laptopInner, randomMsg);
       });
     }
 
-    if (phone) {
-      phone.addEventListener('click', () => {
+    if (phoneWrapper && phoneInner) {
+      phoneWrapper.addEventListener('click', (e) => {
         const msgs = [
           '📶 5GHz Auto-Switch Linked!',
           '✨ MAC Hardware Auto-Bound!',
@@ -2826,7 +2828,7 @@ PrimeNet Team`;
           '🔥 Zero Captive Login Needed!'
         ];
         const randomMsg = msgs[Math.floor(Math.random() * msgs.length)];
-        triggerFunReaction(phone, randomMsg);
+        triggerFunReaction(phoneWrapper, phoneInner, randomMsg);
       });
     }
   }
