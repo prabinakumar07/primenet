@@ -596,6 +596,18 @@ p {
   filter: drop-shadow(0 2px 8px rgba(2, 132, 199, 0.25));
 }
 
+/* Dark Mode Logo Luminescence (prevents dark text/shapes from camouflaging) */
+[data-theme="dark"] .navbar-brand-logo,
+[data-theme="dark"] .footer-brand-logo,
+[data-theme="dark"] .dashboard-container img[alt*="PrimeNet"],
+[data-theme="dark"] .modal-content img[alt*="PrimeNet"] {
+  filter: drop-shadow(0 0 1px #FFFFFF) drop-shadow(0 0 12px rgba(56, 189, 248, 0.7)) drop-shadow(0 2px 14px rgba(56, 189, 248, 0.35));
+  background: rgba(255, 255, 255, 0.08);
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
 .nav-link {
   font-family: var(--font-heading);
   font-weight: 500;

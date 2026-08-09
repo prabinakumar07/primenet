@@ -362,7 +362,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (screenshotContainer) screenshotContainer.classList.remove('d-none');
     if (regScreenshot) regScreenshot.setAttribute('required', '');
     if (paymentInstructionsText) {
-      paymentInstructionsText.textContent = 'Scan the QR code below using any UPI app to pay ₹180, then upload the payment screenshot.';
+      paymentInstructionsText.textContent = 'Scan the QR code below using any UPI app to pay for your chosen plan (₹150 Basic / ₹250 Ultra), then upload the payment screenshot.';
     }
   });
 
@@ -381,7 +381,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (screenshotContainer) screenshotContainer.classList.add('d-none');
         if (regScreenshot) regScreenshot.removeAttribute('required');
         if (paymentInstructionsText) {
-          paymentInstructionsText.textContent = 'Please pay ₹180 in cash to the administrator to complete your registration.';
+          paymentInstructionsText.textContent = 'Please pay the plan amount (₹150 Basic / ₹250 Ultra) in cash to the administrator to complete your registration.';
         }
       } else {
         // Online selected
@@ -389,7 +389,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (screenshotContainer) screenshotContainer.classList.remove('d-none');
         if (regScreenshot) regScreenshot.setAttribute('required', '');
         if (paymentInstructionsText) {
-          paymentInstructionsText.textContent = 'Scan the QR code below using any UPI app to pay ₹180, then upload the payment screenshot.';
+          paymentInstructionsText.textContent = 'Scan the QR code below using any UPI app to pay for your chosen plan (₹150 Basic / ₹250 Ultra), then upload the payment screenshot.';
         }
       }
     });

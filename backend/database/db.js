@@ -100,7 +100,7 @@ async function seedDefaultSettings() {
         value: {
           phone: '+91 98765 43210',
           email: 'support@primenet.local',
-          address_line1: 'Hostel Block-C, Server Room 10',
+          address_line1: 'Hostel Block-C, Server Room',
           address_line2: 'Campus Ground, Pin 751024',
           instagram: 'https://instagram.com/primenet',
           facebook: 'https://facebook.com/primenet',
