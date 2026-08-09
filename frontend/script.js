@@ -2787,6 +2787,14 @@ PrimeNet Team`;
 
     const triggerFunReaction = (wrapperEl, innerEl, message) => {
       if (!innerEl || !wrapperEl) return;
+      
+      // Physical Haptic Vibration on Mobile Touch
+      if (typeof navigator !== 'undefined' && navigator.vibrate) {
+        try {
+          navigator.vibrate([18, 32, 18]); // Subtle physical haptic pulse
+        } catch (err) {}
+      }
+
       innerEl.classList.remove('device-inner-fun-clicked');
       void innerEl.offsetWidth; // Force CSS reflow
       innerEl.classList.add('device-inner-fun-clicked');
