@@ -2728,26 +2728,26 @@ PrimeNet Team`;
     if (intranetPingEl) intranetPingEl.textContent = currentJitter;
   }, 2200);
 
-  // 18 High-Impact Sub-Slogans with Butter-Smooth Fade & Slide Transition
+  // 18 High-Impact Full-Paired Slogans with Butter-Smooth Fade & Slide Transition
   const HERO_SLOGANS = [
-    "Without The Waiting",
+    "Campus Fiber Broadband, Without The Waiting",
     "Gigabit Hostel Internet, Zero Buffering",
-    "Lightning-Fast Gaming & Ultra-Low Ping",
+    "Lightning-Fast Gaming, Ultra-Low Ping",
     "Instant MAC Authentication, Zero Login Hassles",
-    "Unlimited High-Speed Downloads, 24/7",
-    "Unthrottled Bandwidth For Coding & Cloud Labs",
-    "Seamless Multi-Device Auto-Connection",
-    "Dedicated Server Room Fiber Backbone",
-    "Reliable Video Lectures & 4K Streaming",
-    "Zero Captive Portal Drops, 100% Uptime",
-    "Next-Gen Hostel Connectivity, Built For Engineers",
-    "Symmetric Gigabit Speeds & Low Jitter",
-    "Hostel Block High-Throughput Access Points",
-    "Instant Hardware MAC Registration",
-    "Blazing Fast Campus Wi-Fi 6 Experience",
-    "True Unlimited Data, No Hidden FUP Limits",
-    "Direct Server Room Tech Support, 24/7",
-    "Engineered For Peak Hostel Performance"
+    "Unlimited High-Speed Downloads, 24/7 Access",
+    "Unthrottled Bandwidth, For Coding & Cloud Labs",
+    "Seamless Multi-Device Connection, Auto-Linked Hardware",
+    "Dedicated Server Room, Direct On-Campus Support",
+    "Reliable 4K Streaming, Buffer-Free Video Lectures",
+    "Zero Captive Portal Drops, 100% Hostel Uptime",
+    "Next-Gen Campus Connectivity, Built For Engineers",
+    "Symmetric Gigabit Speeds, Ultra-Low Jitter",
+    "Hostel Block Access Points, High-Throughput Wi-Fi",
+    "Instant Hardware Registration, Direct MAC Binding",
+    "Blazing Fast Campus Wi-Fi 6 Experience, True Speed",
+    "True Unlimited Data, Zero Hidden FUP Limits",
+    "Direct Server Room Tech Support, 24/7 On-Campus",
+    "Engineered For Peak Performance, Maximum Hostel Speed"
   ];
 
   function initHeroSloganAnimation() {
