@@ -744,25 +744,36 @@ p {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 2.2rem; /* Close together with elegant spacing */
+  gap: 1.6rem; /* Snug, elegant separation */
   margin: 2rem auto 3.5rem auto;
   max-width: 1050px;
   position: relative;
   perspective: 1200px;
 }
 
-/* 1. Laptop Mockup (Tilted Right) */
+/* 1. Laptop Mockup (Tilted Right with Smooth Floating Animation) */
 .device-mockup-laptop-wrapper {
   position: relative;
   flex: 0 0 auto;
   transform: rotate(3deg);
   transform-origin: center center;
+  animation: floatLaptop 5s ease-in-out infinite;
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s;
   z-index: 1;
 }
 
 .device-mockup-laptop-wrapper:hover {
-  transform: rotate(1.2deg) translateY(-8px) scale(1.02);
+  animation-play-state: paused;
+  transform: rotate(1.5deg) translateY(-10px) scale(1.02);
+}
+
+@keyframes floatLaptop {
+  0%, 100% {
+    transform: rotate(3deg) translateY(0px);
+  }
+  50% {
+    transform: rotate(2deg) translateY(-10px);
+  }
 }
 
 .device-mockup-laptop {
@@ -923,18 +934,29 @@ p {
   margin: 0 auto;
 }
 
-/* 2. Phone Mockup (Tilted Left) */
+/* 2. Phone Mockup (Tilted Left with Smooth Floating Animation) */
 .device-mockup-phone-wrapper {
   position: relative;
   flex: 0 0 auto;
   transform: rotate(-4.5deg);
   transform-origin: center center;
+  animation: floatPhone 5.6s ease-in-out infinite 0.7s;
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s;
   z-index: 1;
 }
 
 .device-mockup-phone-wrapper:hover {
-  transform: rotate(-1.8deg) translateY(-8px) scale(1.03);
+  animation-play-state: paused;
+  transform: rotate(-2deg) translateY(-10px) scale(1.03);
+}
+
+@keyframes floatPhone {
+  0%, 100% {
+    transform: rotate(-4.5deg) translateY(0px);
+  }
+  50% {
+    transform: rotate(-3.5deg) translateY(-12px);
+  }
 }
 
 .device-mockup-phone {
@@ -1096,15 +1118,15 @@ p {
   right: 10px;
 }
 
-/* Responsive Side-by-Side Dual Device Layout */
+/* Responsive Side-by-Side Dual Device Layout (Contained, Zero Overflow) */
 @media (max-width: 991px) and (min-width: 768px) {
   .hero-devices-showcase {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    gap: 1.8rem;
+    gap: 1.4rem;
     margin: 1.5rem auto 2.5rem auto;
-    transform: scale(0.88);
+    transform: scale(0.86);
   }
 }
 
@@ -1115,27 +1137,38 @@ p {
     flex-wrap: nowrap !important;
     justify-content: center !important;
     align-items: center !important;
-    gap: 0.6rem !important;
-    margin: 1.2rem auto 2.2rem auto !important;
+    gap: 0.35rem !important;
+    margin: 1rem auto 2rem auto !important;
     width: 100% !important;
     max-width: 100% !important;
     box-sizing: border-box !important;
-    padding: 0 5px !important;
+    padding: 10px 0 !important;
     overflow: hidden !important;
   }
 
+  .hero-devices-showcase button,
+  .hero-devices-showcase a {
+    pointer-events: none !important;
+  }
+
   .device-mockup-laptop-wrapper {
-    transform: rotate(2deg) scale(0.56);
-    transform-origin: center center;
-    margin: 0 -35px 0 -35px;
-    flex-shrink: 0;
+    animation: floatLaptopMobile 4.8s ease-in-out infinite !important;
+    transform-origin: center center !important;
+    margin: 0 -22px 0 -15px !important;
+    flex-shrink: 0 !important;
   }
 
   .device-mockup-phone-wrapper {
-    transform: rotate(-2.5deg) scale(0.56);
-    transform-origin: center center;
-    margin: 0 -15px 0 -15px;
-    flex-shrink: 0;
+    animation: floatPhoneMobile 5.4s ease-in-out infinite 0.6s !important;
+    transform-origin: center center !important;
+    margin: 0 -10px 0 -10px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .device-mockup-laptop-wrapper:active,
+  .device-mockup-phone-wrapper:active {
+    filter: brightness(1.12);
+    transition: filter 0.2s ease;
   }
 
   .device-floating-badge {
@@ -1143,35 +1176,82 @@ p {
   }
 }
 
-@media (max-width: 480px) {
-  .hero-devices-showcase {
-    gap: 0.4rem !important;
+@keyframes floatLaptopMobile {
+  0%, 100% {
+    transform: rotate(2deg) scale(0.50) translateY(0px);
   }
-
-  .device-mockup-laptop-wrapper {
-    transform: rotate(1.8deg) scale(0.50);
-    margin: 0 -45px 0 -45px;
-  }
-
-  .device-mockup-phone-wrapper {
-    transform: rotate(-2deg) scale(0.50);
-    margin: 0 -20px 0 -20px;
+  50% {
+    transform: rotate(1.2deg) scale(0.50) translateY(-6px);
   }
 }
 
-@media (max-width: 375px) {
+@keyframes floatPhoneMobile {
+  0%, 100% {
+    transform: rotate(-2.5deg) scale(0.50) translateY(0px);
+  }
+  50% {
+    transform: rotate(-1.5deg) scale(0.50) translateY(-7px);
+  }
+}
+
+@media (max-width: 480px) {
   .hero-devices-showcase {
     gap: 0.2rem !important;
+    padding: 6px 0 !important;
+  }
+
+  @keyframes floatLaptopMobile {
+    0%, 100% {
+      transform: rotate(1.8deg) scale(0.44) translateY(0px);
+    }
+    50% {
+      transform: rotate(1deg) scale(0.44) translateY(-5px);
+    }
+  }
+
+  @keyframes floatPhoneMobile {
+    0%, 100% {
+      transform: rotate(-2deg) scale(0.44) translateY(0px);
+    }
+    50% {
+      transform: rotate(-1.2deg) scale(0.44) translateY(-6px);
+    }
   }
 
   .device-mockup-laptop-wrapper {
-    transform: rotate(1.5deg) scale(0.44);
-    margin: 0 -55px 0 -55px;
+    margin: 0 -28px 0 -20px !important;
   }
 
   .device-mockup-phone-wrapper {
-    transform: rotate(-1.5deg) scale(0.44);
-    margin: 0 -25px 0 -25px;
+    margin: 0 -15px 0 -10px !important;
+  }
+}
+
+@media (max-width: 360px) {
+  @keyframes floatLaptopMobile {
+    0%, 100% {
+      transform: rotate(1.5deg) scale(0.38) translateY(0px);
+    }
+    50% {
+      transform: rotate(0.8deg) scale(0.38) translateY(-4px);
+    }
+  }
+
+  @keyframes floatPhoneMobile {
+    0%, 100% {
+      transform: rotate(-1.8deg) scale(0.38) translateY(0px);
+    }
+    50% {
+      transform: rotate(-1deg) scale(0.38) translateY(-5px);
+    }
+  }
+
+  .device-mockup-laptop-wrapper {
+    margin: 0 -35px 0 -25px !important;
+  }
+
+  .device-mockup-phone-wrapper {
+    margin: 0 -20px 0 -10px !important;
   }
 }
 
