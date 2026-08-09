@@ -2715,15 +2715,81 @@ PrimeNet Team`;
   // Auto-probe network diagnostics on page load
   probeNetworkDiagnostics();
 
-  // Dynamic Backbone Latency Jitter (4ms - 9ms realistic live link variation)
+  // Dynamic Backbone Latency & Hostel Ping Jitter (4ms - 9ms realistic live fiber link variation)
   const backboneLatencyEl = document.getElementById('backboneLatency');
-  if (backboneLatencyEl) {
-    const latencies = [4, 5, 4, 6, 7, 5, 8, 4, 6, 9, 5, 4, 7, 5];
-    let latIdx = 0;
-    setInterval(() => {
-      latIdx = (latIdx + 1) % latencies.length;
-      const nextLat = latencies[latIdx];
-      backboneLatencyEl.textContent = nextLat;
-    }, 2400);
+  const intranetPingEl = document.getElementById('intranetPing');
+  const pingJitterValues = [4, 5, 4, 6, 7, 5, 8, 4, 6, 9, 5, 4, 7, 5];
+  let pingJitterIdx = 0;
+
+  setInterval(() => {
+    pingJitterIdx = (pingJitterIdx + 1) % pingJitterValues.length;
+    const currentJitter = pingJitterValues[pingJitterIdx];
+    if (backboneLatencyEl) backboneLatencyEl.textContent = currentJitter;
+    if (intranetPingEl) intranetPingEl.textContent = currentJitter;
+  }, 2200);
+
+  // 18 High-Impact Hero Slogans with Dynamic Typewriter Animation
+  const HERO_SLOGANS = [
+    "Campus Fiber Broadband, Without The Waiting",
+    "Gigabit Hostel Internet, Zero Buffering",
+    "Lightning-Fast Gaming, Ultra-Low Ping",
+    "Instant MAC Authentication, Zero Login Hassles",
+    "Unlimited High-Speed Downloads, 24/7",
+    "Unthrottled Bandwidth For Coding & Cloud Labs",
+    "Seamless Multi-Device Auto-Connection",
+    "Dedicated Server Room Fiber Backbone",
+    "Reliable Video Lectures & 4K Streaming",
+    "Zero Captive Portal Drops, 100% Uptime",
+    "Next-Gen Hostel Connectivity, Built For Engineers",
+    "Symmetric Gigabit Speeds & Low Jitter",
+    "Hostel Block High-Throughput Access Points",
+    "Instant Hardware MAC Registration",
+    "Blazing Fast Campus Wi-Fi 6 Experience",
+    "True Unlimited Data, No Hidden FUP Limits",
+    "Direct Server Room Tech Support, 24/7",
+    "Engineered For Peak Hostel Performance"
+  ];
+
+  function initHeroSloganAnimation() {
+    const sloganEl = document.getElementById('heroAnimatedSlogan');
+    if (!sloganEl) return;
+
+    let sloganIndex = 0;
+    let charIndex = sloganEl.textContent.length;
+    let isDeleting = true;
+    let typingSpeed = 35;
+
+    function typeStep() {
+      const currentFullText = HERO_SLOGANS[sloganIndex];
+
+      if (isDeleting) {
+        charIndex--;
+        sloganEl.textContent = currentFullText.substring(0, charIndex);
+        typingSpeed = 18;
+
+        if (charIndex === 0) {
+          isDeleting = false;
+          sloganIndex = (sloganIndex + 1) % HERO_SLOGANS.length;
+          setTimeout(typeStep, 350);
+          return;
+        }
+      } else {
+        charIndex++;
+        sloganEl.textContent = currentFullText.substring(0, charIndex);
+        typingSpeed = 32;
+
+        if (charIndex === currentFullText.length) {
+          isDeleting = true;
+          setTimeout(typeStep, 2600); // Read time
+          return;
+        }
+      }
+
+      setTimeout(typeStep, typingSpeed);
+    }
+
+    setTimeout(typeStep, 2200);
   }
+
+  initHeroSloganAnimation();
 });
