@@ -1188,9 +1188,8 @@ p {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    gap: 2.5rem;
+    gap: 2.2rem;
     margin: 1.5rem auto 2.5rem auto;
-    transform: scale(0.88);
   }
 }
 
@@ -1198,83 +1197,148 @@ p {
   .hero-devices-showcase {
     display: flex !important;
     flex-direction: row !important;
-    flex-wrap: nowrap !important;
     justify-content: center !important;
     align-items: center !important;
-    gap: 0 !important;
-    margin: 1rem auto 2.2rem auto !important;
+    gap: 12px !important;
+    margin: 1.2rem auto 2rem auto !important;
     width: 100% !important;
-    max-width: 100% !important;
+    max-width: 380px !important;
     box-sizing: border-box !important;
-    padding: 15px 0 !important;
-    overflow: hidden !important;
+    padding: 10px 0 !important;
   }
 
-  /* Staggered: Laptop slightly upper, Phone slightly lower */
+  /* Laptop: Compact Mobile Layout */
   .device-mockup-laptop-wrapper {
     --laptop-rot: 2deg;
     --device-rot: 2deg;
-    --device-scale: 0.50;
-    --laptop-offset-y: -18px;
-    --device-offset-y: -18px;
-    transform-origin: center center;
-    margin: 0 -20px 0 -35px;
-    flex-shrink: 0;
+    --device-scale: 1;
+    --laptop-offset-y: -14px;
+    --device-offset-y: -14px;
+    width: 195px !important;
+    height: 122px !important;
+    margin: 0 !important;
+    flex: 0 0 195px !important;
+    position: relative !important;
+    transform-origin: center center !important;
   }
 
+  .device-mockup-laptop {
+    width: 195px !important;
+    height: 118px !important;
+    border-radius: 8px 8px 0 0 !important;
+    border-width: 1.5px !important;
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.45) !important;
+  }
+
+  .laptop-screen {
+    border-radius: 6px 6px 0 0 !important;
+    padding: 4px 6px !important;
+  }
+
+  .laptop-header-bar {
+    padding-bottom: 2px !important;
+    margin-bottom: 3px !important;
+  }
+
+  .ctrl-dot { width: 4px !important; height: 4px !important; }
+  .laptop-url-bar { font-size: 7px !important; padding: 1px 5px !important; border-radius: 4px !important; }
+  .laptop-status-pill { font-size: 7px !important; }
+  .laptop-telemetry-hero { padding: 3px 6px !important; border-radius: 5px !important; }
+  .laptop-telemetry-hero .metric-label { font-size: 6.5px !important; }
+  .laptop-telemetry-hero .metric-value { font-size: 10.5px !important; }
+  .telemetry-badge { font-size: 6.5px !important; padding: 1px 4px !important; }
+  .laptop-graph-svg { height: 14px !important; margin: 1px 0 !important; }
+  .laptop-footer-metrics { gap: 3px !important; }
+  .metric-mini-card { padding: 2px 4px !important; border-radius: 4px !important; }
+  .metric-mini-card .mini-label { font-size: 6px !important; }
+  .metric-mini-card .mini-val { font-size: 7px !important; }
+  .laptop-base { width: 215px !important; height: 6px !important; margin-left: -10px !important; border-radius: 0 0 6px 6px !important; }
+  .laptop-trackpad-notch { width: 30px !important; height: 2px !important; }
+
+  /* Phone: Compact Mobile Layout (Staggered Lower) */
   .device-mockup-phone-wrapper {
     --phone-rot: -2.5deg;
     --device-rot: -2.5deg;
-    --device-scale: 0.50;
-    --phone-offset-y: 18px;
-    --device-offset-y: 18px;
-    transform-origin: center center;
-    margin: 0 -20px 0 -10px;
-    flex-shrink: 0;
+    --device-scale: 1;
+    --phone-offset-y: 14px;
+    --device-offset-y: 14px;
+    width: 100px !important;
+    height: 180px !important;
+    margin: 0 !important;
+    flex: 0 0 100px !important;
+    position: relative !important;
+    transform-origin: center center !important;
   }
 
-  .device-floating-badge {
-    display: none !important;
+  .device-mockup-phone {
+    width: 100px !important;
+    height: 180px !important;
+    border-radius: 18px !important;
+    border-width: 2px !important;
+    padding: 3px !important;
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.45) !important;
+  }
+
+  .phone-screen {
+    border-radius: 15px !important;
+    padding: 4px 5px !important;
+  }
+
+  .phone-speaker-notch {
+    width: 30px !important;
+    height: 6px !important;
+    top: 5px !important;
+    border-radius: 10px !important;
+  }
+
+  .phone-camera-lens { width: 3px !important; height: 3px !important; }
+  .phone-status-bar { font-size: 6px !important; margin-bottom: 2px !important; margin-top: 1px !important; padding: 0 2px !important; }
+  .phone-battery-icon { width: 9px !important; height: 5px !important; }
+  .phone-brand-header { margin-bottom: 3px !important; }
+  .phone-app-logo { font-size: 6.5px !important; }
+  .phone-telemetry-card { padding: 3px 4px !important; margin-bottom: 3px !important; border-radius: 5px !important; }
+  .phone-wifi-icon-box { width: 14px !important; height: 14px !important; border-radius: 4px !important; }
+  .phone-wifi-text span:first-child { font-size: 6.5px !important; }
+  .phone-wifi-text span:last-child { font-size: 5.5px !important; }
+  .phone-metric-pill { padding: 2px 3px !important; margin-bottom: 3px !important; border-radius: 4px !important; }
+  .phone-metric-pill span:first-child { font-size: 5.5px !important; }
+  .phone-metric-pill span:last-child { font-size: 6.5px !important; }
+  .phone-quick-actions button { font-size: 6px !important; padding: 2px 4px !important; border-radius: 4px !important; }
+
+  .device-floating-badge { display: none !important; }
+  
+  .device-mockup-laptop-wrapper:hover,
+  .device-mockup-phone-wrapper:hover {
+    transform: none !important;
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 360px) {
+  .hero-devices-showcase {
+    gap: 8px !important;
+    max-width: 310px !important;
+  }
   .device-mockup-laptop-wrapper {
-    --laptop-rot: 1.5deg;
-    --device-rot: 1.5deg;
-    --device-scale: 0.44;
-    --laptop-offset-y: -15px;
-    --device-offset-y: -15px;
-    margin: 0 -35px 0 -45px;
+    width: 170px !important;
+    height: 106px !important;
+    flex: 0 0 170px !important;
   }
-
+  .device-mockup-laptop {
+    width: 170px !important;
+    height: 102px !important;
+  }
+  .laptop-base {
+    width: 188px !important;
+    margin-left: -9px !important;
+  }
   .device-mockup-phone-wrapper {
-    --phone-rot: -2deg;
-    --device-rot: -2deg;
-    --device-scale: 0.44;
-    --phone-offset-y: 15px;
-    --device-offset-y: 15px;
-    margin: 0 -22px 0 -15px;
+    width: 88px !important;
+    height: 160px !important;
+    flex: 0 0 88px !important;
   }
-}
-
-@media (max-width: 375px) {
-  .device-mockup-laptop-wrapper {
-    --laptop-rot: 1deg;
-    --device-rot: 1deg;
-    --device-scale: 0.38;
-    --laptop-offset-y: -12px;
-    --device-offset-y: -12px;
-    margin: 0 -45px 0 -55px;
-  }
-
-  .device-mockup-phone-wrapper {
-    --phone-rot: -1.5deg;
-    --device-rot: -1.5deg;
-    --device-scale: 0.38;
-    --phone-offset-y: 12px;
-    --device-offset-y: 12px;
-    margin: 0 -25px 0 -20px;
+  .device-mockup-phone {
+    width: 88px !important;
+    height: 160px !important;
   }
 }
 
