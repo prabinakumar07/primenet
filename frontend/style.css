@@ -738,31 +738,31 @@ p {
 }
 
 /* ==========================================================================
-   Hero Dual-Device Showcase (Separated: Left-Tilted Laptop, Right-Tilted Phone)
+   Hero Dual-Device Showcase (Laptop Tilted Right, Phone Tilted Left)
    ========================================================================== */
 .hero-devices-showcase {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 4.5rem; /* Generous separation ensuring zero overlap */
+  gap: 2.2rem; /* Close together with elegant spacing */
   margin: 2rem auto 3.5rem auto;
   max-width: 1050px;
   position: relative;
   perspective: 1200px;
 }
 
-/* 1. Laptop Mockup (Tilted Left) */
+/* 1. Laptop Mockup (Tilted Right) */
 .device-mockup-laptop-wrapper {
   position: relative;
   flex: 0 0 auto;
-  transform: rotate(-4deg);
+  transform: rotate(3deg);
   transform-origin: center center;
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s;
   z-index: 1;
 }
 
 .device-mockup-laptop-wrapper:hover {
-  transform: rotate(-1.5deg) translateY(-8px) scale(1.02);
+  transform: rotate(1.2deg) translateY(-8px) scale(1.02);
 }
 
 .device-mockup-laptop {
@@ -923,18 +923,18 @@ p {
   margin: 0 auto;
 }
 
-/* 2. Phone Mockup (Tilted Right) */
+/* 2. Phone Mockup (Tilted Left) */
 .device-mockup-phone-wrapper {
   position: relative;
   flex: 0 0 auto;
-  transform: rotate(5deg);
+  transform: rotate(-4.5deg);
   transform-origin: center center;
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s;
   z-index: 1;
 }
 
 .device-mockup-phone-wrapper:hover {
-  transform: rotate(2deg) translateY(-8px) scale(1.03);
+  transform: rotate(-1.8deg) translateY(-8px) scale(1.03);
 }
 
 .device-mockup-phone {
@@ -1102,9 +1102,9 @@ p {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    gap: 2.5rem;
+    gap: 1.8rem;
     margin: 1.5rem auto 2.5rem auto;
-    transform: scale(0.92);
+    transform: scale(0.88);
   }
 }
 
@@ -1115,25 +1115,26 @@ p {
     flex-wrap: nowrap !important;
     justify-content: center !important;
     align-items: center !important;
-    gap: 1.2rem !important;
-    margin: 1.5rem auto 2.5rem auto !important;
+    gap: 0.6rem !important;
+    margin: 1.2rem auto 2.2rem auto !important;
     width: 100% !important;
     max-width: 100% !important;
-    overflow: visible !important;
+    box-sizing: border-box !important;
+    padding: 0 5px !important;
+    overflow: hidden !important;
   }
 
   .device-mockup-laptop-wrapper {
-    transform: rotate(-2deg) scale(0.72);
-    transform-origin: center right;
-    margin-right: -10px;
-    margin-left: -20px;
+    transform: rotate(2deg) scale(0.56);
+    transform-origin: center center;
+    margin: 0 -35px 0 -35px;
     flex-shrink: 0;
   }
 
   .device-mockup-phone-wrapper {
-    transform: rotate(3deg) scale(0.72);
-    transform-origin: center left;
-    margin-left: 0;
+    transform: rotate(-2.5deg) scale(0.56);
+    transform-origin: center center;
+    margin: 0 -15px 0 -15px;
     flex-shrink: 0;
   }
 
@@ -1144,35 +1145,33 @@ p {
 
 @media (max-width: 480px) {
   .hero-devices-showcase {
-    gap: 0.85rem !important;
+    gap: 0.4rem !important;
   }
 
   .device-mockup-laptop-wrapper {
-    transform: rotate(-1.5deg) scale(0.65);
-    margin-right: -15px;
-    margin-left: -20px;
+    transform: rotate(1.8deg) scale(0.50);
+    margin: 0 -45px 0 -45px;
   }
 
   .device-mockup-phone-wrapper {
-    transform: rotate(2.5deg) scale(0.65);
-    margin-left: 0;
+    transform: rotate(-2deg) scale(0.50);
+    margin: 0 -20px 0 -20px;
   }
 }
 
 @media (max-width: 375px) {
   .hero-devices-showcase {
-    gap: 0.6rem !important;
+    gap: 0.2rem !important;
   }
 
   .device-mockup-laptop-wrapper {
-    transform: rotate(-1.5deg) scale(0.58);
-    margin-right: -18px;
-    margin-left: -18px;
+    transform: rotate(1.5deg) scale(0.44);
+    margin: 0 -55px 0 -55px;
   }
 
   .device-mockup-phone-wrapper {
-    transform: rotate(2deg) scale(0.58);
-    margin-left: 0;
+    transform: rotate(-1.5deg) scale(0.44);
+    margin: 0 -25px 0 -25px;
   }
 }
 
