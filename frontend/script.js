@@ -15,6 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const adminPortalLinkItem = document.getElementById('adminPortalLinkItem');
   
   const adminLoginBtn = document.getElementById('adminLoginBtn');
+  const adminLogoutBtn = document.getElementById('adminLogoutBtn');
+  const btnDashboardLogout = document.getElementById('btnDashboardLogout');
   
   // Modals
   const registerModalEl = document.getElementById('registerModal');
@@ -550,6 +552,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // Admin Logout Handler
+  function handleAdminLogout() {
+    clearAdminSession();
+    switchToAdminDashboard(false);
+    showToast('Logged out successfully.');
+  }
+
+  if (adminLogoutBtn) {
+    adminLogoutBtn.addEventListener('click', handleAdminLogout);
+  }
+  if (btnDashboardLogout) {
+    btnDashboardLogout.addEventListener('click', handleAdminLogout);
+  }
+
   function setupAdminSession(token, username, remember = true) {
     sessionStorage.setItem('token', token);
     sessionStorage.setItem('adminUser', username);
@@ -563,10 +579,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     // Toggle Nav buttons
-    adminLoginBtn.classList.remove('d-none');
+    if (adminLoginBtn) {
+      adminLoginBtn.innerHTML = '<i data-lucide="gauge" class="me-1"></i> Dashboard';
+      adminLoginBtn.classList.remove('d-none');
+    }
+    if (adminLogoutBtn) {
+      adminLogoutBtn.classList.remove('d-none');
+    }
     
     // Show dashboard link in nav
-    adminPortalLinkItem.classList.remove('d-none');
+    if (adminPortalLinkItem) {
+      adminPortalLinkItem.classList.remove('d-none');
+    }
+
+    if (window.lucide) {
+      lucide.createIcons();
+    }
   }
 
   function clearAdminSession() {
@@ -576,10 +604,22 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.removeItem('adminUser');
     
     // Toggle Nav buttons
-    adminLoginBtn.classList.remove('d-none');
+    if (adminLoginBtn) {
+      adminLoginBtn.innerHTML = '<i data-lucide="shield-check" class="me-1"></i> Admin Portal';
+      adminLoginBtn.classList.remove('d-none');
+    }
+    if (adminLogoutBtn) {
+      adminLogoutBtn.classList.add('d-none');
+    }
     
     // Hide dashboard link in nav
-    adminPortalLinkItem.classList.add('d-none');
+    if (adminPortalLinkItem) {
+      adminPortalLinkItem.classList.add('d-none');
+    }
+
+    if (window.lucide) {
+      lucide.createIcons();
+    }
   }
 
   function switchToAdminDashboard(active) {
