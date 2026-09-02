@@ -371,7 +371,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (screenshotContainer) screenshotContainer.classList.remove('d-none');
     if (regScreenshot) regScreenshot.setAttribute('required', '');
     if (paymentInstructionsText) {
-      paymentInstructionsText.textContent = 'Scan the QR code below using any UPI app to pay for your chosen plan (₹150 Basic / ₹250 Ultra), then upload the payment screenshot.';
+      paymentInstructionsText.textContent = 'Scan the QR code below using any UPI app to pay for your chosen plan (₹180 Normal / ₹350 Gaming), then upload the payment screenshot.';
     }
   });
 
@@ -390,7 +390,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (screenshotContainer) screenshotContainer.classList.add('d-none');
         if (regScreenshot) regScreenshot.removeAttribute('required');
         if (paymentInstructionsText) {
-          paymentInstructionsText.textContent = 'Please pay the plan amount (₹150 Basic / ₹250 Ultra) in cash to the administrator to complete your registration.';
+          paymentInstructionsText.textContent = 'Please pay the plan amount (₹180 Normal / ₹350 Gaming) in cash to the administrator to complete your registration.';
         }
       } else {
         // Online selected
@@ -398,7 +398,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (screenshotContainer) screenshotContainer.classList.remove('d-none');
         if (regScreenshot) regScreenshot.setAttribute('required', '');
         if (paymentInstructionsText) {
-          paymentInstructionsText.textContent = 'Scan the QR code below using any UPI app to pay for your chosen plan (₹150 Basic / ₹250 Ultra), then upload the payment screenshot.';
+          paymentInstructionsText.textContent = 'Scan the QR code below using any UPI app to pay for your chosen plan (₹180 Normal / ₹350 Gaming), then upload the payment screenshot.';
         }
       }
     });
@@ -2220,7 +2220,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 This is a reminder that your connection request for Room ${student.room_number} is pending payment verification. 
 
-To activate your broadband connection, please ensure you scan the QR code in the registration portal to pay the registration fee of ₹180 and upload your screenshot. If you have already paid, please reply to this email with your transaction reference.
+To activate your broadband connection, please ensure you scan the QR code in the registration portal to pay your plan registration fee (₹180 Normal / ₹350 Gaming) and upload your screenshot. If you have already paid, please reply to this email with your transaction reference.
 
 Thank you,
 PrimeNet Team`;

@@ -1497,6 +1497,18 @@ p {
   box-shadow: 0 15px 35px rgba(var(--primary-rgb), 0.2);
 }
 
+.plan-card.gaming-plan-card {
+  border-color: rgba(139, 92, 246, 0.45);
+  box-shadow: 0 15px 35px rgba(139, 92, 246, 0.15);
+  transition: var(--transition-normal);
+}
+
+.plan-card.gaming-plan-card:hover {
+  border-color: #8B5CF6;
+  box-shadow: 0 20px 45px rgba(139, 92, 246, 0.28);
+  transform: translateY(-4px);
+}
+
 .plan-badge {
   position: absolute;
   top: -14px; left: 50%;
@@ -1509,6 +1521,11 @@ p {
   box-shadow: 0 6px 16px var(--btn-shadow);
   display: inline-flex;
   align-items: center;
+}
+
+.plan-badge.gaming-badge {
+  background: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
+  box-shadow: 0 6px 16px rgba(139, 92, 246, 0.4);
 }
 
 .plan-price {

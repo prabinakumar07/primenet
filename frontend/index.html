@@ -271,7 +271,7 @@
                       </div>
                       <div class="phone-metric-pill">
                         <span class="text-muted" style="font-size: 9px;">6-Month Plan</span>
-                        <span class="text-warning fw-bold" style="font-size: 10.5px;">₹150 / 6m</span>
+                        <span class="text-warning fw-bold" style="font-size: 10.5px;">₹180 / 6m</span>
                       </div>
                       <div class="phone-quick-actions">
                         <button class="btn btn-accent btn-sm py-1 px-2 w-100" style="font-size: 10px; border-radius: 6px;" data-bs-toggle="modal" data-bs-target="#registerModal">
@@ -311,8 +311,8 @@
               </div>
               <div class="col-6 col-md-3">
                 <div class="hero-stat-card">
-                  <span class="hero-stat-number text-warning"><i data-lucide="indian-rupee" class="me-1"></i> 150</span>
-                  <span class="text-muted small d-block">Starts at ₹150 / 6m</span>
+                  <span class="hero-stat-number text-warning"><i data-lucide="indian-rupee" class="me-1"></i> 180</span>
+                  <span class="text-muted small d-block">Starts at ₹180 / 6m</span>
                 </div>
               </div>
             </div>
@@ -406,44 +406,22 @@
         </div>
 
         <div class="row g-4 justify-content-center text-start" id="plansRow">
-          <!-- Plan 1 -->
-          <div class="col-md-6 col-lg-4">
-            <div class="glass-card plan-card">
-              <div>
-                <span class="badge bg-primary-subtle text-primary mb-3"><i data-lucide="graduation-cap" class="me-1" style="width: 14px; height: 14px;"></i> Standard Hostel</span>
-                <h4 class="fw-bold"><i data-lucide="wifi" class="text-primary me-2"></i>Prime Basic</h4>
-                <p class="small text-muted">Ideal for study, browsing & video lectures.</p>
-                <div class="plan-price"><i data-lucide="indian-rupee" style="width: 28px; height: 28px;"></i>150 <span>/ 6m</span></div>
-                
-                <ul class="plan-features-list">
-                  <li><i data-lucide="gauge" class="text-primary"></i> Up to 50 Mbps Speed</li>
-                  <li><i data-lucide="laptop" class="text-primary"></i> 1 Primary MAC Address</li>
-                  <li><i data-lucide="infinity" class="text-primary"></i> Unlimited Data Download</li>
-                  <li><i data-lucide="headphones" class="text-primary"></i> Campus Support Access</li>
-                </ul>
-              </div>
-
-              <button class="btn btn-outline-primary w-100 mt-4" data-bs-toggle="modal" data-bs-target="#registerModal">
-                <i data-lucide="arrow-right" class="me-1"></i> Select Plan
-              </button>
-            </div>
-          </div>
-
-          <!-- Plan 2 (Featured) -->
-          <div class="col-md-6 col-lg-4">
+          <!-- Plan 1: Normal & Popular -->
+          <div class="col-md-6 col-lg-5 col-xl-4">
             <div class="glass-card plan-card featured">
               <div class="plan-badge"><i data-lucide="sparkles" class="me-1" style="width: 14px; height: 14px;"></i> MOST POPULAR</div>
               <div>
-                <span class="badge bg-accent-subtle text-accent mb-3"><i data-lucide="flame" class="me-1" style="width: 14px; height: 14px;"></i> Pro Student</span>
-                <h4 class="fw-bold"><i data-lucide="zap" class="text-accent me-2"></i>Prime Turbo</h4>
-                <p class="small text-muted">Designed for heavy streaming, gaming & coding.</p>
-                <div class="plan-price"><i data-lucide="indian-rupee" style="width: 28px; height: 28px;"></i>180 <span>/ 6m</span></div>
+                <span class="badge bg-accent-subtle text-accent mb-3"><i data-lucide="flame" class="me-1" style="width: 14px; height: 14px;"></i> Normal & Popular</span>
+                <h4 class="fw-bold"><i data-lucide="wifi" class="text-accent me-2"></i>Prime Popular</h4>
+                <p class="small text-muted">Ideal for everyday study, HD video streaming, online classes & multi-device hostel browsing.</p>
+                <div class="plan-price"><i data-lucide="indian-rupee" style="width: 28px; height: 28px;"></i>180 <span>/ 6 months</span></div>
                 
                 <ul class="plan-features-list">
-                  <li><i data-lucide="gauge" class="text-accent"></i> Up to 100 Mbps Speed</li>
-                  <li><i data-lucide="network" class="text-accent"></i> Up to 4 MAC Addresses</li>
-                  <li><i data-lucide="shield-check" class="text-accent"></i> Zero Throttling Guarantee</li>
-                  <li><i data-lucide="server" class="text-accent"></i> Priority Server Room Support</li>
+                  <li><i data-lucide="gauge" class="text-accent"></i> Up to 100 Mbps High Speed</li>
+                  <li><i data-lucide="laptop" class="text-accent"></i> Up to 4 MAC Addresses</li>
+                  <li><i data-lucide="infinity" class="text-accent"></i> Unlimited High-Speed Data</li>
+                  <li><i data-lucide="shield-check" class="text-accent"></i> Zero Captive Portal Logins</li>
+                  <li><i data-lucide="server" class="text-accent"></i> Campus Server Room Support</li>
                 </ul>
               </div>
 
@@ -453,25 +431,27 @@
             </div>
           </div>
 
-          <!-- Plan 3 -->
-          <div class="col-md-6 col-lg-4">
-            <div class="glass-card plan-card">
+          <!-- Plan 2: Gaming Plan -->
+          <div class="col-md-6 col-lg-5 col-xl-4">
+            <div class="glass-card plan-card gaming-plan-card">
+              <div class="plan-badge gaming-badge"><i data-lucide="gamepad-2" class="me-1" style="width: 14px; height: 14px;"></i> GAMING EDITION</div>
               <div>
-                <span class="badge bg-primary-subtle text-primary mb-3"><i data-lucide="award" class="me-1" style="width: 14px; height: 14px;"></i> Ultra Speed</span>
-                <h4 class="fw-bold"><i data-lucide="rocket" class="text-primary me-2"></i>Prime Ultra</h4>
-                <p class="small text-muted">Maximum throughput for power users.</p>
-                <div class="plan-price"><i data-lucide="indian-rupee" style="width: 28px; height: 28px;"></i>250 <span>/ 6m</span></div>
+                <span class="badge bg-primary-subtle text-primary mb-3" style="background: rgba(139, 92, 246, 0.15) !important; color: #A78BFA !important;"><i data-lucide="zap" class="me-1" style="width: 14px; height: 14px;"></i> Ultra Low Latency</span>
+                <h4 class="fw-bold"><i data-lucide="gamepad-2" class="text-primary me-2" style="color: #A78BFA !important;"></i>Prime Gaming</h4>
+                <p class="small text-muted">Dedicated high-priority gaming routing, ultra-low ping & heavy throughput for competitive gamers.</p>
+                <div class="plan-price"><i data-lucide="indian-rupee" style="width: 28px; height: 28px;"></i>350 <span>/ 6 months</span></div>
                 
                 <ul class="plan-features-list">
-                  <li><i data-lucide="zap" class="text-primary"></i> Gigabit Fiber Access</li>
-                  <li><i data-lucide="code-2" class="text-primary"></i> Multi-Device Auto-Link</li>
-                  <li><i data-lucide="gamepad-2" class="text-primary"></i> Low Ping Gaming Mode</li>
-                  <li><i data-lucide="headphones" class="text-primary"></i> 24/7 Priority Tech Line</li>
+                  <li><i data-lucide="gauge" class="text-primary"></i> Gigabit Fiber Access (Up to 150+ Mbps)</li>
+                  <li><i data-lucide="activity" class="text-primary"></i> Ultra-Low Ping & Jitter (4-9ms)</li>
+                  <li><i data-lucide="shield-alert" class="text-primary"></i> Packet Loss Protection & QoS Priority</li>
+                  <li><i data-lucide="network" class="text-primary"></i> Up to 4 MAC Addresses Auto-Link</li>
+                  <li><i data-lucide="headphones" class="text-primary"></i> Dedicated VIP Tech Line Support</li>
                 </ul>
               </div>
 
-              <button class="btn btn-outline-primary w-100 mt-4" data-bs-toggle="modal" data-bs-target="#registerModal">
-                <i data-lucide="arrow-right" class="me-1"></i> Select Plan
+              <button class="btn btn-outline-primary w-100 mt-4" data-bs-toggle="modal" data-bs-target="#registerModal" style="border-color: #8B5CF6; color: #A78BFA;">
+                <i data-lucide="gamepad-2" class="me-1"></i> Select Gaming Plan
               </button>
             </div>
           </div>
@@ -522,7 +502,7 @@
             <div>
               <div class="bento-icon"><i data-lucide="indian-rupee"></i></div>
               <h4 class="fw-bold mb-2">Students First Pricing</h4>
-              <p class="small">Affordable plans starting at ₹150 for 6 months coverage with zero hidden fees.</p>
+              <p class="small">Affordable plans starting at ₹180 for 6 months coverage with zero hidden fees.</p>
             </div>
           </div>
 
@@ -559,7 +539,7 @@
               <div>
                 <div class="bento-icon"><i data-lucide="qr-code"></i></div>
                 <h5 class="fw-bold mb-2">Pay Semester Bill</h5>
-                <p class="small">Scan UPI QR code and submit your ₹180 payment receipt directly online.</p>
+                <p class="small">Scan UPI QR code and submit your ₹180 (Normal) / ₹350 (Gaming) payment receipt directly online.</p>
               </div>
               <button class="btn btn-outline-primary btn-sm mt-3 w-100" data-bs-toggle="modal" data-bs-target="#registerModal">
                 <i data-lucide="qr-code" class="me-1"></i> Pay Now
@@ -718,7 +698,7 @@
                 </h2>
                 <div id="collapseThree" class="accordion-collapse accordion-collapse-glass collapse" data-bs-parent="#faqAccordion">
                   <div class="accordion-body-glass">
-                    When you click "Get Connection", the form displays our admin UPI QR code. Scan with any UPI app (GPay, PhonePe, Paytm), pay the plan amount (e.g. ₹150 for Basic or ₹250 for Ultra), take a screenshot of the payment receipt, and upload it in the form.
+                    When you click "Get Connection", the form displays our admin UPI QR code. Scan with any UPI app (GPay, PhonePe, Paytm), pay the plan amount (₹180 for Normal Popular or ₹350 for Gaming Plan), take a screenshot of the payment receipt, and upload it in the form.
                   </div>
                 </div>
               </div>
@@ -1080,7 +1060,7 @@
           <div class="footer-qr-card">
             <span class="text-primary small fw-bold mb-2"><i data-lucide="qr-code" class="me-1"></i> Scan to Pay / Continue</span>
             <img src="assets/payment_qr.png" alt="PrimeNet UPI Payment QR Code" class="footer-qr-img mb-2">
-            <span class="small text-muted text-center" style="font-size: 0.78rem;">UPI Payment QR · ₹150</span>
+            <span class="small text-muted text-center" style="font-size: 0.78rem;">UPI Payment QR · ₹180 / ₹350</span>
             <a id="footerDownloadQrBtn" href="assets/payment_qr.png" download="payment_qr.png" class="btn btn-outline-primary btn-sm mt-2 px-3 py-1 text-nowrap">
               <i data-lucide="download" class="me-1"></i> Download QR
             </a>
@@ -1171,7 +1151,7 @@
 
             <div id="paymentInstructionsBlock" class="mb-4 p-3 rounded-3 border" style="background: rgba(0, 0, 0, 0.02); border-color: var(--card-border) !important;">
               <h6 class="fw-bold mb-2 text-primary" id="paymentInstructionsTitle"><i data-lucide="qr-code" class="me-2"></i>Pay for Registration</h6>
-              <p class="small text-muted mb-3" id="paymentInstructionsText">Scan the UPI QR code below using any UPI app (GPay, PhonePe, Paytm) to pay for your chosen plan (₹150 Basic / ₹250 Ultra), then upload the payment screenshot.</p>
+              <p class="small text-muted mb-3" id="paymentInstructionsText">Scan the UPI QR code below using any UPI app (GPay, PhonePe, Paytm) to pay for your chosen plan (₹180 Normal / ₹350 Gaming), then upload the payment screenshot.</p>
               <div class="text-center mb-3" id="qrCodeContainer">
                 <img id="registerQrCode" src="assets/payment_qr.png" alt="Payment UPI QR Code" class="img-fluid rounded border shadow-sm p-1" style="max-height: 180px; display: block; margin: 0 auto 10px auto;">
                 <a id="downloadQrBtn" href="assets/payment_qr.png" download="payment_qr.png" class="btn btn-outline-primary btn-sm mt-1 px-3">
