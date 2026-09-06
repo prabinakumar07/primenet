@@ -271,8 +271,85 @@ document.addEventListener('DOMContentLoaded', () => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   }
 
+  function cleanMobileNumber(val) {
+    if (!val) return '';
+    let cleaned = String(val).trim().replace(/[\s\-()]/g, '');
+    if (cleaned.startsWith('+91')) {
+      cleaned = cleaned.substring(3);
+    } else if (cleaned.length === 12 && cleaned.startsWith('91')) {
+      cleaned = cleaned.substring(2);
+    }
+    // Wisely strip any leading 0 (common from autofill or dialing prefix)
+    if (cleaned.startsWith('0')) {
+      cleaned = cleaned.replace(/^0+/, '');
+    }
+    if (cleaned.length > 10) {
+      cleaned = cleaned.slice(0, 10);
+    }
+    return cleaned;
+  }
+
   function validateMobile(mobile) {
-    return /^\d{10}$/.test(mobile);
+    return /^\d{10}$/.test(cleanMobileNumber(mobile));
+  }
+
+  // Wise Mobile Autofill & Paste Handlers (strips leading 0 automatically)
+  const regMobileInput = document.getElementById('regMobile');
+  if (regMobileInput) {
+    ['input', 'change', 'blur', 'paste'].forEach(evtType => {
+      regMobileInput.addEventListener(evtType, () => {
+        const val = regMobileInput.value;
+        const cleaned = cleanMobileNumber(val);
+        if (val.startsWith('0') || val.startsWith('+91') || val.includes(' ') || val.includes('-') || val.length > 10) {
+          regMobileInput.value = cleaned;
+        }
+      });
+    });
+  }
+
+  const editMobileInput = document.getElementById('editMobile');
+  if (editMobileInput) {
+    ['input', 'change', 'blur', 'paste'].forEach(evtType => {
+      editMobileInput.addEventListener(evtType, () => {
+        const val = editMobileInput.value;
+        const cleaned = cleanMobileNumber(val);
+        if (val.startsWith('0') || val.startsWith('+91') || val.includes(' ') || val.includes('-') || val.length > 10) {
+          editMobileInput.value = cleaned;
+        }
+      });
+    });
+  }
+
+  // Dynamic Hostel field toggling for Registration Modal
+  const regHostelSelect = document.getElementById('regHostel');
+  const regRoomTypeWrapper = document.getElementById('regRoomTypeWrapper');
+  const regCollegeRollWrapper = document.getElementById('regCollegeRollWrapper');
+  const regRoomTypeSelect = document.getElementById('regRoomType');
+  const regCollegeRollInput = document.getElementById('regCollegeRoll');
+
+  function updateRegHostelUI() {
+    if (!regHostelSelect) return;
+    const selectedHostel = regHostelSelect.value;
+    if (selectedHostel === 'kapilash') {
+      // Kapilash Chatrabash: DO NOT ask for room type; require college roll number
+      if (regRoomTypeWrapper) regRoomTypeWrapper.classList.add('d-none');
+      if (regCollegeRollWrapper) regCollegeRollWrapper.classList.remove('d-none');
+      if (regRoomTypeSelect) regRoomTypeSelect.removeAttribute('required');
+      if (regCollegeRollInput) regCollegeRollInput.setAttribute('required', 'required');
+    } else {
+      // Mahima Chatrabash: Ask for room type; hide college roll number
+      if (regRoomTypeWrapper) regRoomTypeWrapper.classList.remove('d-none');
+      if (regCollegeRollWrapper) regCollegeRollWrapper.classList.add('d-none');
+      if (regRoomTypeSelect) regRoomTypeSelect.setAttribute('required', 'required');
+      if (regCollegeRollInput) {
+        regCollegeRollInput.removeAttribute('required');
+        regCollegeRollInput.value = '';
+      }
+    }
+  }
+
+  if (regHostelSelect) {
+    regHostelSelect.addEventListener('change', updateRegHostelUI);
   }
 
   /* ==========================================
@@ -286,11 +363,13 @@ document.addEventListener('DOMContentLoaded', () => {
     registerSuccessAlert.classList.add('d-none');
     
     const name = document.getElementById('regName').value.trim();
-    const mobile = document.getElementById('regMobile').value.trim();
+    let mobile = cleanMobileNumber(document.getElementById('regMobile').value);
+    document.getElementById('regMobile').value = mobile;
     const email = document.getElementById('regEmail').value.trim();
     const hostel_id = document.getElementById('regHostel') ? document.getElementById('regHostel').value.trim() : '';
     const room_number = document.getElementById('regRoomNumber').value.trim();
-    const room_type = document.getElementById('regRoomType').value;
+    const room_type = document.getElementById('regRoomType') ? document.getElementById('regRoomType').value : '';
+    const college_roll_no = document.getElementById('regCollegeRoll') ? document.getElementById('regCollegeRoll').value.trim().toUpperCase() : '';
     const mac_address = document.getElementById('regMac').value.trim();
     const payment_method = document.getElementById('regPaymentMethod').value;
     const screenshotFile = document.getElementById('regScreenshot').files[0];
@@ -302,7 +381,20 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!validateMobile(mobile)) errors.push('Please enter a valid 10-digit mobile number.');
     if (!validateEmail(email)) errors.push('Please enter a valid email address.');
     if (!room_number) errors.push('Please enter room number.');
-    if (!room_type) errors.push('Please select a room type.');
+
+    // Hostel-specific field validations
+    if (hostel_id === 'kapilash') {
+      if (!college_roll_no) {
+        errors.push('Please enter your College Roll Number (e.g. BS24-033, BA23-029).');
+      } else if (!/^[A-Za-z0-9()\-/.]{4,20}$/.test(college_roll_no)) {
+        errors.push('Please enter a valid College Roll Number (e.g. BS24-033, BA23-029, BS(P)25-020, BS26002).');
+      }
+    } else {
+      if (!room_type) {
+        errors.push('Please select a room type (Type A or Type B).');
+      }
+    }
+
     if (!validateMacAddress(mac_address)) errors.push('Please enter a valid MAC address (e.g. AA:BB:CC:DD:EE:01).');
     if (!payment_method) errors.push('Please select a payment method.');
     if (payment_method === 'O' && !screenshotFile) errors.push('Please upload a payment screenshot.');
@@ -336,11 +428,22 @@ document.addEventListener('DOMContentLoaded', () => {
         screenshot_url = uploadData.url;
       }
 
-      // 2. Submit student registration with screenshot_url, payment_method & hostel_id
+      // 2. Submit student registration with screenshot_url, payment_method, hostel_id, room_type / college_roll_no
       const response = await fetch(`${API_BASE}/students/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, mobile, email, hostel_id, room_number, room_type, mac_address, screenshot_url, payment_method })
+        body: JSON.stringify({ 
+          name, 
+          mobile, 
+          email, 
+          hostel_id, 
+          room_number, 
+          room_type: hostel_id === 'kapilash' ? '' : room_type, 
+          college_roll_no: hostel_id === 'kapilash' ? college_roll_no : '',
+          mac_address, 
+          screenshot_url, 
+          payment_method 
+        })
       });
 
       const data = await response.json();
@@ -870,6 +973,7 @@ document.addEventListener('DOMContentLoaded', () => {
         student.name.toLowerCase().includes(searchVal) ||
         student.room_number.toLowerCase().includes(searchVal) ||
         student.mac_address.toLowerCase().includes(searchVal) ||
+        (student.college_roll_no && student.college_roll_no.toLowerCase().includes(searchVal)) ||
         (student.hostel_id && student.hostel_id.toLowerCase().includes(searchVal)) ||
         (student.hostel_name && student.hostel_name.toLowerCase().includes(searchVal)) ||
         (student.mac_address_2 && student.mac_address_2.toLowerCase().includes(searchVal)) ||
@@ -991,7 +1095,10 @@ document.addEventListener('DOMContentLoaded', () => {
         </td>
         <td>
           <div class="text-light-contrast">Room <strong>${student.room_number}</strong></div>
-          <div class="small text-muted">Type ${student.room_type}</div>
+          ${student.hostel_id === 'kapilash' 
+            ? (student.college_roll_no ? `<div class="small fw-semibold text-primary d-flex align-items-center gap-1 mt-0.5" title="College Roll Number"><i data-lucide="graduation-cap" style="width: 12px; height: 12px;"></i><span>${student.college_roll_no}</span></div>` : '<div class="small text-muted">Kapilash</div>')
+            : `<div class="small text-muted">Type ${student.room_type || 'N/A'}</div>`
+          }
         </td>
         <td>
           <span class="badge ${student.payment_method === 'C' ? 'bg-success-subtle text-success border border-success-subtle' : 'bg-info-subtle text-info border border-info-subtle'} px-2.5 py-1.5" style="font-size: 0.82rem; font-weight: 700;" title="${student.payment_method === 'C' ? 'Cash Payment' : 'Online Payment'}">
@@ -1223,10 +1330,30 @@ document.addEventListener('DOMContentLoaded', () => {
       editPayMethodEl.value = student.payment_method || 'O';
     }
     const editHostelEl = document.getElementById('editHostel');
+    const editRoomTypeWrapper = document.getElementById('editRoomTypeWrapper');
+    const editCollegeRollWrapper = document.getElementById('editCollegeRollWrapper');
+    const editCollegeRollEl = document.getElementById('editCollegeRoll');
+
+    if (editCollegeRollEl) {
+      editCollegeRollEl.value = student.college_roll_no || '';
+    }
+
+    function toggleEditHostelFields(hostel) {
+      if (hostel === 'kapilash') {
+        if (editRoomTypeWrapper) editRoomTypeWrapper.classList.add('d-none');
+        if (editCollegeRollWrapper) editCollegeRollWrapper.classList.remove('d-none');
+      } else {
+        if (editRoomTypeWrapper) editRoomTypeWrapper.classList.remove('d-none');
+        if (editCollegeRollWrapper) editCollegeRollWrapper.classList.add('d-none');
+      }
+    }
+
     if (editHostelEl) {
       editHostelEl.value = student.hostel_id || 'mahima';
       // Only Superadmin with 'all' hostel access can reassign a student's hostel
       editHostelEl.disabled = (adminHostelAccess !== 'all');
+      toggleEditHostelFields(editHostelEl.value);
+      editHostelEl.onchange = () => toggleEditHostelFields(editHostelEl.value);
     }
     
     if (student.pay_later_date) {
@@ -1277,10 +1404,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const id = document.getElementById('editStudentId').value;
     const name = document.getElementById('editName').value.trim();
-    const mobile = document.getElementById('editMobile').value.trim();
+    let mobile = cleanMobileNumber(document.getElementById('editMobile').value);
+    document.getElementById('editMobile').value = mobile;
     const email = document.getElementById('editEmail').value.trim();
     const room_number = document.getElementById('editRoomNumber').value.trim();
-    const room_type = document.getElementById('editRoomType').value;
+    const editHostelEl = document.getElementById('editHostel');
+    const hostel_id = editHostelEl ? editHostelEl.value : undefined;
+    const room_type = document.getElementById('editRoomType') ? document.getElementById('editRoomType').value : '';
+    const college_roll_no = document.getElementById('editCollegeRoll') ? document.getElementById('editCollegeRoll').value.trim().toUpperCase() : '';
     const mac_address = document.getElementById('editMac').value.trim();
     const mac_address_2 = document.getElementById('editMac2').value.trim();
     const mac_address_3 = document.getElementById('editMac3').value.trim();
@@ -1289,14 +1420,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const pay_later_date = document.getElementById('editPayLaterDate').value;
     const status = document.getElementById('editStatus').value;
     const payment_method = document.getElementById('editPaymentMethod').value;
-    const editHostelEl = document.getElementById('editHostel');
-    const hostel_id = editHostelEl ? editHostelEl.value : undefined;
 
     let errors = [];
     if (!name || name.length < 2) errors.push('Please enter student name.');
     if (!validateMobile(mobile)) errors.push('Please enter valid 10-digit mobile number.');
     if (!validateEmail(email)) errors.push('Please enter valid email address.');
     if (!room_number) errors.push('Please enter room number.');
+
+    if (hostel_id === 'kapilash') {
+      if (!college_roll_no) {
+        errors.push('Please enter College Roll Number.');
+      } else if (!/^[A-Za-z0-9()\-/.]{4,20}$/.test(college_roll_no)) {
+        errors.push('Please enter a valid College Roll Number (e.g. BS24-033, BA23-029).');
+      }
+    } else {
+      if (!room_type) {
+        errors.push('Please select a room type (Type A or Type B).');
+      }
+    }
+
     if (!validateMacAddress(mac_address)) errors.push('Please enter a valid primary MAC address.');
     if (mac_address_2 && !validateMacAddress(mac_address_2)) errors.push('Please enter a valid MAC address 2.');
     if (mac_address_3 && !validateMacAddress(mac_address_3)) errors.push('Please enter a valid MAC address 3.');
@@ -1319,7 +1461,8 @@ document.addEventListener('DOMContentLoaded', () => {
           mobile, 
           email, 
           room_number, 
-          room_type, 
+          room_type: hostel_id === 'kapilash' ? '' : room_type, 
+          college_roll_no: hostel_id === 'kapilash' ? college_roll_no : '',
           mac_address, 
           mac_address_2, 
           mac_address_3, 

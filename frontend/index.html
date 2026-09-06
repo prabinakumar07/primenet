@@ -1161,14 +1161,22 @@
                   <i data-lucide="door-closed"></i>
                 </div>
               </div>
-              <div class="col-md-6">
+              <!-- Room Type (For Mahima Chatrabash) -->
+              <div class="col-md-6" id="regRoomTypeWrapper">
                 <div class="contact-input-wrapper">
-                  <select id="regRoomType" required>
-                    <option value="" disabled selected>Select Room Type</option>
-                    <option value="A">A</option>
-                    <option value="B">B</option>
+                  <select id="regRoomType">
+                    <option value="" disabled selected>Select Room Type *</option>
+                    <option value="A">Type A</option>
+                    <option value="B">Type B</option>
                   </select>
                   <i data-lucide="home"></i>
+                </div>
+              </div>
+              <!-- College Roll Number (For Kapilash Chatrabash) -->
+              <div class="col-md-6 d-none" id="regCollegeRollWrapper">
+                <div class="contact-input-wrapper">
+                  <input type="text" id="regCollegeRoll" placeholder="College Roll No (e.g. BS24-033)" style="text-transform: uppercase;">
+                  <i data-lucide="graduation-cap"></i>
                 </div>
               </div>
             </div>
@@ -1300,13 +1308,19 @@
                   <i data-lucide="door-closed"></i>
                 </div>
               </div>
-              <div class="col-md-6">
+              <div class="col-md-6" id="editRoomTypeWrapper">
                 <div class="contact-input-wrapper">
-                  <select id="editRoomType" required>
-                    <option value="A">A</option>
-                    <option value="B">B</option>
+                  <select id="editRoomType">
+                    <option value="A">Type A</option>
+                    <option value="B">Type B</option>
                   </select>
                   <i data-lucide="home"></i>
+                </div>
+              </div>
+              <div class="col-md-6 d-none" id="editCollegeRollWrapper">
+                <div class="contact-input-wrapper">
+                  <input type="text" id="editCollegeRoll" placeholder="College Roll No (e.g. BS24-033)" style="text-transform: uppercase;">
+                  <i data-lucide="graduation-cap"></i>
                 </div>
               </div>
             </div>

@@ -113,8 +113,9 @@ const mapStudentDoc = (doc) => {
     email: doc.email,
     hostel_id: hostelId,
     hostel_name: hostelId === 'mahima' ? 'Mahima Chatrabash (New Hostel)' : 'Kapilash Chatrabash (Old Hostel)',
+    college_roll_no: doc.college_roll_no || '',
     room_number: doc.room_number,
-    room_type: doc.room_type,
+    room_type: doc.room_type || '',
     mac_address: doc.mac_address,
     mac_address_2: doc.mac_address_2 || '',
     mac_address_3: doc.mac_address_3 || '',
@@ -168,25 +169,32 @@ const sortStudentsArray = (arr) => {
 };
 
 exports.registerStudent = async (req, res) => {
-  const { name, mobile, email, hostel_id, room_number, room_type, mac_address, screenshot_url, payment_method } = req.body;
+  const { name, mobile, email, hostel_id, room_number, room_type, college_roll_no, mac_address, screenshot_url, payment_method } = req.body;
   const cleanPaymentMethod = payment_method === 'C' ? 'C' : 'O';
-
-  if (!name || !mobile || !email || !hostel_id || !room_number || !room_type || !mac_address || (cleanPaymentMethod === 'O' && !screenshot_url)) {
-    return res.status(400).json({ message: 'All fields, including hostel selection and payment screenshot, are required.' });
-  }
 
   // Sanitize
   const cleanName = sanitizeInput(name);
-  const cleanMobile = sanitizeInput(mobile);
   const cleanEmail = sanitizeInput(email);
   const cleanHostelId = sanitizeInput(hostel_id || '').toLowerCase();
   const cleanRoomNumber = sanitizeInput(room_number);
-  const cleanRoomType = sanitizeInput(room_type).toUpperCase();
+  const cleanRoomType = sanitizeInput(room_type || '').toUpperCase();
+  const cleanCollegeRollNo = sanitizeInput(college_roll_no || '').trim().toUpperCase();
   const cleanMac = sanitizeInput(mac_address);
+
+  // Wisely clean mobile: remove whitespace/hyphens, strip +91/91, remove leading 0
+  let rawMobile = sanitizeInput(mobile || '').replace(/[\s\-()]/g, '');
+  if (rawMobile.startsWith('+91')) rawMobile = rawMobile.substring(3);
+  else if (rawMobile.length === 12 && rawMobile.startsWith('91')) rawMobile = rawMobile.substring(2);
+  if (rawMobile.startsWith('0')) rawMobile = rawMobile.replace(/^0+/, '');
+  const cleanMobile = rawMobile;
 
   // Validations
   if (!cleanHostelId || !['mahima', 'kapilash'].includes(cleanHostelId)) {
     return res.status(400).json({ message: 'A valid hostel (Mahima Chatrabash or Kapilash Chatrabash) is required.' });
+  }
+
+  if (!cleanName || !cleanMobile || !cleanEmail || !cleanRoomNumber || !cleanMac || (cleanPaymentMethod === 'O' && !screenshot_url)) {
+    return res.status(400).json({ message: 'All required fields and payment screenshot must be provided.' });
   }
 
   if (cleanName.length < 2) {
@@ -201,8 +209,20 @@ exports.registerStudent = async (req, res) => {
     return res.status(400).json({ message: 'Invalid email address format.' });
   }
 
-  if (cleanRoomType !== 'A' && cleanRoomType !== 'B') {
-    return res.status(400).json({ message: 'Room type must be A or B.' });
+  // Hostel specific validations:
+  // Kapilash Chatrabash requires College Roll No and DOES NOT ask for room_type
+  if (cleanHostelId === 'kapilash') {
+    if (!cleanCollegeRollNo) {
+      return res.status(400).json({ message: 'College Roll Number is required for Kapilash Chatrabash.' });
+    }
+    if (!/^[A-Z0-9()\-/.]{4,20}$/.test(cleanCollegeRollNo)) {
+      return res.status(400).json({ message: 'Invalid College Roll Number format. Example: BS24-033, BA23-029, BS(P)25-020, BS26002.' });
+    }
+  } else {
+    // Mahima Chatrabash requires room_type A or B
+    if (cleanRoomType !== 'A' && cleanRoomType !== 'B') {
+      return res.status(400).json({ message: 'Room type must be A or B for Mahima Chatrabash.' });
+    }
   }
 
   const normalizedMac = validateAndNormalizeMAC(cleanMac);
@@ -211,17 +231,23 @@ exports.registerStudent = async (req, res) => {
   }
 
   try {
-    // Check for duplicate active registrations (MAC, Email, or Mobile) across the system
+    // Check for duplicate active registrations (MAC, Email, Mobile, or College Roll No) across the system
+    const duplicateConditions = [
+      { mac_address: normalizedMac },
+      { mac_address_2: normalizedMac },
+      { mac_address_3: normalizedMac },
+      { mac_address_4: normalizedMac },
+      { email: cleanEmail },
+      { mobile: cleanMobile }
+    ];
+
+    if (cleanCollegeRollNo) {
+      duplicateConditions.push({ college_roll_no: cleanCollegeRollNo });
+    }
+
     const duplicate = await Student.findOne({
       status: { $in: ['Pending', 'Accepted'] },
-      $or: [
-        { mac_address: normalizedMac },
-        { mac_address_2: normalizedMac },
-        { mac_address_3: normalizedMac },
-        { mac_address_4: normalizedMac },
-        { email: cleanEmail },
-        { mobile: cleanMobile }
-      ]
+      $or: duplicateConditions
     });
 
     if (duplicate) {
@@ -234,6 +260,7 @@ exports.registerStudent = async (req, res) => {
       }
       else if (duplicate.email === cleanEmail) field = 'Email address';
       else if (duplicate.mobile === cleanMobile) field = 'Mobile number';
+      else if (duplicate.college_roll_no && duplicate.college_roll_no === cleanCollegeRollNo) field = 'College Roll Number';
 
       return res.status(400).json({ 
         message: `A student with this ${field} is already registered and is currently ${duplicate.status}.` 
@@ -246,7 +273,8 @@ exports.registerStudent = async (req, res) => {
       email: cleanEmail,
       hostel_id: cleanHostelId,
       room_number: cleanRoomNumber,
-      room_type: cleanRoomType,
+      room_type: cleanHostelId === 'kapilash' ? '' : cleanRoomType,
+      college_roll_no: cleanHostelId === 'kapilash' ? cleanCollegeRollNo : '',
       mac_address: normalizedMac,
       screenshot_url: cleanPaymentMethod === 'O' ? sanitizeUrl(screenshot_url) : '',
       payment_method: cleanPaymentMethod,
@@ -383,18 +411,14 @@ exports.updatePaymentStatus = async (req, res) => {
 // 4. Edit Student Registration (Admin only)
 exports.editStudent = async (req, res) => {
   const { id } = req.params;
-  const { name, mobile, email, room_number, room_type, mac_address, mac_address_2, mac_address_3, mac_address_4, payment_status, pay_later_date, status, screenshot_url, payment_method } = req.body;
-
-  if (!name || !mobile || !email || !room_number || !room_type || !mac_address || !status) {
-    return res.status(400).json({ message: 'All fields are required.' });
-  }
+  const { name, mobile, email, room_number, room_type, college_roll_no, mac_address, mac_address_2, mac_address_3, mac_address_4, payment_status, pay_later_date, status, screenshot_url, payment_method } = req.body;
 
   // Sanitize
   const cleanName = sanitizeInput(name);
-  const cleanMobile = sanitizeInput(mobile);
   const cleanEmail = sanitizeInput(email);
   const cleanRoomNumber = sanitizeInput(room_number);
-  const cleanRoomType = sanitizeInput(room_type).toUpperCase();
+  const cleanRoomType = room_type ? sanitizeInput(room_type).toUpperCase() : '';
+  const cleanCollegeRollNo = college_roll_no !== undefined ? sanitizeInput(college_roll_no).trim().toUpperCase() : '';
   const cleanMac = sanitizeInput(mac_address);
   const cleanMac2 = mac_address_2 ? sanitizeInput(mac_address_2) : '';
   const cleanMac3 = mac_address_3 ? sanitizeInput(mac_address_3) : '';
@@ -404,7 +428,18 @@ exports.editStudent = async (req, res) => {
   const cleanStatus = sanitizeInput(status);
   const cleanPaymentMethod = payment_method === 'C' ? 'C' : 'O';
 
+  // Wisely clean mobile: remove whitespace/hyphens, strip +91/91, remove leading 0
+  let rawMobile = sanitizeInput(mobile || '').replace(/[\s\-()]/g, '');
+  if (rawMobile.startsWith('+91')) rawMobile = rawMobile.substring(3);
+  else if (rawMobile.length === 12 && rawMobile.startsWith('91')) rawMobile = rawMobile.substring(2);
+  if (rawMobile.startsWith('0')) rawMobile = rawMobile.replace(/^0+/, '');
+  const cleanMobile = rawMobile;
+
   // Validate
+  if (!cleanName || !cleanMobile || !cleanEmail || !cleanRoomNumber || !cleanMac || !cleanStatus) {
+    return res.status(400).json({ message: 'All required fields must be filled.' });
+  }
+
   if (cleanName.length < 2) {
     return res.status(400).json({ message: 'Name must be at least 2 characters.' });
   }
@@ -415,10 +450,6 @@ exports.editStudent = async (req, res) => {
 
   if (!validateEmail(cleanEmail)) {
     return res.status(400).json({ message: 'Invalid email address format.' });
-  }
-
-  if (cleanRoomType !== 'A' && cleanRoomType !== 'B') {
-    return res.status(400).json({ message: 'Room type must be A or B.' });
   }
 
   const normalizedMac = validateAndNormalizeMAC(cleanMac);
@@ -459,23 +490,68 @@ exports.editStudent = async (req, res) => {
   }
 
   try {
-    // Check duplicate MAC, Email, or Mobile for other active registrations
+    // 1. Fetch current student record first to inspect hostel and check permissions
+    const student = await Student.findById(id);
+    if (!student) {
+      return res.status(404).json({ message: 'Student registration not found.' });
+    }
+
+    if (!canAccessStudent(req, student)) {
+      return res.status(403).json({ 
+        message: 'Forbidden: You do not have permission to edit students in this hostel.' 
+      });
+    }
+
+    let targetHostel = student.hostel_id || 'mahima';
+    if (req.body.hostel_id) {
+      const cleanHostelId = sanitizeInput(req.body.hostel_id).toLowerCase();
+      if (['mahima', 'kapilash'].includes(cleanHostelId)) {
+        if (cleanHostelId !== student.hostel_id) {
+          if (req.user.hostel_access !== 'all') {
+            return res.status(403).json({ message: 'Forbidden: Only global administrators can transfer students between hostels.' });
+          }
+          targetHostel = cleanHostelId;
+        }
+      }
+    }
+
+    // Hostel-specific field validations
+    if (targetHostel === 'kapilash') {
+      if (!cleanCollegeRollNo) {
+        return res.status(400).json({ message: 'College Roll Number is required for Kapilash Chatrabash.' });
+      }
+      if (!/^[A-Z0-9()\-/.]{4,20}$/.test(cleanCollegeRollNo)) {
+        return res.status(400).json({ message: 'Invalid College Roll Number format. Example: BS24-033, BA23-029.' });
+      }
+    } else {
+      if (cleanRoomType !== 'A' && cleanRoomType !== 'B') {
+        return res.status(400).json({ message: 'Room type must be A or B for Mahima Chatrabash.' });
+      }
+    }
+
+    // Check duplicate MAC, Email, Mobile, or College Roll No for other active registrations
     const activeMacs = [normalizedMac];
     if (normalizedMac2) activeMacs.push(normalizedMac2);
     if (normalizedMac3) activeMacs.push(normalizedMac3);
     if (normalizedMac4) activeMacs.push(normalizedMac4);
 
+    const duplicateOrConditions = [
+      { mac_address: { $in: activeMacs } },
+      { mac_address_2: { $in: activeMacs } },
+      { mac_address_3: { $in: activeMacs } },
+      { mac_address_4: { $in: activeMacs } },
+      { email: cleanEmail },
+      { mobile: cleanMobile }
+    ];
+
+    if (targetHostel === 'kapilash' && cleanCollegeRollNo) {
+      duplicateOrConditions.push({ college_roll_no: cleanCollegeRollNo });
+    }
+
     const duplicate = await Student.findOne({
       status: { $in: ['Pending', 'Accepted'] },
       _id: { $ne: id },
-      $or: [
-        { mac_address: { $in: activeMacs } },
-        { mac_address_2: { $in: activeMacs } },
-        { mac_address_3: { $in: activeMacs } },
-        { mac_address_4: { $in: activeMacs } },
-        { email: cleanEmail },
-        { mobile: cleanMobile }
-      ]
+      $or: duplicateOrConditions
     });
 
     if (duplicate) {
@@ -488,21 +564,10 @@ exports.editStudent = async (req, res) => {
       }
       else if (duplicate.email === cleanEmail) field = 'Email address';
       else if (duplicate.mobile === cleanMobile) field = 'Mobile number';
+      else if (duplicate.college_roll_no && duplicate.college_roll_no === cleanCollegeRollNo) field = 'College Roll Number';
 
       return res.status(400).json({ 
         message: `This ${field} is already registered to another active user.` 
-      });
-    }
-
-    // 1. Fetch current student record
-    const student = await Student.findById(id);
-    if (!student) {
-      return res.status(404).json({ message: 'Student registration not found.' });
-    }
-
-    if (!canAccessStudent(req, student)) {
-      return res.status(403).json({ 
-        message: 'Forbidden: You do not have permission to edit students in this hostel.' 
       });
     }
 
@@ -512,8 +577,10 @@ exports.editStudent = async (req, res) => {
     student.name = cleanName;
     student.mobile = cleanMobile;
     student.email = cleanEmail;
+    student.hostel_id = targetHostel;
     student.room_number = cleanRoomNumber;
-    student.room_type = cleanRoomType;
+    student.room_type = targetHostel === 'kapilash' ? '' : cleanRoomType;
+    student.college_roll_no = targetHostel === 'kapilash' ? cleanCollegeRollNo : '';
     student.mac_address = normalizedMac;
     student.mac_address_2 = normalizedMac2;
     student.mac_address_3 = normalizedMac3;
@@ -522,18 +589,6 @@ exports.editStudent = async (req, res) => {
     student.pay_later_date = cleanPayLaterDate ? new Date(cleanPayLaterDate) : null;
     student.status = cleanStatus;
     student.payment_method = cleanPaymentMethod;
-
-    if (req.body.hostel_id) {
-      const cleanHostelId = sanitizeInput(req.body.hostel_id).toLowerCase();
-      if (['mahima', 'kapilash'].includes(cleanHostelId)) {
-        if (cleanHostelId !== student.hostel_id) {
-          if (req.user.hostel_access !== 'all') {
-            return res.status(403).json({ message: 'Forbidden: Only global administrators can transfer students between hostels.' });
-          }
-          student.hostel_id = cleanHostelId;
-        }
-      }
-    }
 
     if (screenshot_url !== undefined) {
       student.screenshot_url = cleanPaymentMethod === 'O' ? sanitizeUrl(screenshot_url) : '';
@@ -733,7 +788,7 @@ exports.exportCSV = async (req, res) => {
     const mapped = students.map(mapStudentDoc);
     const sorted = sortStudentsArray(mapped);
 
-    const headers = 'Hostel,Name,Mobile Number,Email,Room Number,Room Type,Payment Method,MAC Address,MAC Address 2,MAC Address 3,MAC Address 4,Payment Status,Status,Pay Later Date,Registration Date';
+    const headers = 'Hostel,Name,College Roll No,Mobile Number,Email,Room Number,Room Type,Payment Method,MAC Address,MAC Address 2,MAC Address 3,MAC Address 4,Payment Status,Status,Pay Later Date,Registration Date';
     const csvRows = sorted.map(r => {
       const escapeCsv = (val) => {
         if (val === null || val === undefined) return '';
@@ -746,10 +801,11 @@ exports.exportCSV = async (req, res) => {
       return [
         escapeCsv(r.hostel_name),
         escapeCsv(r.name),
+        escapeCsv(r.college_roll_no || 'N/A'),
         escapeCsv(r.mobile),
         escapeCsv(r.email),
         escapeCsv(r.room_number),
-        escapeCsv(r.room_type),
+        escapeCsv(r.room_type || 'N/A'),
         escapeCsv(r.payment_method === 'C' ? 'Cash' : 'Online'),
         escapeCsv(r.mac_address),
         escapeCsv(r.mac_address_2),

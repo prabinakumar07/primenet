@@ -31,7 +31,8 @@ const studentSchema = new mongoose.Schema({
   email: { type: String, required: true, trim: true },
   hostel_id: { type: String, required: true, enum: ['mahima', 'kapilash'], default: 'mahima', index: true },
   room_number: { type: String, required: true, trim: true },
-  room_type: { type: String, required: true, enum: ['A', 'B'], uppercase: true },
+  room_type: { type: String, required: false, default: '', uppercase: true, trim: true },
+  college_roll_no: { type: String, default: '', trim: true, uppercase: true },
   mac_address: { type: String, required: true, trim: true },
   mac_address_2: { type: String, default: '', trim: true },
   mac_address_3: { type: String, default: '', trim: true },
@@ -45,6 +46,14 @@ const studentSchema = new mongoose.Schema({
 });
 
 studentSchema.index({ hostel_id: 1, status: 1 });
+studentSchema.index(
+  { college_roll_no: 1 }, 
+  { 
+    unique: true, 
+    sparse: true, 
+    partialFilterExpression: { college_roll_no: { $type: 'string', $gt: '' } } 
+  }
+);
 
 // 3. User Schema (Admin User)
 const userSchema = new mongoose.Schema({
