@@ -77,6 +77,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const statPending = document.getElementById('statPending');
   const statAccepted = document.getElementById('statAccepted');
   const statRejected = document.getElementById('statRejected');
+  const statTotalMacs = document.getElementById('statTotalMacs');
+  const statActiveMacs = document.getElementById('statActiveMacs');
+  const statBlockedMacs = document.getElementById('statBlockedMacs');
+
+  // Hostel Management Controls
+  const adminHostelSelector = document.getElementById('adminHostelSelector');
+  const currentHostelBadgeTitle = document.getElementById('currentHostelBadgeTitle');
+  const currentHostelPill = document.getElementById('currentHostelPill');
+  const regHostel = document.getElementById('regHostel');
+  const editHostel = document.getElementById('editHostel');
   
   const recentActivityList = document.getElementById('recentActivityList');
   
@@ -84,6 +94,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let allStudents = [];
   let deleteStudentIdTarget = null;
   let speedTestEnabled = true;
+  let currentHostelFilter = sessionStorage.getItem('adminHostelFilter') || 'all';
+  let adminHostelAccess = sessionStorage.getItem('adminHostelAccess') || 'all';
 
   // Base API URL (dynamic fallback to support running frontend standalone/file-mode or deployed)
   let API_BASE = '/api';
@@ -276,6 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const name = document.getElementById('regName').value.trim();
     const mobile = document.getElementById('regMobile').value.trim();
     const email = document.getElementById('regEmail').value.trim();
+    const hostel_id = document.getElementById('regHostel') ? document.getElementById('regHostel').value.trim() : '';
     const room_number = document.getElementById('regRoomNumber').value.trim();
     const room_type = document.getElementById('regRoomType').value;
     const mac_address = document.getElementById('regMac').value.trim();
@@ -284,6 +297,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Client Side Validations
     let errors = [];
+    if (!hostel_id) errors.push('Please select your hostel (Mahima or Kapilash).');
     if (!name || name.length < 2) errors.push('Please enter your full name (min 2 chars).');
     if (!validateMobile(mobile)) errors.push('Please enter a valid 10-digit mobile number.');
     if (!validateEmail(email)) errors.push('Please enter a valid email address.');
@@ -322,11 +336,11 @@ document.addEventListener('DOMContentLoaded', () => {
         screenshot_url = uploadData.url;
       }
 
-      // 2. Submit student registration with screenshot_url & payment_method
+      // 2. Submit student registration with screenshot_url, payment_method & hostel_id
       const response = await fetch(`${API_BASE}/students/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, mobile, email, room_number, room_type, mac_address, screenshot_url, payment_method })
+        body: JSON.stringify({ name, mobile, email, hostel_id, room_number, room_type, mac_address, screenshot_url, payment_method })
       });
 
       const data = await response.json();
@@ -484,7 +498,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (response.ok && data.valid) {
         const isRemembered = localStorage.getItem('token') !== null;
-        setupAdminSession(token, data.username, isRemembered);
+        setupAdminSession(token, data.username, data.hostel_access || 'all', isRemembered);
       } else {
         clearAdminSession();
       }
@@ -522,7 +536,7 @@ document.addEventListener('DOMContentLoaded', () => {
         throw new Error(data.message || 'Login failed.');
       }
 
-      setupAdminSession(data.token, data.username, rememberMe);
+      setupAdminSession(data.token, data.username, data.hostel_access || 'all', rememberMe);
       loginModal.hide();
       showToast('Logged in successfully!');
       
@@ -566,16 +580,89 @@ document.addEventListener('DOMContentLoaded', () => {
     btnDashboardLogout.addEventListener('click', handleAdminLogout);
   }
 
-  function setupAdminSession(token, username, remember = true) {
+  function updateHostelSelectorUI() {
+    if (!adminHostelSelector) return;
+
+    if (adminHostelAccess && adminHostelAccess !== 'all') {
+      currentHostelFilter = adminHostelAccess;
+      sessionStorage.setItem('adminHostelFilter', currentHostelFilter);
+      adminHostelSelector.value = adminHostelAccess;
+      adminHostelSelector.disabled = true;
+
+      Array.from(adminHostelSelector.options).forEach(opt => {
+        if (opt.value !== adminHostelAccess) {
+          opt.style.display = 'none';
+        } else {
+          opt.style.display = '';
+        }
+      });
+
+      if (currentHostelBadgeTitle) {
+        currentHostelBadgeTitle.textContent = adminHostelAccess === 'mahima' 
+          ? 'Mahima Chatrabash (New Hostel)' 
+          : 'Kapilash Chatrabash (Old Hostel)';
+      }
+      if (currentHostelPill) {
+        currentHostelPill.textContent = 'Restricted Scope';
+        currentHostelPill.className = 'badge bg-warning-subtle text-warning-emphasis border border-warning-subtle';
+      }
+    } else {
+      // Superadmin with global access
+      adminHostelSelector.disabled = false;
+      Array.from(adminHostelSelector.options).forEach(opt => {
+        opt.style.display = '';
+      });
+
+      if (currentHostelFilter !== 'mahima' && currentHostelFilter !== 'kapilash') {
+        currentHostelFilter = 'all';
+      }
+      adminHostelSelector.value = currentHostelFilter;
+
+      if (currentHostelBadgeTitle) {
+        if (currentHostelFilter === 'mahima') {
+          currentHostelBadgeTitle.textContent = 'Mahima Chatrabash (New Hostel)';
+        } else if (currentHostelFilter === 'kapilash') {
+          currentHostelBadgeTitle.textContent = 'Kapilash Chatrabash (Old Hostel)';
+        } else {
+          currentHostelBadgeTitle.textContent = 'All Hostels';
+        }
+      }
+
+      if (currentHostelPill) {
+        if (currentHostelFilter === 'all') {
+          currentHostelPill.textContent = 'Global Scope';
+          currentHostelPill.className = 'badge bg-primary-subtle text-primary border border-primary-subtle';
+        } else {
+          currentHostelPill.textContent = `${currentHostelFilter === 'mahima' ? 'Mahima' : 'Kapilash'} Filtered`;
+          currentHostelPill.className = 'badge bg-info-subtle text-info border border-info-subtle';
+        }
+      }
+    }
+  }
+
+  if (adminHostelSelector) {
+    adminHostelSelector.addEventListener('change', (e) => {
+      currentHostelFilter = e.target.value;
+      sessionStorage.setItem('adminHostelFilter', currentHostelFilter);
+      updateHostelSelectorUI();
+      loadDashboardData();
+    });
+  }
+
+  function setupAdminSession(token, username, hostelAccess = 'all', remember = true) {
     sessionStorage.setItem('token', token);
     sessionStorage.setItem('adminUser', username);
+    sessionStorage.setItem('adminHostelAccess', hostelAccess);
+    adminHostelAccess = hostelAccess;
     
     if (remember) {
       localStorage.setItem('token', token);
       localStorage.setItem('adminUser', username);
+      localStorage.setItem('adminHostelAccess', hostelAccess);
     } else {
       localStorage.removeItem('token');
       localStorage.removeItem('adminUser');
+      localStorage.removeItem('adminHostelAccess');
     }
     
     // Toggle Nav buttons
@@ -592,6 +679,8 @@ document.addEventListener('DOMContentLoaded', () => {
       adminPortalLinkItem.classList.remove('d-none');
     }
 
+    updateHostelSelectorUI();
+
     if (window.lucide) {
       lucide.createIcons();
     }
@@ -600,9 +689,17 @@ document.addEventListener('DOMContentLoaded', () => {
   function clearAdminSession() {
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('adminUser');
+    sessionStorage.removeItem('adminHostelAccess');
+    sessionStorage.removeItem('adminHostelFilter');
     localStorage.removeItem('token');
     localStorage.removeItem('adminUser');
+    localStorage.removeItem('adminHostelAccess');
+    localStorage.removeItem('adminHostelFilter');
+    adminHostelAccess = 'all';
+    currentHostelFilter = 'all';
     
+    updateHostelSelectorUI();
+
     // Toggle Nav buttons
     if (adminLoginBtn) {
       adminLoginBtn.innerHTML = '<i data-lucide="shield-check" class="me-1"></i> Admin Portal';
@@ -661,8 +758,12 @@ document.addEventListener('DOMContentLoaded', () => {
   async function loadDashboardData() {
     toggleSpinner(true);
     try {
+      const hostelParam = currentHostelFilter && currentHostelFilter !== 'all' 
+        ? `?hostel=${encodeURIComponent(currentHostelFilter)}` 
+        : '';
+
       // 1. Fetch Stats
-      const statsRes = await fetch(`${API_BASE}/students/stats`, {
+      const statsRes = await fetch(`${API_BASE}/students/stats${hostelParam}`, {
         headers: getAuthHeaders()
       });
       
@@ -680,7 +781,7 @@ document.addEventListener('DOMContentLoaded', () => {
       renderRecentActivityList(stats.recentRegistrations);
 
       // 2. Fetch all users
-      const usersRes = await fetch(`${API_BASE}/students`, {
+      const usersRes = await fetch(`${API_BASE}/students${hostelParam}`, {
         headers: getAuthHeaders()
       });
       
@@ -690,7 +791,7 @@ document.addEventListener('DOMContentLoaded', () => {
       applyFilters();
 
       // 3. Fetch other MACs (Necessary & Guest)
-      const otherMacsRes = await fetch(`${API_BASE}/students/other-macs`, {
+      const otherMacsRes = await fetch(`${API_BASE}/students/other-macs${hostelParam}`, {
         headers: getAuthHeaders()
       });
       if (otherMacsRes.ok) {
@@ -709,10 +810,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function renderStatsCards(stats) {
-    statTotal.textContent = stats.total;
-    statPending.textContent = stats.pending;
-    statAccepted.textContent = stats.accepted;
-    statRejected.textContent = stats.rejected;
+    statTotal.textContent = stats.total || 0;
+    statPending.textContent = stats.pending || 0;
+    statAccepted.textContent = stats.accepted || 0;
+    statRejected.textContent = stats.rejected || 0;
+    if (statTotalMacs) statTotalMacs.textContent = stats.totalMacs || 0;
+    if (statActiveMacs) statActiveMacs.textContent = stats.activeMacs || 0;
+    if (statBlockedMacs) statBlockedMacs.textContent = stats.blockedMacs || 0;
   }
 
   function renderRecentActivityList(recent) {
@@ -766,6 +870,8 @@ document.addEventListener('DOMContentLoaded', () => {
         student.name.toLowerCase().includes(searchVal) ||
         student.room_number.toLowerCase().includes(searchVal) ||
         student.mac_address.toLowerCase().includes(searchVal) ||
+        (student.hostel_id && student.hostel_id.toLowerCase().includes(searchVal)) ||
+        (student.hostel_name && student.hostel_name.toLowerCase().includes(searchVal)) ||
         (student.mac_address_2 && student.mac_address_2.toLowerCase().includes(searchVal)) ||
         (student.mac_address_3 && student.mac_address_3.toLowerCase().includes(searchVal)) ||
         (student.mac_address_4 && student.mac_address_4.toLowerCase().includes(searchVal));
@@ -825,7 +931,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (students.length === 0) {
       studentTableBody.innerHTML = `
         <tr>
-          <td colspan="7" class="text-center text-muted py-5">
+          <td colspan="8" class="text-center text-muted py-5">
             <i data-lucide="folder-open" class="display-6 mb-3 d-block text-primary mx-auto" style="width: 48px; height: 48px;"></i>
             No matching student records found.
           </td>
@@ -838,6 +944,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     students.forEach(student => {
+      const hostelBadge = student.hostel_id === 'mahima'
+        ? `<span class="badge-hostel-mahima" title="Mahima Chatrabash (New Hostel)"><i data-lucide="building-2" style="width: 13px; height: 13px;"></i>Mahima</span>`
+        : `<span class="badge-hostel-kapilash" title="Kapilash Chatrabash (Old Hostel)"><i data-lucide="landmark" style="width: 13px; height: 13px;"></i>Kapilash</span>`;
+
       let statusBadge = '';
       if (student.status === 'Pending') {
         statusBadge = `<span class="badge-pending"><i data-lucide="clock" class="me-1" style="width: 14px; height: 14px;"></i>Pending</span>`;
@@ -867,6 +977,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const row = document.createElement('tr');
       row.innerHTML = `
+        <td>
+          ${hostelBadge}
+        </td>
         <td>
           <div class="fw-bold text-light-contrast">${student.name}</div>
           <div class="text-muted small" style="font-size: 0.75rem;">Reg: ${new Date(student.created_at).toLocaleDateString()} ${new Date(student.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
@@ -1109,6 +1222,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (editPayMethodEl) {
       editPayMethodEl.value = student.payment_method || 'O';
     }
+    const editHostelEl = document.getElementById('editHostel');
+    if (editHostelEl) {
+      editHostelEl.value = student.hostel_id || 'kapilash';
+      // Only Superadmin with 'all' hostel access can reassign a student's hostel
+      editHostelEl.disabled = (adminHostelAccess !== 'all');
+    }
     
     if (student.pay_later_date) {
       const dateObj = new Date(student.pay_later_date);
@@ -1170,6 +1289,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const pay_later_date = document.getElementById('editPayLaterDate').value;
     const status = document.getElementById('editStatus').value;
     const payment_method = document.getElementById('editPaymentMethod').value;
+    const editHostelEl = document.getElementById('editHostel');
+    const hostel_id = editHostelEl ? editHostelEl.value : undefined;
 
     let errors = [];
     if (!name || name.length < 2) errors.push('Please enter student name.');
@@ -1206,7 +1327,8 @@ document.addEventListener('DOMContentLoaded', () => {
           payment_status, 
           pay_later_date,
           status,
-          payment_method
+          payment_method,
+          hostel_id
         })
       });
 
@@ -1256,7 +1378,10 @@ document.addEventListener('DOMContentLoaded', () => {
   btnExportMac.addEventListener('click', async () => {
     toggleSpinner(true);
     try {
-      const response = await fetch(`${API_BASE}/students/export-mac`, {
+      const hostelParam = currentHostelFilter && currentHostelFilter !== 'all' 
+        ? `?hostel=${encodeURIComponent(currentHostelFilter)}` 
+        : '';
+      const response = await fetch(`${API_BASE}/students/export-mac${hostelParam}`, {
         method: 'GET',
         headers: getAuthHeaders()
       });
@@ -1264,8 +1389,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!response.ok) throw new Error('Failed to generate MAC export.');
 
       const text = await response.text();
-      triggerFileDownload(text, 'accepted_mac_addresses.txt', 'text/plain');
-      showToast('Accepted MAC list downloaded.');
+      const filename = currentHostelFilter && currentHostelFilter !== 'all'
+        ? `accepted_macs_${currentHostelFilter}.txt`
+        : 'accepted_mac_addresses.txt';
+      triggerFileDownload(text, filename, 'text/plain');
+      showToast(`Accepted MAC list (${currentHostelFilter === 'all' ? 'All Hostels' : currentHostelFilter}) downloaded.`);
     } catch (err) {
       showToast(err.message, 'error');
     } finally {
@@ -1387,7 +1515,8 @@ document.addEventListener('DOMContentLoaded', () => {
         headers: getAuthHeaders(),
         body: JSON.stringify({
           necessary_macs: necessaryMacList.value,
-          guest_macs: guestMacList.value
+          guest_macs: guestMacList.value,
+          hostel: currentHostelFilter
         })
       });
       const data = await response.json();
@@ -1409,7 +1538,8 @@ document.addEventListener('DOMContentLoaded', () => {
         headers: getAuthHeaders(),
         body: JSON.stringify({
           necessary_macs: necessaryMacList.value,
-          guest_macs: guestMacList.value
+          guest_macs: guestMacList.value,
+          hostel: currentHostelFilter
         })
       });
       const data = await response.json();
@@ -1460,7 +1590,10 @@ document.addEventListener('DOMContentLoaded', () => {
   btnExportCsv.addEventListener('click', async () => {
     toggleSpinner(true);
     try {
-      const response = await fetch(`${API_BASE}/students/export-csv`, {
+      const hostelParam = currentHostelFilter && currentHostelFilter !== 'all' 
+        ? `?hostel=${encodeURIComponent(currentHostelFilter)}` 
+        : '';
+      const response = await fetch(`${API_BASE}/students/export-csv${hostelParam}`, {
         method: 'GET',
         headers: getAuthHeaders()
       });
@@ -1468,8 +1601,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!response.ok) throw new Error('Failed to generate CSV export.');
 
       const csv = await response.text();
-      triggerFileDownload(csv, 'primenet_users_list.csv', 'text/csv');
-      showToast('CSV export downloaded successfully.');
+      const filename = currentHostelFilter && currentHostelFilter !== 'all'
+        ? `primenet_students_${currentHostelFilter}.csv`
+        : 'primenet_users_list.csv';
+      triggerFileDownload(csv, filename, 'text/csv');
+      showToast(`CSV export (${currentHostelFilter === 'all' ? 'All Hostels' : currentHostelFilter}) downloaded successfully.`);
     } catch (err) {
       showToast(err.message, 'error');
     } finally {

@@ -22,7 +22,7 @@ exports.login = async (req, res) => {
 
     // Generate JWT
     const token = jwt.sign(
-      { id: user._id, username: user.username },
+      { id: user._id, username: user.username, hostel_access: user.hostel_access || 'all' },
       process.env.JWT_SECRET || 'primenet_super_secret_key_2026',
       { expiresIn: '24h' }
     );
@@ -30,7 +30,8 @@ exports.login = async (req, res) => {
     return res.status(200).json({
       message: 'Login successful.',
       token,
-      username: user.username
+      username: user.username,
+      hostel_access: user.hostel_access || 'all'
     });
   } catch (err) {
     console.error('Error during login:', err.message);
@@ -39,5 +40,9 @@ exports.login = async (req, res) => {
 };
 
 exports.verifySession = (req, res) => {
-  return res.status(200).json({ valid: true, username: req.user.username });
+  return res.status(200).json({
+    valid: true,
+    username: req.user.username,
+    hostel_access: req.user.hostel_access || 'all'
+  });
 };

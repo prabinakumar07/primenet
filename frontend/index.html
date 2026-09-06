@@ -804,13 +804,39 @@
         </div>
       </div>
 
+      <!-- HOSTEL SELECTION & ACTIVE SCOPE BAR -->
+      <div class="glass-card p-3 mb-4 text-start d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+        <div class="d-flex align-items-center gap-2.5">
+          <div class="bento-icon m-0" style="width: 42px; height: 42px;"><i data-lucide="building-2"></i></div>
+          <div>
+            <div class="small text-muted fw-semibold text-uppercase" style="letter-spacing: 0.5px; font-size: 0.72rem;">Management Scope</div>
+            <div class="d-flex align-items-center gap-2">
+              <h5 class="mb-0 fw-bold text-primary" id="currentHostelBadgeTitle">All Hostels</h5>
+              <span class="badge bg-primary-subtle text-primary border border-primary-subtle" id="currentHostelPill">Global Scope</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex align-items-center gap-2" id="hostelSelectorWrapper">
+          <label for="adminHostelSelector" class="form-label small text-muted mb-0 fw-semibold text-nowrap d-none d-sm-inline">
+            <i data-lucide="filter" class="me-1"></i>Hostel View:
+          </label>
+          <select id="adminHostelSelector" class="form-select form-select-sm border-primary" style="min-width: 270px; font-weight: 600;">
+            <option value="all">🌐 All Hostels (Global View)</option>
+            <option value="mahima">🏢 Mahima Chatrabash (New Hostel)</option>
+            <option value="kapilash">🏛️ Kapilash Chatrabash (Old Hostel)</option>
+          </select>
+        </div>
+      </div>
+
       <!-- Stats Cards (Total, Pending, Accepted, Rejected) -->
       <div class="row g-4 mb-5 text-start">
         <div class="col-sm-6 col-lg-3">
           <div class="admin-stats-panel glass-card">
             <div>
-              <span class="text-muted fw-semibold small">Total Registrations</span>
+              <span class="text-muted fw-semibold small">Total Students</span>
               <div class="stats-number text-primary" id="statTotal">0</div>
+              <div class="small text-muted mt-1" id="statTotalMacsWrapper"><i data-lucide="cpu" style="width: 12px; height: 12px;" class="me-1"></i><span id="statTotalMacs">0</span> Total MACs</div>
             </div>
             <div class="stats-icon text-primary"><i data-lucide="users"></i></div>
           </div>
@@ -820,6 +846,7 @@
             <div>
               <span class="text-muted fw-semibold small">Pending Requests</span>
               <div class="stats-number text-warning" id="statPending">0</div>
+              <div class="small text-muted mt-1"><i data-lucide="hourglass" style="width: 12px; height: 12px;" class="me-1"></i>Awaiting Review</div>
             </div>
             <div class="stats-icon text-warning"><i data-lucide="clock"></i></div>
           </div>
@@ -827,8 +854,9 @@
         <div class="col-sm-6 col-lg-3">
           <div class="admin-stats-panel glass-card">
             <div>
-              <span class="text-muted fw-semibold small">Accepted Users</span>
+              <span class="text-muted fw-semibold small">Active (Accepted)</span>
               <div class="stats-number text-success" id="statAccepted">0</div>
+              <div class="small text-success mt-1" id="statActiveMacsWrapper"><i data-lucide="check-circle" style="width: 12px; height: 12px;" class="me-1"></i><span id="statActiveMacs">0</span> Active MACs</div>
             </div>
             <div class="stats-icon text-success"><i data-lucide="check-circle"></i></div>
           </div>
@@ -836,8 +864,9 @@
         <div class="col-sm-6 col-lg-3">
           <div class="admin-stats-panel glass-card">
             <div>
-              <span class="text-muted fw-semibold small">Rejected Users</span>
+              <span class="text-muted fw-semibold small">Blocked (Rejected)</span>
               <div class="stats-number text-danger" id="statRejected">0</div>
+              <div class="small text-danger mt-1" id="statBlockedMacsWrapper"><i data-lucide="shield-x" style="width: 12px; height: 12px;" class="me-1"></i><span id="statBlockedMacs">0</span> Blocked MACs</div>
             </div>
             <div class="stats-icon text-danger"><i data-lucide="x-circle"></i></div>
           </div>
@@ -920,6 +949,7 @@
           <table class="table table-custom-premium align-middle">
             <thead>
               <tr>
+                <th>Hostel</th>
                 <th>Student Name</th>
                 <th>Contact Info</th>
                 <th>Room Details</th>
@@ -931,7 +961,7 @@
             </thead>
             <tbody id="studentTableBody">
               <tr>
-                <td colspan="7" class="text-center text-muted py-5">
+                <td colspan="8" class="text-center text-muted py-5">
                   <i data-lucide="folder-open" class="display-6 mb-3 d-block"></i>
                   No student registrations found.
                 </td>
@@ -1095,6 +1125,15 @@
           <div class="alert alert-success d-none" id="registerSuccessAlert" role="alert"></div>
 
           <form id="registerForm" novalidate>
+            <div class="contact-input-wrapper mb-2">
+              <select id="regHostel" required>
+                <option value="" disabled selected>Select Hostel *</option>
+                <option value="mahima">Mahima Chatrabash (New Hostel)</option>
+                <option value="kapilash">Kapilash Chatrabash (Old Hostel)</option>
+              </select>
+              <i data-lucide="building-2"></i>
+            </div>
+
             <div class="contact-input-wrapper">
               <input type="text" id="regName" required placeholder="Student Full Name">
               <i data-lucide="user"></i>
@@ -1229,6 +1268,14 @@
             <div class="contact-input-wrapper">
               <input type="text" id="editName" required placeholder="Student Name">
               <i data-lucide="user"></i>
+            </div>
+
+            <div class="contact-input-wrapper mb-2">
+              <select id="editHostel" required>
+                <option value="mahima">Mahima Chatrabash (New Hostel)</option>
+                <option value="kapilash">Kapilash Chatrabash (Old Hostel)</option>
+              </select>
+              <i data-lucide="building-2"></i>
             </div>
 
             <div class="row g-2">

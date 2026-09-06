@@ -17,7 +17,11 @@ const verifyToken = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'primenet_super_secret_key_2026');
-    req.user = decoded;
+    req.user = {
+      id: decoded.id,
+      username: decoded.username,
+      hostel_access: decoded.hostel_access || 'all'
+    };
     next();
   } catch (ex) {
     return res.status(401).json({ message: 'Invalid or expired token.' });

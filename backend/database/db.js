@@ -8,6 +8,7 @@ const mongoURI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/primenet'
 mongoose.connect(mongoURI)
   .then(() => {
     console.log('Connected to MongoDB database.');
+    seedHostels();
     seedAdminUser();
     seedDefaultSettings();
   })
@@ -15,11 +16,20 @@ mongoose.connect(mongoURI)
     console.error('MongoDB connection error:', err.message);
   });
 
-// 1. Student Schema
+// 1. Hostel Schema
+const hostelSchema = new mongoose.Schema({
+  id: { type: String, unique: true, required: true, trim: true },
+  name: { type: String, required: true, trim: true },
+  code: { type: String, required: true, trim: true },
+  label: { type: String, required: true, trim: true }
+});
+
+// 2. Student Schema
 const studentSchema = new mongoose.Schema({
   name: { type: String, required: true, trim: true },
   mobile: { type: String, required: true, trim: true },
   email: { type: String, required: true, trim: true },
+  hostel_id: { type: String, required: true, enum: ['mahima', 'kapilash'], default: 'kapilash', index: true },
   room_number: { type: String, required: true, trim: true },
   room_type: { type: String, required: true, enum: ['A', 'B'], uppercase: true },
   mac_address: { type: String, required: true, trim: true },
@@ -34,50 +44,140 @@ const studentSchema = new mongoose.Schema({
   created_at: { type: Date, default: Date.now }
 });
 
-// 2. User Schema (Admin User)
+studentSchema.index({ hostel_id: 1, status: 1 });
+
+// 3. User Schema (Admin User)
 const userSchema = new mongoose.Schema({
   username: { type: String, unique: true, required: true, trim: true },
-  password: { type: String, required: true }
+  password: { type: String, required: true },
+  hostel_access: { type: String, default: 'all', enum: ['all', 'mahima', 'kapilash'] }
 });
 
-// 3. Settings Schema
+// 4. Settings Schema
 const settingSchema = new mongoose.Schema({
   key: { type: String, unique: true, required: true },
   value: { type: mongoose.Schema.Types.Mixed, required: true }
 });
 
+const Hostel = mongoose.model('Hostel', hostelSchema);
 const Student = mongoose.model('Student', studentSchema);
 const User = mongoose.model('User', userSchema);
 const Setting = mongoose.model('Setting', settingSchema);
 
 // Seeding functions
-async function seedAdminUser() {
-  const username = (process.env.ADMIN_USERNAME || 'admin').toLowerCase().trim();
-  const password = process.env.ADMIN_PASSWORD || 'primenet@2007';
-
+async function seedHostels() {
   try {
-    const existingAdmin = await User.findOne({ username });
-    if (!existingAdmin) {
-      const hashedPassword = await bcrypt.hash(password, 10);
-      const admin = new User({
-        username,
-        password: hashedPassword
-      });
-      await admin.save();
-      console.log(`Admin user seeded successfully with username: ${username}`);
-    } else {
-      const isMatch = await bcrypt.compare(password, existingAdmin.password);
-      if (!isMatch) {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        existingAdmin.password = hashedPassword;
-        await existingAdmin.save();
-        console.log(`Admin password updated in database to match the current environment configuration.`);
-      } else {
-        console.log('Admin user already exists and matches current password. Seeding skipped.');
+    const hostelsData = [
+      {
+        id: 'mahima',
+        name: 'Mahima Chatrabash',
+        code: 'mahima',
+        label: 'Mahima Chatrabash (New Hostel)'
+      },
+      {
+        id: 'kapilash',
+        name: 'Kapilash Chatrabash',
+        code: 'kapilash',
+        label: 'Kapilash Chatrabash (Old Hostel)'
+      }
+    ];
+
+    for (const h of hostelsData) {
+      const exists = await Hostel.findOne({ id: h.id });
+      if (!exists) {
+        await new Hostel(h).save();
+        console.log(`Seeded hostel: ${h.label}`);
       }
     }
+
+    // Safe migration: check for any existing students without hostel_id or with null/undefined
+    const unassignedCount = await Student.countDocuments({
+      $or: [
+        { hostel_id: { $exists: false } },
+        { hostel_id: null },
+        { hostel_id: '' }
+      ]
+    });
+
+    if (unassignedCount > 0) {
+      console.log(`Migrating ${unassignedCount} existing students without hostel assignment to Kapilash Chatrabash (Old Hostel)...`);
+      const result = await Student.updateMany(
+        {
+          $or: [
+            { hostel_id: { $exists: false } },
+            { hostel_id: null },
+            { hostel_id: '' }
+          ]
+        },
+        { $set: { hostel_id: 'kapilash' } }
+      );
+      console.log(`Successfully migrated ${result.modifiedCount} students to Kapilash Chatrabash. All student data and MAC addresses preserved.`);
+    }
   } catch (err) {
-    console.error('Error seeding admin user:', err.message);
+    console.error('Error seeding hostels and migrating students:', err.message);
+  }
+}
+
+async function seedAdminUser() {
+  const superUsername = (process.env.ADMIN_USERNAME || 'admin').toLowerCase().trim();
+  const superPassword = process.env.ADMIN_PASSWORD || 'primenet@2007';
+
+  try {
+    // 1. Seed or update superadmin (hostel_access: 'all')
+    const existingAdmin = await User.findOne({ username: superUsername });
+    if (!existingAdmin) {
+      const hashedPassword = await bcrypt.hash(superPassword, 10);
+      const admin = new User({
+        username: superUsername,
+        password: hashedPassword,
+        hostel_access: 'all'
+      });
+      await admin.save();
+      console.log(`Superadmin user seeded successfully with username: ${superUsername} (access: all)`);
+    } else {
+      let needsSave = false;
+      const isMatch = await bcrypt.compare(superPassword, existingAdmin.password);
+      if (!isMatch) {
+        existingAdmin.password = await bcrypt.hash(superPassword, 10);
+        needsSave = true;
+      }
+      if (existingAdmin.hostel_access !== 'all') {
+        existingAdmin.hostel_access = 'all';
+        needsSave = true;
+      }
+      if (needsSave) {
+        await existingAdmin.save();
+        console.log(`Superadmin user updated in database (access: all).`);
+      } else {
+        console.log('Superadmin user already configured.');
+      }
+    }
+
+    // 2. Seed scoped admin for Mahima Chatrabash (New Hostel)
+    const mahimaAdmin = await User.findOne({ username: 'admin_mahima' });
+    if (!mahimaAdmin) {
+      const hashedMahimaPass = await bcrypt.hash(process.env.ADMIN_MAHIMA_PASSWORD || 'mahima@2026', 10);
+      await new User({
+        username: 'admin_mahima',
+        password: hashedMahimaPass,
+        hostel_access: 'mahima'
+      }).save();
+      console.log(`Scoped admin seeded: admin_mahima (access: mahima)`);
+    }
+
+    // 3. Seed scoped admin for Kapilash Chatrabash (Old Hostel)
+    const kapilashAdmin = await User.findOne({ username: 'admin_kapilash' });
+    if (!kapilashAdmin) {
+      const hashedKapilashPass = await bcrypt.hash(process.env.ADMIN_KAPILASH_PASSWORD || 'kapilash@2026', 10);
+      await new User({
+        username: 'admin_kapilash',
+        password: hashedKapilashPass,
+        hostel_access: 'kapilash'
+      }).save();
+      console.log(`Scoped admin seeded: admin_kapilash (access: kapilash)`);
+    }
+  } catch (err) {
+    console.error('Error seeding admin users:', err.message);
   }
 }
 
@@ -117,6 +217,7 @@ async function seedDefaultSettings() {
 }
 
 module.exports = {
+  Hostel,
   Student,
   User,
   Setting,

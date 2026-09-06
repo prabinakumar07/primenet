@@ -105,11 +105,14 @@ const mapStudentDoc = (doc) => {
   if (typeof screenshot === 'string') {
     screenshot = screenshot.replace(/&#x2F;/g, '/');
   }
+  const hostelId = doc.hostel_id || 'kapilash';
   return {
     id: doc._id.toString(),
     name: doc.name,
     mobile: doc.mobile,
     email: doc.email,
+    hostel_id: hostelId,
+    hostel_name: hostelId === 'mahima' ? 'Mahima Chatrabash (New Hostel)' : 'Kapilash Chatrabash (Old Hostel)',
     room_number: doc.room_number,
     room_type: doc.room_type,
     mac_address: doc.mac_address,
@@ -123,6 +126,28 @@ const mapStudentDoc = (doc) => {
     created_at: doc.created_at,
     payment_method: doc.payment_method || 'O'
   };
+};
+
+// Helper to resolve and enforce hostel scope from user permissions and optional query/param
+const resolveHostelScope = (req) => {
+  const userAccess = (req.user && req.user.hostel_access) ? req.user.hostel_access : 'all';
+  if (userAccess !== 'all') {
+    // Restricted admin can ONLY access their assigned hostel
+    return userAccess;
+  }
+  // Superadmin with 'all' can filter by query parameter
+  const queryHostel = req.query.hostel || (req.body && req.body.hostel_id);
+  if (queryHostel && ['mahima', 'kapilash'].includes(queryHostel)) {
+    return queryHostel;
+  }
+  return 'all';
+};
+
+// Helper to check if admin is allowed to access/mutate a specific student record
+const canAccessStudent = (req, student) => {
+  const userAccess = (req.user && req.user.hostel_access) ? req.user.hostel_access : 'all';
+  if (userAccess === 'all') return true;
+  return (student.hostel_id || 'kapilash') === userAccess;
 };
 
 // Helper to sort students: Room Type (A then B) and Room Number (Ascending)
@@ -143,22 +168,27 @@ const sortStudentsArray = (arr) => {
 };
 
 exports.registerStudent = async (req, res) => {
-  const { name, mobile, email, room_number, room_type, mac_address, screenshot_url, payment_method } = req.body;
+  const { name, mobile, email, hostel_id, room_number, room_type, mac_address, screenshot_url, payment_method } = req.body;
   const cleanPaymentMethod = payment_method === 'C' ? 'C' : 'O';
 
-  if (!name || !mobile || !email || !room_number || !room_type || !mac_address || (cleanPaymentMethod === 'O' && !screenshot_url)) {
-    return res.status(400).json({ message: 'All fields, including payment screenshot, are required.' });
+  if (!name || !mobile || !email || !hostel_id || !room_number || !room_type || !mac_address || (cleanPaymentMethod === 'O' && !screenshot_url)) {
+    return res.status(400).json({ message: 'All fields, including hostel selection and payment screenshot, are required.' });
   }
 
   // Sanitize
   const cleanName = sanitizeInput(name);
   const cleanMobile = sanitizeInput(mobile);
   const cleanEmail = sanitizeInput(email);
+  const cleanHostelId = sanitizeInput(hostel_id || '').toLowerCase();
   const cleanRoomNumber = sanitizeInput(room_number);
   const cleanRoomType = sanitizeInput(room_type).toUpperCase();
   const cleanMac = sanitizeInput(mac_address);
 
   // Validations
+  if (!cleanHostelId || !['mahima', 'kapilash'].includes(cleanHostelId)) {
+    return res.status(400).json({ message: 'A valid hostel (Mahima Chatrabash or Kapilash Chatrabash) is required.' });
+  }
+
   if (cleanName.length < 2) {
     return res.status(400).json({ message: 'Name must be at least 2 characters.' });
   }
@@ -181,7 +211,7 @@ exports.registerStudent = async (req, res) => {
   }
 
   try {
-    // Check for duplicate active registrations (MAC, Email, or Mobile)
+    // Check for duplicate active registrations (MAC, Email, or Mobile) across the system
     const duplicate = await Student.findOne({
       status: { $in: ['Pending', 'Accepted'] },
       $or: [
@@ -214,6 +244,7 @@ exports.registerStudent = async (req, res) => {
       name: cleanName,
       mobile: cleanMobile,
       email: cleanEmail,
+      hostel_id: cleanHostelId,
       room_number: cleanRoomNumber,
       room_type: cleanRoomType,
       mac_address: normalizedMac,
@@ -260,10 +291,12 @@ exports.registerStudent = async (req, res) => {
   }
 };
 
-// 2. Get all students (Admin only)
+// 2. Get all students (Admin only - scoped by hostel permission)
 exports.getAllStudents = async (req, res) => {
   try {
-    const students = await Student.find({});
+    const scope = resolveHostelScope(req);
+    const filter = scope !== 'all' ? { hostel_id: scope } : {};
+    const students = await Student.find(filter);
     const mapped = students.map(mapStudentDoc);
     const sorted = sortStudentsArray(mapped);
     return res.status(200).json(sorted);
@@ -287,6 +320,12 @@ exports.updateStatus = async (req, res) => {
     const student = await Student.findById(id);
     if (!student) {
       return res.status(404).json({ message: 'Student registration not found.' });
+    }
+
+    if (!canAccessStudent(req, student)) {
+      return res.status(403).json({ 
+        message: 'Forbidden: You do not have permission to manage students or MACs in this hostel.' 
+      });
     }
 
     const wasAccepted = student.status === 'Accepted';
@@ -323,6 +362,12 @@ exports.updatePaymentStatus = async (req, res) => {
     const student = await Student.findById(id);
     if (!student) {
       return res.status(404).json({ message: 'Student registration not found.' });
+    }
+
+    if (!canAccessStudent(req, student)) {
+      return res.status(403).json({ 
+        message: 'Forbidden: You do not have permission to manage students in this hostel.' 
+      });
     }
 
     student.payment_status = payment_status;
@@ -455,6 +500,12 @@ exports.editStudent = async (req, res) => {
       return res.status(404).json({ message: 'Student registration not found.' });
     }
 
+    if (!canAccessStudent(req, student)) {
+      return res.status(403).json({ 
+        message: 'Forbidden: You do not have permission to edit students in this hostel.' 
+      });
+    }
+
     const wasAccepted = student.status === 'Accepted';
 
     // 2. Update fields
@@ -471,6 +522,18 @@ exports.editStudent = async (req, res) => {
     student.pay_later_date = cleanPayLaterDate ? new Date(cleanPayLaterDate) : null;
     student.status = cleanStatus;
     student.payment_method = cleanPaymentMethod;
+
+    if (req.body.hostel_id) {
+      const cleanHostelId = sanitizeInput(req.body.hostel_id).toLowerCase();
+      if (['mahima', 'kapilash'].includes(cleanHostelId)) {
+        if (cleanHostelId !== student.hostel_id) {
+          if (req.user.hostel_access !== 'all') {
+            return res.status(403).json({ message: 'Forbidden: Only global administrators can transfer students between hostels.' });
+          }
+          student.hostel_id = cleanHostelId;
+        }
+      }
+    }
 
     if (screenshot_url !== undefined) {
       student.screenshot_url = cleanPaymentMethod === 'O' ? sanitizeUrl(screenshot_url) : '';
@@ -546,6 +609,12 @@ exports.deleteStudent = async (req, res) => {
       return res.status(404).json({ message: 'Student registration not found.' });
     }
 
+    if (!canAccessStudent(req, student)) {
+      return res.status(403).json({ 
+        message: 'Forbidden: You do not have permission to delete students in this hostel.' 
+      });
+    }
+
     // 2. If Cloudinary is configured and student has a screenshot, delete it
     if (isCloudinaryConfigured && student.screenshot_url) {
       const details = extractCloudinaryDetails(student.screenshot_url);
@@ -569,28 +638,55 @@ exports.deleteStudent = async (req, res) => {
   }
 };
 
-// 6. Get stats (Admin only)
+// 6. Get stats (Admin only - scoped by hostel permission)
 exports.getStats = async (req, res) => {
   try {
-    const [total, pending, accepted, rejected, roomTypeA, roomTypeB, recent] = await Promise.all([
-      Student.countDocuments({}),
-      Student.countDocuments({ status: 'Pending' }),
-      Student.countDocuments({ status: 'Accepted' }),
-      Student.countDocuments({ status: 'Rejected' }),
-      Student.countDocuments({ room_type: 'A' }),
-      Student.countDocuments({ room_type: 'B' }),
-      Student.find({}).sort({ _id: -1 }).limit(5)
+    const scope = resolveHostelScope(req);
+    const filter = scope !== 'all' ? { hostel_id: scope } : {};
+    const pendingFilter = { ...filter, status: 'Pending' };
+    const acceptedFilter = { ...filter, status: 'Accepted' };
+    const rejectedFilter = { ...filter, status: 'Rejected' };
+    const roomAFilter = { ...filter, room_type: 'A' };
+    const roomBFilter = { ...filter, room_type: 'B' };
+
+    const [total, pending, accepted, rejected, roomTypeA, roomTypeB, recent, scopedStudents] = await Promise.all([
+      Student.countDocuments(filter),
+      Student.countDocuments(pendingFilter),
+      Student.countDocuments(acceptedFilter),
+      Student.countDocuments(rejectedFilter),
+      Student.countDocuments(roomAFilter),
+      Student.countDocuments(roomBFilter),
+      Student.find(filter).sort({ _id: -1 }).limit(5),
+      Student.find(filter, 'mac_address mac_address_2 mac_address_3 mac_address_4 status')
     ]);
+
+    let totalMacs = 0;
+    let activeMacs = 0;
+    let blockedMacs = 0;
+
+    scopedStudents.forEach(s => {
+      const studentMacs = [s.mac_address, s.mac_address_2, s.mac_address_3, s.mac_address_4].filter(Boolean);
+      totalMacs += studentMacs.length;
+      if (s.status === 'Accepted') {
+        activeMacs += studentMacs.length;
+      } else if (s.status === 'Rejected') {
+        blockedMacs += studentMacs.length;
+      }
+    });
 
     const mappedRecent = recent.map(mapStudentDoc);
 
     return res.status(200).json({
+      hostel: scope,
       total,
       pending,
       accepted,
       rejected,
       roomTypeA,
       roomTypeB,
+      totalMacs,
+      activeMacs,
+      blockedMacs,
       recentRegistrations: mappedRecent
     });
   } catch (err) {
@@ -599,10 +695,16 @@ exports.getStats = async (req, res) => {
   }
 };
 
-// 7. Export accepted MAC list as TXT
+// 7. Export accepted MAC list as TXT (Admin only - scoped by hostel)
 exports.exportAcceptedMac = async (req, res) => {
   try {
-    const students = await Student.find({ status: 'Accepted' }, 'mac_address mac_address_2 mac_address_3 mac_address_4');
+    const scope = resolveHostelScope(req);
+    const filter = { status: 'Accepted' };
+    if (scope !== 'all') {
+      filter.hostel_id = scope;
+    }
+
+    const students = await Student.find(filter, 'mac_address mac_address_2 mac_address_3 mac_address_4');
     const macs = [];
     students.forEach(s => {
       if (s.mac_address) macs.push(s.mac_address);
@@ -612,7 +714,8 @@ exports.exportAcceptedMac = async (req, res) => {
     });
     const macList = macs.join('\r\n');
     
-    res.setHeader('Content-Disposition', 'attachment; filename="accepted_mac_addresses.txt"');
+    const filename = `accepted_macs_${scope}.txt`;
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
     res.setHeader('Content-Type', 'text/plain');
     return res.status(200).send(macList);
   } catch (err) {
@@ -621,14 +724,16 @@ exports.exportAcceptedMac = async (req, res) => {
   }
 };
 
-// Extra: Export all registrations as CSV
+// Extra: Export registrations as CSV (Admin only - scoped by hostel)
 exports.exportCSV = async (req, res) => {
   try {
-    const students = await Student.find({});
+    const scope = resolveHostelScope(req);
+    const filter = scope !== 'all' ? { hostel_id: scope } : {};
+    const students = await Student.find(filter);
     const mapped = students.map(mapStudentDoc);
     const sorted = sortStudentsArray(mapped);
 
-    const headers = 'Name,Mobile Number,Email,Room Number,Room Type,Payment Method,MAC Address,MAC Address 2,MAC Address 3,MAC Address 4,Payment Status,Status,Pay Later Date,Registration Date';
+    const headers = 'Hostel,Name,Mobile Number,Email,Room Number,Room Type,Payment Method,MAC Address,MAC Address 2,MAC Address 3,MAC Address 4,Payment Status,Status,Pay Later Date,Registration Date';
     const csvRows = sorted.map(r => {
       const escapeCsv = (val) => {
         if (val === null || val === undefined) return '';
@@ -639,6 +744,7 @@ exports.exportCSV = async (req, res) => {
         return stringVal;
       };
       return [
+        escapeCsv(r.hostel_name),
         escapeCsv(r.name),
         escapeCsv(r.mobile),
         escapeCsv(r.email),
@@ -658,12 +764,13 @@ exports.exportCSV = async (req, res) => {
 
     const csvContent = [headers, ...csvRows].join('\r\n');
 
-    res.setHeader('Content-Disposition', 'attachment; filename="primenet_users_list.csv"');
+    const filename = `primenet_users_${scope}.csv`;
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
     res.setHeader('Content-Type', 'text/csv');
     return res.status(200).send(csvContent);
   } catch (err) {
     console.error('Error generating CSV:', err.message);
-    return res.status(500).json({ message: 'Failed to generate CSV.' });
+    return res.status(500).json({ message: 'Failed to generate CSV file.' });
   }
 };
 
@@ -950,7 +1057,11 @@ exports.sendMailBroadcast = async (req, res) => {
   }
 
   try {
+    const scope = resolveHostelScope(req);
     let query = {};
+    if (scope !== 'all') {
+      query.hostel_id = scope;
+    }
     if (recipients !== 'All') {
       query.status = recipients;
     }
@@ -1002,6 +1113,12 @@ exports.sendSingleMail = async (req, res) => {
       return res.status(404).json({ message: 'Student registration not found.' });
     }
 
+    if (!canAccessStudent(req, student)) {
+      return res.status(403).json({ 
+        message: 'Forbidden: You do not have permission to message students in this hostel.' 
+      });
+    }
+
     const emailService = require('../utils/emailService');
     const sent = await emailService.sendBroadcastEmail(student.email, student.name, subject, message);
     if (!sent) {
@@ -1015,10 +1132,15 @@ exports.sendSingleMail = async (req, res) => {
   }
 };
 
-// 17. Get Other MACs (Necessary & Guest) (Admin only)
+// 17. Get Other MACs (Necessary & Guest) (Admin only - scoped by hostel)
 exports.getOtherMacs = async (req, res) => {
   try {
-    const setting = await Setting.findOne({ key: 'other_macs' });
+    const scope = resolveHostelScope(req);
+    const key = scope !== 'all' ? `other_macs_${scope}` : 'other_macs';
+    let setting = await Setting.findOne({ key });
+    if (!setting && scope !== 'all') {
+      setting = await Setting.findOne({ key: 'other_macs' });
+    }
     const defaultOtherMacs = {
       necessary_macs: '',
       guest_macs: ''
@@ -1036,15 +1158,20 @@ exports.getOtherMacs = async (req, res) => {
   }
 };
 
-// 18. Update Other MACs (Admin only)
+// 18. Update Other MACs (Admin only - scoped by hostel)
 exports.updateOtherMacs = async (req, res) => {
-  const { necessary_macs, guest_macs } = req.body;
+  const { necessary_macs, guest_macs, hostel } = req.body;
   const cleanNecessary = necessary_macs ? sanitizeInput(necessary_macs) : '';
   const cleanGuest = guest_macs ? sanitizeInput(guest_macs) : '';
+  const scope = resolveHostelScope({
+    ...req,
+    query: { hostel: hostel || req.query.hostel }
+  });
+  const key = scope !== 'all' ? `other_macs_${scope}` : 'other_macs';
 
   try {
     const updated = await Setting.findOneAndUpdate(
-      { key: 'other_macs' },
+      { key },
       {
         value: {
           necessary_macs: cleanNecessary,
