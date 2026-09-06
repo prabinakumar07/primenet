@@ -105,7 +105,7 @@ const mapStudentDoc = (doc) => {
   if (typeof screenshot === 'string') {
     screenshot = screenshot.replace(/&#x2F;/g, '/');
   }
-  const hostelId = doc.hostel_id || 'kapilash';
+  const hostelId = doc.hostel_id || 'mahima';
   return {
     id: doc._id.toString(),
     name: doc.name,
@@ -147,7 +147,7 @@ const resolveHostelScope = (req) => {
 const canAccessStudent = (req, student) => {
   const userAccess = (req.user && req.user.hostel_access) ? req.user.hostel_access : 'all';
   if (userAccess === 'all') return true;
-  return (student.hostel_id || 'kapilash') === userAccess;
+  return (student.hostel_id || 'mahima') === userAccess;
 };
 
 // Helper to sort students: Room Type (A then B) and Room Number (Ascending)

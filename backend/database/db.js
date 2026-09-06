@@ -29,7 +29,7 @@ const studentSchema = new mongoose.Schema({
   name: { type: String, required: true, trim: true },
   mobile: { type: String, required: true, trim: true },
   email: { type: String, required: true, trim: true },
-  hostel_id: { type: String, required: true, enum: ['mahima', 'kapilash'], default: 'kapilash', index: true },
+  hostel_id: { type: String, required: true, enum: ['mahima', 'kapilash'], default: 'mahima', index: true },
   room_number: { type: String, required: true, trim: true },
   room_type: { type: String, required: true, enum: ['A', 'B'], uppercase: true },
   mac_address: { type: String, required: true, trim: true },
@@ -90,28 +90,52 @@ async function seedHostels() {
       }
     }
 
-    // Safe migration: check for any existing students without hostel_id or with null/undefined
-    const unassignedCount = await Student.countDocuments({
-      $or: [
-        { hostel_id: { $exists: false } },
-        { hostel_id: null },
-        { hostel_id: '' }
-      ]
-    });
-
-    if (unassignedCount > 0) {
-      console.log(`Migrating ${unassignedCount} existing students without hostel assignment to Kapilash Chatrabash (Old Hostel)...`);
+    // Safe migration: Ensure existing MACs and students are assigned to Mahima Chatrabash (New Hostel)
+    const legacyMigrationSetting = await Setting.findOne({ key: 'legacy_hostel_migrated_mahima' });
+    if (!legacyMigrationSetting) {
       const result = await Student.updateMany(
         {
           $or: [
             { hostel_id: { $exists: false } },
             { hostel_id: null },
-            { hostel_id: '' }
+            { hostel_id: '' },
+            { hostel_id: 'kapilash' }
           ]
         },
-        { $set: { hostel_id: 'kapilash' } }
+        { $set: { hostel_id: 'mahima' } }
       );
-      console.log(`Successfully migrated ${result.modifiedCount} students to Kapilash Chatrabash. All student data and MAC addresses preserved.`);
+      if (result.modifiedCount > 0) {
+        console.log(`Migrated ${result.modifiedCount} existing students/MACs to Mahima Chatrabash (New Hostel). All student data and MACs preserved.`);
+      }
+      await Setting.findOneAndUpdate(
+        { key: 'legacy_hostel_migrated_mahima' },
+        { value: { migrated: true, timestamp: new Date() } },
+        { upsert: true }
+      );
+    } else {
+      // Standard backfill for any unassigned records
+      const unassignedCount = await Student.countDocuments({
+        $or: [
+          { hostel_id: { $exists: false } },
+          { hostel_id: null },
+          { hostel_id: '' }
+        ]
+      });
+
+      if (unassignedCount > 0) {
+        console.log(`Migrating ${unassignedCount} unassigned students to Mahima Chatrabash...`);
+        const result = await Student.updateMany(
+          {
+            $or: [
+              { hostel_id: { $exists: false } },
+              { hostel_id: null },
+              { hostel_id: '' }
+            ]
+          },
+          { $set: { hostel_id: 'mahima' } }
+        );
+        console.log(`Successfully migrated ${result.modifiedCount} unassigned students to Mahima Chatrabash.`);
+      }
     }
   } catch (err) {
     console.error('Error seeding hostels and migrating students:', err.message);

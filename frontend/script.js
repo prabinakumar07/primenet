@@ -1224,7 +1224,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     const editHostelEl = document.getElementById('editHostel');
     if (editHostelEl) {
-      editHostelEl.value = student.hostel_id || 'kapilash';
+      editHostelEl.value = student.hostel_id || 'mahima';
       // Only Superadmin with 'all' hostel access can reassign a student's hostel
       editHostelEl.disabled = (adminHostelAccess !== 'all');
     }
